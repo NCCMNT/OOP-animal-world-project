@@ -7,19 +7,24 @@ public class WorldMap {
     private final int grassEnergy;
     private final int width;
     private final int height;
+    private final int fertilityThreshold;
+    private final int breedingCost;
     private HashMap<Vector2d, WorldElement> plants;
     private List<Animal> animals;
     private static final Random random = new Random();
 
-    public WorldMap(int width, int height, int grassPerTurn, int grassEnergy) {
+    public WorldMap(int width, int height, int grassPerTurn, int grassEnergy, int fertilityThreshold, int breedingCost, int minMutations, int maxMutations) {
         this.width = width;
         this.height = height;
         this.grassPerTurn = grassPerTurn;
         this.grassEnergy = grassEnergy;
+        this.fertilityThreshold = fertilityThreshold;
+        this.breedingCost = breedingCost;
     }
 
-    public WorldMap(int width, int height, int grassPerTurn, int grassEnergy,  int startingAnimals, int startingEnergy, int genomLen,  int startingGrass) {
-        this(width, height, grassPerTurn, grassEnergy);
+    public WorldMap(int width, int height, int grassPerTurn, int grassEnergy, int fertilityThreshold, int breedingCost, int minMutations, int maxMutations,
+                    int startingAnimals, int startingEnergy, int genomLen,  int startingGrass) {
+        this(width, height, grassPerTurn, grassEnergy, fertilityThreshold, breedingCost, minMutations, maxMutations);
         generateAnimals(startingAnimals, startingEnergy, genomLen);
         generatePlants(startingGrass);
     }
