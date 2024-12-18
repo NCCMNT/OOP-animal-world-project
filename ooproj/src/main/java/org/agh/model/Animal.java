@@ -6,7 +6,7 @@ import java.util.Random;
 
 import static java.lang.Math.round;
 
-public class Animal extends WorldElement{
+public class Animal extends WorldElement implements Comparable<Animal> {
     private int energy;
     private MapDirection direction;
     private int age;
@@ -99,5 +99,22 @@ public class Animal extends WorldElement{
 
     public int getActiveGen() {
         return activeGen;
+    }
+
+    @Override
+    public int compareTo(Animal other) {
+        if(position.getY() - other.position.getY() != 0){
+            return position.getY() - other.position.getY();
+        }
+        if(position.getX() - other.position.getX() != 0){
+            return position.getX() - other.position.getX();
+        }
+        if(energy - other.energy != 0){
+            return energy - other.energy;
+        }
+        if(age - other.age != 0){
+            return age - other.age;
+        }
+        return 0;
     }
 }

@@ -1,9 +1,6 @@
 package org.agh.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class WorldMap {
     private final int grassPerTurn;
@@ -32,6 +29,7 @@ public class WorldMap {
         for (int i = 0; i < amountOfAnimals; i++) {
             animals.add(new Animal(this, startingEnergy, new Vector2d(random.nextInt(width), random.nextInt(height)), genomLen));
         }
+        animals.sort(Collections.reverseOrder());
     }
 
     public void generatePlants(int amountOfPlants) {
@@ -49,6 +47,7 @@ public class WorldMap {
         for(Animal animal: animals) {
             animal.move();
         }
+        animals.sort(Collections.reverseOrder());
     }
 
     public void printAnimalInfo(){
