@@ -1,8 +1,8 @@
 package org.agh;
 
+import org.agh.model.Animal;
+import org.agh.model.Vector2d;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalTest {
     Animal animal1 = new Animal(10, new Vector2d(0,0), 5);

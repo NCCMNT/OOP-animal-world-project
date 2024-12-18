@@ -1,4 +1,4 @@
-package org.agh;
+package org.agh.model;
 
 import java.util.ArrayList;
 import java.util.List;

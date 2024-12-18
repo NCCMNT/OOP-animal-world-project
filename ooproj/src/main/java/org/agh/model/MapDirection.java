@@ -1,4 +1,4 @@
-package org.agh;
+package org.agh.model;
 
 public enum MapDirection {
     NORTH,

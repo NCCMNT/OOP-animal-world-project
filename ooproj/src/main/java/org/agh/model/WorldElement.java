@@ -1,4 +1,4 @@
-package org.agh;
+package org.agh.model;
 
 abstract public class WorldElement {
     protected Vector2d position;
