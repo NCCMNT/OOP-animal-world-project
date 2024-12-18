@@ -9,21 +9,22 @@ import static java.lang.Math.round;
 public class Animal extends WorldElement{
     private int energy;
     private MapDirection direction;
-    private Vector2d position;
     private int age;
     private List<Integer> genom;
     private int activeGen;
+    private final WorldMap worldMap;
     private static final Random random = new Random();
 
-    private Animal(int energy, Vector2d position){
+    private Animal(WorldMap worldMap, int energy, Vector2d position){
+        this.worldMap = worldMap;
         this.energy = energy;
         this.position = position;
         this.age = 0;
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
     // Animal when born in the beginning of simulation
-    public Animal(int initEnergy, Vector2d position, int genomLen) {
-        this(initEnergy, position);
+    public Animal(WorldMap worldMap, int initEnergy, Vector2d position, int genomLen) {
+        this(worldMap, initEnergy, position);
         this.genom = new ArrayList<>(genomLen);
         for (int i = 0; i < genomLen; i++) {
             genom.add(random.nextInt(8));
@@ -33,7 +34,7 @@ public class Animal extends WorldElement{
     }
     // Animal when born from two parents
     public Animal(Animal parent1, Animal parent2, int energy) {
-        this(energy, parent1.getPosition());
+        this(parent1.worldMap, energy, parent1.getPosition());
         int genomLen = parent1.genom.size();
         int sumEnergy = parent1.energy + parent2.energy;
         int gensFromParent1 = round(genomLen * parent1.energy / sumEnergy);
@@ -59,6 +60,20 @@ public class Animal extends WorldElement{
 
         this.activeGen = random.nextInt(genomLen);
 
+    }
+
+    public void move(){
+        direction = direction.rotate(genom.get(activeGen));
+        activeGen = (activeGen + 1)%genom.size();
+        Vector2d desiredPosition = position.add(this.direction.toUnitVector());
+        Vector2d actualPosition = worldMap.whereToMove(desiredPosition);
+        if(actualPosition == null){
+            direction = direction.opposite();
+        }
+        else{
+            position = actualPosition;
+        }
+        energy -= 1;
     }
 
     @Override

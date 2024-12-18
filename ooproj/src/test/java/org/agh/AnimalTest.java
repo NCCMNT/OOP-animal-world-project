@@ -5,8 +5,8 @@ import org.agh.model.Vector2d;
 import org.junit.jupiter.api.Test;
 
 class AnimalTest {
-    Animal animal1 = new Animal(10, new Vector2d(0,0), 5);
-    Animal animal2 = new Animal(5, new Vector2d(0,0), 5);
+    Animal animal1 = new Animal(null, 10, new Vector2d(0,0), 5);
+    Animal animal2 = new Animal(null, 5, new Vector2d(0,0), 5);
 
     @Test
     void animalsMakeNewAnimalTest(){
