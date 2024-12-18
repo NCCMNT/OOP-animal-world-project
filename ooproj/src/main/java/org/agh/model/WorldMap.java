@@ -9,8 +9,9 @@ public class WorldMap {
     private final int height;
     private final int fertilityThreshold;
     private final int breedingCost;
-    private HashMap<Vector2d, WorldElement> plants;
     private List<Animal> animals;
+    private HashMap<Vector2d, WorldElement> plants;
+    private Mutator mutator;
     private static final Random random = new Random();
 
     public WorldMap(int width, int height, int grassPerTurn, int grassEnergy, int fertilityThreshold, int breedingCost, int minMutations, int maxMutations) {
@@ -20,6 +21,12 @@ public class WorldMap {
         this.grassEnergy = grassEnergy;
         this.fertilityThreshold = fertilityThreshold;
         this.breedingCost = breedingCost;
+        if(breedingCost < fertilityThreshold){
+            throw new IllegalArgumentException("breedingCost < fertilityThreshold");
+        }
+        if (minMutations > maxMutations) {
+            throw new IllegalArgumentException("minMutations > maxMutations");
+        }
     }
 
     public WorldMap(int width, int height, int grassPerTurn, int grassEnergy, int fertilityThreshold, int breedingCost, int minMutations, int maxMutations,
@@ -27,6 +34,7 @@ public class WorldMap {
         this(width, height, grassPerTurn, grassEnergy, fertilityThreshold, breedingCost, minMutations, maxMutations);
         generateAnimals(startingAnimals, startingEnergy, genomLen);
         generatePlants(startingGrass);
+        generateMutator(minMutations, maxMutations, genomLen);
     }
 
     public void generateAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -39,6 +47,10 @@ public class WorldMap {
 
     public void generatePlants(int amountOfPlants) {
         plants = new HashMap<>();
+    }
+
+    public void generateMutator(int minMutations, int maxMutations, int genomLen) {
+        mutator = new Mutator(minMutations, maxMutations, genomLen);
     }
 
     public Vector2d whereToMove( Vector2d desiredPosition ) {
