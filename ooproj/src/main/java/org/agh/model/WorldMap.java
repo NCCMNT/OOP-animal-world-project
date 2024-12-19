@@ -20,7 +20,7 @@ public class WorldMap {
     private final Set<Vector2d> regularFields;
     private final List<Vector2d> preferredFieldsAvailable;
     private final List<Vector2d> regularFieldsAvailable;
-    private HashMap<Vector2d, WorldElement> plants;
+    private HashMap<Vector2d, WorldElement> plants = new HashMap<>();
 
     private List<Animal> animals;
     private Mutator mutator;
@@ -81,12 +81,11 @@ public class WorldMap {
         animals.sort(Collections.reverseOrder());
     }
 
-    private void initializePlants(int startingGrass) {
-        plants = new HashMap<>();
+    private void initializePlants(int plantAmount) {
         int preferredFieldsCount = preferredFieldsAvailable.size();
         int regularFieldsCount = regularFieldsAvailable.size();
 
-        for (int i = 0; i < startingGrass; i++) {
+        for (int i = 0; i < plantAmount; i++) {
             double chance = random.nextDouble();
             //there is 80% chance that plant grows on a preferred field
             if (chance >= 0.2 && preferredFieldsCount > 0) {
@@ -107,7 +106,10 @@ public class WorldMap {
                 regularFieldsCount--;
             }
         }
+    }
 
+    public void growPlants() {
+        this.initializePlants(this.plantsPerTurn);
     }
 
     public void generateMutator(int minMutations, int maxMutations, int genomLen) {
@@ -139,4 +141,6 @@ public class WorldMap {
     //getters
     public HashMap<Vector2d, WorldElement> getPlants() { return plants; }
     public Fields getFields(){ return fields; }
+    public List<Vector2d> getPreferredFieldsAvailable() { return preferredFieldsAvailable; }
+    public List<Vector2d> getRegularFieldsAvailable() { return regularFieldsAvailable; }
 }

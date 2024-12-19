@@ -10,8 +10,8 @@ public class Fields {
     private final int height;
     private final Set<Vector2d> preferredFields;
     private final Set<Vector2d> regularFields;
-    private int equatorStart;
-    private int equatorEnd;
+    private final int equatorStart;
+    private final int equatorEnd;
 
     public Fields(int width, int height, int percentage) {
         this.width = width;
