@@ -1,4 +1,6 @@
-package org.agh;
+package org.agh.model;
+
+import java.util.Map;
 
 public enum MapDirection {
     NORTH,
@@ -53,11 +55,14 @@ public enum MapDirection {
     /**
      *
      * @param num
-     * @param direction
      * @return
      */
-    public MapDirection rotate(int num, MapDirection direction){
-        return intToMapDirection((num + direction.toInt()) % 8);
+    public MapDirection rotate(int num){
+        return intToMapDirection((num + this.toInt()) % 8);
+    }
+
+    public MapDirection opposite(){
+        return rotate(4);
     }
 
     public Vector2d toUnitVector(){
