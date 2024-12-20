@@ -15,7 +15,7 @@ public class MapVisualizer {
     private static final String EMPTY_CELL = " ";
     private static final String FRAME_SEGMENT = "-";
     private static final String CELL_SEGMENT = "|";
-    private static final String EMPTY_EQUATOR = "-";
+    private static final String EMPTY_PREFERRED = "-";
     private final WorldMap map;
 
     /**
@@ -81,8 +81,8 @@ public class MapVisualizer {
         if (object != null) {
             return object.mapMarker();
         }
-        if(currentPosition.getY() >= this.map.getFields().getEquatorStart() && currentPosition.getY() < this.map.getFields().getEquatorEnd()) {
-            return EMPTY_EQUATOR;
+        if(this.map.getFields().isPreferredField(currentPosition)) {
+            return EMPTY_PREFERRED;
         }
         return EMPTY_CELL;
     }
