@@ -12,8 +12,8 @@ public class Plant extends WorldElement{
         this.energy = energy;
     }
 
-    @Override
-    public String toString() {
+
+    public String mapMarker() {
         return "*";
     }
 
