@@ -16,12 +16,7 @@ public class WorldMap {
     private final int energeticFertilityThreshold;
     private final int energeticBreedingCost;
 
-    private final Fields fields;
-    private final Set<Vector2d> preferredFields;
-    private final Set<Vector2d> regularFields;
-    private final List<Vector2d> preferredFieldsAvailable;
-    private final List<Vector2d> regularFieldsAvailable;
-    private HashMap<Vector2d, WorldElement> plants = new HashMap<>();
+    private Planter planter;
 
     private List<Animal> animals;
     private Mutator mutator;
@@ -38,19 +33,15 @@ public class WorldMap {
         this.energeticFertilityThreshold = energeticFertilityThreshold;
         this.energeticBreedingCost = energeticBreedingCost;
 
-        this.fields = (new Fields(this.width, this.height, 20));
-        this.preferredFields = fields.getPreferredFields();
-        this.regularFields = fields.getRegularFields();
-        this.preferredFieldsAvailable = new ArrayList<>(preferredFields);
-        this.regularFieldsAvailable = new ArrayList<>(regularFields);
+        planter = new EquatorPlanter(width, height, plantEnergy);
     }
 
     public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations,
-                    int startingAnimals, int startingEnergy, int genomLen, int startingGrass) {
+                    int startingAnimals, int startingEnergy, int genomLen, int startingPlants) {
         this(width, height, plantsPerTurn, plantEnergy, energeticFertilityThreshold, energeticBreedingCost, minMutations, maxMutations);
         initializeAnimals(startingAnimals, startingEnergy, genomLen);
-        initializePlants(startingGrass);
         initializeMutator(minMutations, maxMutations, genomLen);
+        planter.generatePlants(startingPlants);
     }
 
     public WorldMap(MapSettings mapSettings){
@@ -62,15 +53,10 @@ public class WorldMap {
         this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
         this.energeticBreedingCost = mapSettings.energeticBreedingCost();
 
-        this.fields = (new Fields(this.width, this.height, 20));
-        this.preferredFields = fields.getPreferredFields();
-        this.regularFields = fields.getRegularFields();
-        this.preferredFieldsAvailable = new ArrayList<>(preferredFields);
-        this.regularFieldsAvailable = new ArrayList<>(regularFields);
+        planter = new EquatorPlanter(width, height, plantEnergy, mapSettings.startingNumberOfPlants());
 
         initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
         initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
-        initializePlants(mapSettings.startingNumberOfPlants());
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -81,37 +67,8 @@ public class WorldMap {
         animals.sort(Collections.reverseOrder());
     }
 
-    private void initializePlants(int plantAmount) {
-        int preferredFieldsCount = preferredFieldsAvailable.size();
-        int regularFieldsCount = regularFieldsAvailable.size();
-
-        for (int i = 0; i < plantAmount; i++) {
-            double chance = random.nextDouble();
-            //there is 80% chance that plant grows on a preferred field
-            if (chance >= 0.2 && preferredFieldsCount > 0) {
-                int ind = random.nextInt(preferredFieldsCount);
-                Vector2d field = preferredFieldsAvailable.get(ind);
-                plants.put(field, new Plant(field, plantEnergy));
-                preferredFieldsAvailable.remove(ind);
-                preferredFieldsCount--;
-            }
-            //there is 20% chance that plant grows on a regular field
-            //if all preferred fields are already taken by plants, then for map to have exactly starting amount of plants
-            //we have to distribute remaining plants onto regular field, hence second condition
-            else if ( (chance < 0.2 && regularFieldsCount > 0) || (preferredFieldsCount == 0 && regularFieldsCount > 0)) {
-                int ind = random.nextInt(regularFieldsCount);
-                Vector2d field = regularFieldsAvailable.get(ind);
-                plants.put(field, new Plant(field, plantEnergy));
-                regularFieldsAvailable.remove(ind);
-                regularFieldsCount--;
-            }
-        }
-    }
-
-    public void growPlants() {
-        //TODO -> sprawdzić/zdecydować - gdy miejsca preferowane są zapełnione to dalej dokłanie ilość plantsPerTurn powinna się pojawić na mapie
-        // czy tylko te faktycznie wylosowane za pomocą szansy 20% na polach zwykłych
-        this.initializePlants(this.plantsPerTurn);
+    public void growPlants(){
+        planter.generatePlants(plantsPerTurn);
     }
 
     //TODO (co można zrobić next)
@@ -137,22 +94,15 @@ public class WorldMap {
         animals.sort(Collections.reverseOrder());
     }
 
-    //getters
-    public HashMap<Vector2d, WorldElement> getPlants() { return plants; }
-    public Fields getFields(){ return fields; }
-    public List<Vector2d> getPreferredFieldsAvailable() { return preferredFieldsAvailable; }
-    public List<Vector2d> getRegularFieldsAvailable() { return regularFieldsAvailable; }
-
-
     // Visual helpers
 
-    public WorldElement elementAt(Vector2d position) {
+    public Optional<WorldElement> elementAt(Vector2d position) {
         for (Animal animal : animals) {
             if(animal.getPosition().equals(position)) {
-                return animal;
+                return Optional.of(animal);
             }
         }
-        return plants.get(position);
+        return Optional.ofNullable(planter.plantAt(position));
     }
 
     public String toString(){
@@ -167,5 +117,10 @@ public class WorldMap {
                     "|direction=" + animal.getDirection().toString() + "|genom=" + animal.getGenom().toString() ) ;
         }
     }
+
+    public boolean isPreferred(Vector2d position) {
+        return planter.isPreferred( position );
+    }
+
 
 }
