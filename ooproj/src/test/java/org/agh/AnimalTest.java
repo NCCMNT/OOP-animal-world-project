@@ -4,7 +4,6 @@ import org.agh.model.Animal;
 import org.agh.model.Vector2d;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 class AnimalTest {
@@ -32,8 +31,13 @@ class AnimalTest {
         for (Animal animal : animals) {
             System.out.print(animal.getEnergy() + animal.getPosition().toString() + "; ");
         }
-        animals.sort(Collections.reverseOrder());
-        System.out.println("\nSorted:");
+        animals.sort(Animal::compareByPosition);
+        System.out.println("\nSorted by position first:");
+        for (Animal animal : animals) {
+            System.out.print(animal.getEnergy() + animal.getPosition().toString()+ "; ");
+        }
+        animals.sort(Animal::compareTo);
+        System.out.println("\nSorted by energy first:");
         for (Animal animal : animals) {
             System.out.print(animal.getEnergy() + animal.getPosition().toString()+ "; ");
         }
