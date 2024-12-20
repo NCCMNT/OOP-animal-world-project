@@ -16,7 +16,7 @@ class WorldMapTest {
     WorldMap worldMap2 = new WorldMap(mapSettings2);
 
     @Test
-    void test() {
+    void testMoveAllAnimals() {
         for (int i = 0; i < 10; i++) {
             worldMap1.printAnimalInfo();
             worldMap1.moveAllAnimals();

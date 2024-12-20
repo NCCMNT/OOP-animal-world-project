@@ -49,7 +49,7 @@ public class WorldMap {
         this(width, height, plantsPerTurn, plantEnergy, energeticFertilityThreshold, energeticBreedingCost, minMutations, maxMutations);
         initializeAnimals(startingAnimals, startingEnergy, genomLen);
         initializePlants(startingGrass);
-        generateMutator(minMutations, maxMutations, genomLen);
+        initializeMutator(minMutations, maxMutations, genomLen);
     }
 
     public WorldMap(MapSettings mapSettings){
@@ -67,7 +67,7 @@ public class WorldMap {
         this.preferredFieldsAvailable = new ArrayList<>(preferredFields);
         this.regularFieldsAvailable = new ArrayList<>(regularFields);
 
-        generateMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
+        initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
         initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
         initializePlants(mapSettings.startingNumberOfPlants());
     }
@@ -118,7 +118,7 @@ public class WorldMap {
     // -> dodać mechanizm determinowania, które zwierzę zjada roślinę
     // -> dodać mechanizm rozmnażania zwierząt
 
-    public void generateMutator(int minMutations, int maxMutations, int genomLen) {
+    public void initializeMutator(int minMutations, int maxMutations, int genomLen) {
         mutator = new Mutator(minMutations, maxMutations, genomLen);
     }
 

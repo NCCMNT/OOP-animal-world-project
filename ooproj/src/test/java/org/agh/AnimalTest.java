@@ -28,12 +28,12 @@ class AnimalTest {
                 animal1
         ));
 
-        System.out.println("Przed sortowaniem:");
+        System.out.println("Unsorted:");
         for (Animal animal : animals) {
             System.out.print(animal.getEnergy() + animal.getPosition().toString() + "; ");
         }
         animals.sort(Collections.reverseOrder());
-        System.out.println("\nPo sortowaniu:");
+        System.out.println("\nSorted:");
         for (Animal animal : animals) {
             System.out.print(animal.getEnergy() + animal.getPosition().toString()+ "; ");
         }
