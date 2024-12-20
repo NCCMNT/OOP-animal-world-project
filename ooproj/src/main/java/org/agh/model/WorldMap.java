@@ -70,7 +70,6 @@ public class WorldMap {
         generateMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
         initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
         initializePlants(mapSettings.startingNumberOfPlants());
-
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -109,8 +108,15 @@ public class WorldMap {
     }
 
     public void growPlants() {
+        //TODO -> sprawdzić/zdecydować - gdy miejsca preferowane są zapełnione to dalej dokłanie ilość plantsPerTurn powinna się pojawić na mapie
+        // czy tylko te faktycznie wylosowane za pomocą szansy 20% na polach zwykłych
         this.initializePlants(this.plantsPerTurn);
     }
+
+    //TODO (co można zrobić next)
+    // -> dodać mechanizm jedzenia plantów, jeśli roślina znika (jest zjedzona) z pola to powinna zwrócić swoją pozycję do puli FieldsAvailable
+    // -> dodać mechanizm determinowania, które zwierzę zjada roślinę
+    // -> dodać mechanizm rozmnażania zwierząt
 
     public void generateMutator(int minMutations, int maxMutations, int genomLen) {
         mutator = new Mutator(minMutations, maxMutations, genomLen);
