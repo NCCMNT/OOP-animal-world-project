@@ -81,6 +81,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return this.position.toString();
     }
 
+    public String mapMarker(){return this.direction.toArrow();}
+
     public int getEnergy() {
         return energy;
     }

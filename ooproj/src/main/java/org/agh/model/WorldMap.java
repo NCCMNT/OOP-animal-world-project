@@ -2,6 +2,7 @@ package org.agh.model;
 
 import org.agh.utils.Fields;
 import org.agh.utils.MapSettings;
+import org.agh.utils.MapVisualizer;
 
 import java.util.*;
 
@@ -136,6 +137,29 @@ public class WorldMap {
         animals.sort(Collections.reverseOrder());
     }
 
+    //getters
+    public HashMap<Vector2d, WorldElement> getPlants() { return plants; }
+    public Fields getFields(){ return fields; }
+    public List<Vector2d> getPreferredFieldsAvailable() { return preferredFieldsAvailable; }
+    public List<Vector2d> getRegularFieldsAvailable() { return regularFieldsAvailable; }
+
+
+    // Visual helpers
+
+    public WorldElement elementAt(Vector2d position) {
+        for (Animal animal : animals) {
+            if(animal.getPosition().equals(position)) {
+                return animal;
+            }
+        }
+        return plants.get(position);
+    }
+
+    public String toString(){
+        MapVisualizer visualizer = new MapVisualizer(this);
+        return  visualizer.draw(new Vector2d(width - 1, height - 1));
+    }
+
     public void printAnimalInfo(){
         System.out.println("There are " + animals.size() + " animals in the world: ");
         for(Animal animal: animals) {
@@ -144,9 +168,4 @@ public class WorldMap {
         }
     }
 
-    //getters
-    public HashMap<Vector2d, WorldElement> getPlants() { return plants; }
-    public Fields getFields(){ return fields; }
-    public List<Vector2d> getPreferredFieldsAvailable() { return preferredFieldsAvailable; }
-    public List<Vector2d> getRegularFieldsAvailable() { return regularFieldsAvailable; }
 }

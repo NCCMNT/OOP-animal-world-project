@@ -20,6 +20,7 @@ class WorldMapTest {
         for (int i = 0; i < 10; i++) {
             worldMap1.printAnimalInfo();
             worldMap1.moveAllAnimals();
+            System.out.println(worldMap1);
         }
         worldMap1.printAnimalInfo();
     }

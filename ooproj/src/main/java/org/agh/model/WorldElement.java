@@ -7,5 +7,5 @@ abstract public class WorldElement {
         return position;
     }
 
-    public abstract String toString();
+    public abstract String mapMarker();
 }

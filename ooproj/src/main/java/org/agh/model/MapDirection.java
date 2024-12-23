@@ -25,6 +25,19 @@ public enum MapDirection {
         };
     }
 
+    public String toArrow(){
+        return switch(this){
+            case NORTH -> "↑";
+            case NORTH_EAST -> "↗";
+            case NORTH_WEST -> "↖";
+            case SOUTH -> "↓";
+            case SOUTH_EAST -> "↘";
+            case SOUTH_WEST -> "↙";
+            case WEST -> "←";
+            case EAST -> "→";
+        };
+    }
+
     public int toInt(){
         return switch(this){
             case NORTH -> 0;
