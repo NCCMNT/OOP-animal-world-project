@@ -12,6 +12,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private int age;
     private List<Integer> genom;
     private int activeGen;
+    private int childCount;
     private final WorldMap worldMap;
     private static final Random random = new Random();
 
@@ -20,6 +21,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.energy = energy;
         this.position = position;
         this.age = 0;
+        this.childCount = 0;
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
     // Animal when born in the beginning of simulation
@@ -35,9 +37,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     // Animal when born from two parents
     public Animal(Animal parent1, Animal parent2, int energy) {
         this(parent1.worldMap, energy, parent1.getPosition());
+        parent1.childCount += 1; parent2.childCount += 1;
         int genomLen = parent1.genom.size();
         int sumEnergy = parent1.energy + parent2.energy;
-        int gensFromParent1 = round(genomLen * parent1.energy / sumEnergy);
+        int gensFromParent1 = round((float) (genomLen * parent1.energy) / sumEnergy); // Straszne susge, trzeba poczytać
         int gensFromParent2 = genomLen - gensFromParent1;
         this.genom = new ArrayList<>(genomLen);
 
@@ -103,20 +106,28 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return activeGen;
     }
 
-    @Override
-    public int compareTo(Animal other) {
+    /**
+     * Comparator used for sorting the animals in List, it sorts first by position then by all other factors.
+     * After sorting using this animals will be grouped by position and inside a position those with the priority to
+     * eat or procreate will be first.
+     * @param other animal to compare to
+     * @return int value determining their order
+     */
+    public int compareByPosition(Animal other){
         if(position.getY() - other.position.getY() != 0){
             return position.getY() - other.position.getY();
         }
         if(position.getX() - other.position.getX() != 0){
             return position.getX() - other.position.getX();
         }
-        if(energy - other.energy != 0){
-            return energy - other.energy;
-        }
-        if(age - other.age != 0){
-            return age - other.age;
-        }
+        return -1*compareTo(other);
+    }
+
+    @Override
+    public int compareTo(Animal other) {
+        if(energy - other.energy != 0){return energy - other.energy;}
+        if(age - other.age != 0){return age - other.age;}
+        if (childCount - other.childCount != 0){return childCount - other.childCount;}
         return 0;
     }
 }

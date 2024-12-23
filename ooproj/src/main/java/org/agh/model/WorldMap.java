@@ -1,6 +1,5 @@
 package org.agh.model;
 
-import org.agh.utils.Fields;
 import org.agh.utils.MapSettings;
 import org.agh.utils.MapVisualizer;
 
@@ -64,7 +63,7 @@ public class WorldMap {
         for (int i = 0; i < amountOfAnimals; i++) {
             animals.add(new Animal(this, startingEnergy, new Vector2d(random.nextInt(width), random.nextInt(height)), genomLen));
         }
-        animals.sort(Collections.reverseOrder());
+        animals.sort(Animal::compareByPosition);
     }
 
     public void growPlants(){
@@ -91,7 +90,7 @@ public class WorldMap {
         for(Animal animal: animals) {
             animal.move();
         }
-        animals.sort(Collections.reverseOrder());
+        animals.sort(Animal::compareByPosition);
     }
 
     // Visual helpers
