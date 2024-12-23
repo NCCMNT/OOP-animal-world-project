@@ -19,6 +19,7 @@ public class WorldMap {
     private HashMap<Vector2d, Plant> plants;
 
     private List<Animal> animals;
+    private int animalId = 0;
     private Mutator mutator;
     private static final Random random = new Random();
 
@@ -64,19 +65,71 @@ public class WorldMap {
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
         animals = new ArrayList<>();
         for (int i = 0; i < amountOfAnimals; i++) {
-            animals.add(new Animal(this, startingEnergy, new Vector2d(random.nextInt(width), random.nextInt(height)), genomLen));
+            animals.add(new Animal(this, startingEnergy, new Vector2d(random.nextInt(width), random.nextInt(height)), genomLen, animalId));
+            animalId++;
         }
         animals.sort(Animal::compareByPosition);
+
+        //printing info for logs
+        System.out.println("Animals initialized");
     }
 
     public void initializeMutator(int minMutations, int maxMutations, int genomLen) {
         mutator = new Mutator(minMutations, maxMutations, genomLen);
+
+        //printing info for logs
+        System.out.println("Mutator initialized");
     }
 
-    //TODO (co można zrobić next)
-    // -> dodać mechanizm jedzenia plantów, jeśli roślina znika (jest zjedzona) z pola to powinna zwrócić swoją pozycję do puli FieldsAvailable
-    // -> dodać mechanizm determinowania, które zwierzę zjada roślinę
-    // -> dodać mechanizm rozmnażania zwierząt
+    public void checkStateOfAllAnimals() {
+        int count = 0;
+        for (int i = animals.size() - 1; i >= 0; i--) {
+            //if animal has 0 energy - it dies
+            if (animals.get(i).getEnergy() == 0) {
+                animals.remove(i);
+                count++;
+            }
+            //if animal lives then ages by one time unit
+            else{
+                animals.get(i).age(1);
+            }
+        }
+        //printing info for logs
+        System.out.println("Removed " + count + " dead animals from map");
+    }
+
+    public void breedAllAnimals(){
+        //wariant dwóch najsilniejszych na danym polu
+        int i = 0;
+        while (i < animals.size() - 1){
+            Animal potentialParent1 = animals.get(i);
+            Animal potentialParent2 = animals.get(i+1);
+            if (potentialParent1.getPosition().equals(potentialParent2.getPosition()) &&
+                potentialParent1.getEnergy() >= energeticFertilityThreshold && potentialParent2.getEnergy() >= energeticFertilityThreshold) {
+
+                potentialParent1.loseEnergy(energeticBreedingCost);
+                potentialParent2.loseEnergy(energeticBreedingCost);
+
+                //printing info for logs
+                System.out.println("Animals " + potentialParent1.getAnimalId() + " and " + potentialParent2.getAnimalId() + " mated");
+
+                breedAnimals(potentialParent1, potentialParent2);
+                i++;
+            }
+            i++;
+        }
+        animals.sort(Animal::compareByPosition);
+    }
+
+    private void breedAnimals(Animal animal1, Animal animal2) {
+        Animal child = new Animal(animal1, animal2, 2*energeticBreedingCost, animalId);
+        animalId++;
+        mutator.mutate(child);
+        animals.add(child);
+
+        //printing info for logs
+        System.out.println("Animal " + child.getAnimalId() + " was born");
+    }
 
     public void feedAllAnimals(){
         //list of animals must be sorted by position first and then by energy
@@ -99,9 +152,12 @@ public class WorldMap {
             }
             i++;
         }
+
+        //printing info for logs
+        System.out.println("All animals were fed");
     }
 
-    public void feedAnimal(Animal animal){
+    private void feedAnimal(Animal animal){
         Vector2d position = animal.getPosition();
         Plant plant = planter.removePlant(position);
         if (plant != null) {
@@ -111,6 +167,9 @@ public class WorldMap {
 
     public void growPlants(){
         planter.generatePlants(plantsPerTurn);
+
+        //printing info for logs
+        System.out.println("World blooms with new plants");
     }
 
     public Vector2d whereToMove( Vector2d desiredPosition ) {
@@ -125,6 +184,9 @@ public class WorldMap {
             animal.move();
         }
         animals.sort(Animal::compareByPosition);
+
+        //printing info for logs
+        System.out.println("All animals were moved");
     }
 
     // Visual helpers
@@ -146,15 +208,14 @@ public class WorldMap {
     public void printAnimalInfo(){
         System.out.println("There are " + animals.size() + " animals in the world: ");
         for(Animal animal: animals) {
-            System.out.println("    Energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
+            System.out.println("Animal: " + animal.getAnimalId() + " | energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
                     " | direction: " + animal.getDirection().toString() + " | genom: " + animal.getGenom().toString() +
-                    " | active gen: " + animal.getActiveGen()) ;
+                    " | active gen: " + animal.getActiveGen() + " | age: " + animal.getAge()) ;
         }
     }
 
     public boolean isPreferred(Vector2d position) {
         return planter.isPreferred( position );
     }
-
 
 }

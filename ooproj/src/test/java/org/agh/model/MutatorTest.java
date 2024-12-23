@@ -8,7 +8,7 @@ class MutatorTest {
 
     @Test
     void mutate() {
-        Animal testSubject = new Animal(null, 10, null, 10);
+        Animal testSubject = new Animal(null, 10, null, 10, 1);
         Mutator mutator1 = new Mutator(0, 0, 10);
         System.out.println("No mutations:");
         for (int i = 0; i < 4; i++) {
