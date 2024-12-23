@@ -79,6 +79,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         energy -= 1;
     }
 
+    public void feed(int energy){
+        this.energy += energy;
+    }
+
     @Override
     public String toString() {
         return this.position.toString();

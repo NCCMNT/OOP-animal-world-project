@@ -16,6 +16,7 @@ public class WorldMap {
     private final int energeticBreedingCost;
 
     private Planter planter;
+    private HashMap<Vector2d, Plant> plants;
 
     private List<Animal> animals;
     private Mutator mutator;
@@ -33,6 +34,7 @@ public class WorldMap {
         this.energeticBreedingCost = energeticBreedingCost;
 
         planter = new EquatorPlanter(width, height, plantEnergy);
+        this.plants = planter.getPlants();
     }
 
     public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations,
@@ -53,6 +55,7 @@ public class WorldMap {
         this.energeticBreedingCost = mapSettings.energeticBreedingCost();
 
         planter = new EquatorPlanter(width, height, plantEnergy, mapSettings.startingNumberOfPlants());
+        this.plants = planter.getPlants();
 
         initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
         initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
@@ -66,8 +69,8 @@ public class WorldMap {
         animals.sort(Animal::compareByPosition);
     }
 
-    public void growPlants(){
-        planter.generatePlants(plantsPerTurn);
+    public void initializeMutator(int minMutations, int maxMutations, int genomLen) {
+        mutator = new Mutator(minMutations, maxMutations, genomLen);
     }
 
     //TODO (co można zrobić next)
@@ -75,8 +78,39 @@ public class WorldMap {
     // -> dodać mechanizm determinowania, które zwierzę zjada roślinę
     // -> dodać mechanizm rozmnażania zwierząt
 
-    public void initializeMutator(int minMutations, int maxMutations, int genomLen) {
-        mutator = new Mutator(minMutations, maxMutations, genomLen);
+    public void feedAllAnimals(){
+        //list of animals must be sorted by position first and then by energy
+        //we only feed the strongest animals on each position
+        Animal animal = animals.getFirst();
+
+        //feed first animal in the list, it eats plant on his position
+        this.feedAnimal(animal);
+
+        int i = 1;
+        Vector2d position = animal.getPosition();
+        while (i < animals.size()) {
+            Animal nextAnimal = animals.get(i);
+            if (!nextAnimal.getPosition().equals(position)) {
+                //change considered position
+                position = nextAnimal.getPosition();
+
+                //feed this animal
+                feedAnimal(nextAnimal);
+            }
+            i++;
+        }
+    }
+
+    public void feedAnimal(Animal animal){
+        Vector2d position = animal.getPosition();
+        Plant plant = planter.removePlant(position);
+        if (plant != null) {
+            animal.feed(plant.getEnergy());
+        }
+    }
+
+    public void growPlants(){
+        planter.generatePlants(plantsPerTurn);
     }
 
     public Vector2d whereToMove( Vector2d desiredPosition ) {
@@ -112,8 +146,9 @@ public class WorldMap {
     public void printAnimalInfo(){
         System.out.println("There are " + animals.size() + " animals in the world: ");
         for(Animal animal: animals) {
-            System.out.println("    Energy=" + animal.getEnergy() + "|Position=" + animal.getPosition().toString() +
-                    "|direction=" + animal.getDirection().toString() + "|genom=" + animal.getGenom().toString() ) ;
+            System.out.println("    Energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
+                    " | direction: " + animal.getDirection().toString() + " | genom: " + animal.getGenom().toString() +
+                    " | active gen: " + animal.getActiveGen()) ;
         }
     }
 
