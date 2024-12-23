@@ -5,6 +5,8 @@ import org.agh.model.Vector2d;
 import org.agh.model.WorldElement;
 import org.agh.model.WorldMap;
 
+import java.util.Optional;
+
 /**
  * The map visualizer converts the {@link WorldMap} map into a string
  * representation.
@@ -77,13 +79,9 @@ public class MapVisualizer {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        WorldElement object = this.map.elementAt(currentPosition);
-        if (object != null) {
-            return object.mapMarker();
-        }
-        if(this.map.getFields().isPreferredField(currentPosition)) {
-            return EMPTY_PREFERRED;
-        }
+        Optional<WorldElement> element = this.map.elementAt(currentPosition);
+        if (element.isPresent()) { return element.get().mapMarker();}
+        if (this.map.isPreferred(currentPosition)) { return EMPTY_PREFERRED;}
         return EMPTY_CELL;
     }
 }
