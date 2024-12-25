@@ -15,8 +15,7 @@ public class WorldMap {
     private final int energeticFertilityThreshold;
     private final int energeticBreedingCost;
 
-    private Planter planter;
-    private HashMap<Vector2d, Plant> plants;
+    private final Planter planter;
 
     private List<Animal> animals;
     private int animalId = 0;
@@ -35,7 +34,6 @@ public class WorldMap {
         this.energeticBreedingCost = energeticBreedingCost;
 
         planter = new EquatorPlanter(width, height, plantEnergy);
-        this.plants = planter.getPlants();
     }
 
     public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations,
@@ -56,7 +54,6 @@ public class WorldMap {
         this.energeticBreedingCost = mapSettings.energeticBreedingCost();
 
         planter = new EquatorPlanter(width, height, plantEnergy, mapSettings.startingNumberOfPlants());
-        this.plants = planter.getPlants();
 
         initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
         initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
@@ -68,7 +65,6 @@ public class WorldMap {
             animals.add(new Animal(this, startingEnergy, new Vector2d(random.nextInt(width), random.nextInt(height)), genomLen, animalId));
             animalId++;
         }
-        animals.sort(Animal::compareByPosition);
 
         //printing info for logs
         System.out.println("Animals initialized");
@@ -100,6 +96,8 @@ public class WorldMap {
 
     public void breedAllAnimals(){
         //wariant dwóch najsilniejszych na danym polu
+        animals.sort(Animal::compareByPosition);
+
         int i = 0;
         while (i < animals.size() - 1){
             Animal potentialParent1 = animals.get(i);
@@ -107,21 +105,23 @@ public class WorldMap {
             if (potentialParent1.getPosition().equals(potentialParent2.getPosition()) &&
                 potentialParent1.getEnergy() >= energeticFertilityThreshold && potentialParent2.getEnergy() >= energeticFertilityThreshold) {
 
-                potentialParent1.loseEnergy(energeticBreedingCost);
-                potentialParent2.loseEnergy(energeticBreedingCost);
-
                 //printing info for logs
                 System.out.println("Animals " + potentialParent1.getAnimalId() + " and " + potentialParent2.getAnimalId() + " mated");
 
                 breedAnimals(potentialParent1, potentialParent2);
+            }
+            // We move until we get to another position, because current position is already occupied by the first 2
+            // strongest animals.
+            while( i < animals.size() - 1 && animals.get(i).getPosition().equals(animals.get(i+1).getPosition())){
                 i++;
             }
             i++;
         }
-        animals.sort(Animal::compareByPosition);
     }
 
     private void breedAnimals(Animal animal1, Animal animal2) {
+        animal1.loseEnergy(energeticBreedingCost);
+        animal2.loseEnergy(energeticBreedingCost);
         Animal child = new Animal(animal1, animal2, 2*energeticBreedingCost, animalId);
         animalId++;
         mutator.mutate(child);
@@ -132,25 +132,11 @@ public class WorldMap {
     }
 
     public void feedAllAnimals(){
-        //list of animals must be sorted by position first and then by energy
-        //we only feed the strongest animals on each position
-        Animal animal = animals.getFirst();
-
-        //feed first animal in the list, it eats plant on his position
-        this.feedAnimal(animal);
-
-        int i = 1;
-        Vector2d position = animal.getPosition();
-        while (i < animals.size()) {
-            Animal nextAnimal = animals.get(i);
-            if (!nextAnimal.getPosition().equals(position)) {
-                //change considered position
-                position = nextAnimal.getPosition();
-
-                //feed this animal
-                feedAnimal(nextAnimal);
-            }
-            i++;
+        //list of animals must be sorted by energy
+        animals.sort(Animal::compareTo);
+        //we feed strongest first due to how list is sorted
+        for (Animal animal : animals) {
+            feedAnimal(animal);
         }
 
         //printing info for logs
@@ -183,7 +169,6 @@ public class WorldMap {
         for(Animal animal: animals) {
             animal.move();
         }
-        animals.sort(Animal::compareByPosition);
 
         //printing info for logs
         System.out.println("All animals were moved");
@@ -206,6 +191,7 @@ public class WorldMap {
     }
 
     public void printAnimalInfo(){
+        animals.sort(Animal::compareByPosition);
         System.out.println("There are " + animals.size() + " animals in the world: ");
         for(Animal animal: animals) {
             System.out.println("Animal: " + animal.getAnimalId() + " | energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
