@@ -57,7 +57,41 @@ public class EquatorPlanter implements Planter{
                 regularFieldsCount--;
             }
         }
+    }
 
+    public Plant removePlant(Vector2d position) {
+        if (this.plants.containsKey(position)) {
+            Plant plant = this.plants.get(position);
+
+            if (isPreferred(position)) {
+                this.addToPreferredFieldsAvailable(position);
+            }
+            else {
+                this.addToRegularFieldsAvailable(position);
+            }
+
+            this.plants.remove(position);
+            return plant;
+        }
+        return null;
+    }
+
+    //handling regular fields availability
+    private void addToRegularFieldsAvailable(Vector2d position) {
+        regularFieldsAvailable.add(position);
+    }
+
+    private void removeFromRegularFieldsAvailable(Vector2d position) {
+        regularFieldsAvailable.remove(position);
+    }
+
+    //handling preferred fields availability
+    private void addToPreferredFieldsAvailable(Vector2d position) {
+        preferredFieldsAvailable.add(position);
+    }
+
+    private void removeFromPreferredFieldsAvailable(Vector2d position) {
+        preferredFieldsAvailable.remove(position);
     }
 
     @Override
@@ -70,27 +104,27 @@ public class EquatorPlanter implements Planter{
         return plants.get(position);
     }
 
-    Fields getFields() {
+    public Fields getFields() {
         return fields;
     }
 
-    HashMap<Vector2d, Plant> getPlants() {
+    public HashMap<Vector2d, Plant> getPlants() {
         return plants;
     }
 
-    Set<Vector2d> getPreferredFields() {
+    public Set<Vector2d> getPreferredFields() {
         return preferredFields;
     }
 
-    Set<Vector2d> getRegularFields() {
+    public Set<Vector2d> getRegularFields() {
         return regularFields;
     }
 
-    List<Vector2d> getPreferredFieldsAvailable() {
+    public List<Vector2d> getPreferredFieldsAvailable() {
         return preferredFieldsAvailable;
     }
 
-    List<Vector2d> getRegularFieldsAvailable() {
+    public List<Vector2d> getRegularFieldsAvailable() {
         return regularFieldsAvailable;
     }
 }

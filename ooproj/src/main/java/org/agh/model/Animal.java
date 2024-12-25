@@ -13,6 +13,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private List<Integer> genom;
     private int activeGen;
     private int childCount;
+    private int animalId;
     private final WorldMap worldMap;
     private static final Random random = new Random();
 
@@ -25,17 +26,18 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
     // Animal when born in the beginning of simulation
-    public Animal(WorldMap worldMap, int initEnergy, Vector2d position, int genomLen) {
+    public Animal(WorldMap worldMap, int initEnergy, Vector2d position, int genomLen, int animalId) {
         this(worldMap, initEnergy, position);
         this.genom = new ArrayList<>(genomLen);
         for (int i = 0; i < genomLen; i++) {
             genom.add(random.nextInt(8));
         }
         this.activeGen = random.nextInt(genomLen);
+        this.animalId = animalId;
 
     }
     // Animal when born from two parents
-    public Animal(Animal parent1, Animal parent2, int energy) {
+    public Animal(Animal parent1, Animal parent2, int energy, int animalId) {
         this(parent1.worldMap, energy, parent1.getPosition());
         parent1.childCount += 1; parent2.childCount += 1;
         int genomLen = parent1.genom.size();
@@ -61,6 +63,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
             }
         }
 
+        this.animalId = animalId;
         this.activeGen = random.nextInt(genomLen);
 
     }
@@ -77,6 +80,18 @@ public class Animal extends WorldElement implements Comparable<Animal> {
             position = actualPosition;
         }
         energy -= 1;
+    }
+
+    public void feed(int energy){
+        this.energy += energy;
+    }
+
+    public void loseEnergy(int energy){
+        this.energy -= energy;
+    }
+
+    public void age(int timeUnit){
+        this.age += timeUnit;
     }
 
     @Override
@@ -105,6 +120,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     public int getActiveGen() {
         return activeGen;
     }
+
+    public int getAnimalId() { return animalId; }
 
     /**
      * Comparator used for sorting the animals in List, it sorts first by position then by all other factors.

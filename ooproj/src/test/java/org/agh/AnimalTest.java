@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class AnimalTest {
-    Animal animal1 = new Animal(null, 10, new Vector2d(0,0), 5);
-    Animal animal2 = new Animal(null, 5, new Vector2d(0,0), 5);
+    Animal animal1 = new Animal(null, 10, new Vector2d(0,0), 5,1);
+    Animal animal2 = new Animal(null, 5, new Vector2d(0,0), 5,2);
 
     @Test
     void animalsMakeNewAnimalTest(){
-        Animal childAnimal = new Animal(animal1, animal2, 8);
+        Animal childAnimal = new Animal(animal1, animal2, 8,3);
         System.out.println(animal1.getGenom());
         System.out.println(animal2.getGenom());
         System.out.println(childAnimal.getGenom());
@@ -20,10 +20,10 @@ class AnimalTest {
 
     @Test
     void sortAnimals(){
-        List<Animal> animals = new java.util.ArrayList<>(List.of(animal1, animal2, new Animal(animal1, animal2, 8),
-                new Animal(null, 6, new Vector2d(1, 1), 5),
-                new Animal(null, 7, new Vector2d(1, 1), 5),
-                new Animal(null, 5, new Vector2d(1, 1), 5),
+        List<Animal> animals = new java.util.ArrayList<>(List.of(animal1, animal2, new Animal(animal1, animal2, 8, 3),
+                new Animal(null, 6, new Vector2d(1, 1), 5,4),
+                new Animal(null, 7, new Vector2d(1, 1), 5,5),
+                new Animal(null, 5, new Vector2d(1, 1), 5,6),
                 animal1
         ));
 
