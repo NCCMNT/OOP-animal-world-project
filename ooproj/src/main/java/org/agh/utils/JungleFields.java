@@ -20,9 +20,9 @@ public class JungleFields implements Fields {
         this.height = height;
         this.preferredFields = new HashSet<>();
         this.regularFields = new HashSet<>();
-        // Assigning a jungle square side that will cover at least 1/5 of all the fields, but it cannot exceed width
+        // Assigning a jungle square side that will cover at least "percentage" of all the fields, but it cannot exceed width
         // of height for obvious reasons
-        squareSide = Math.min((int) Math.ceil(Math.sqrt(width * height / 5.0)), Math.min(width, height));
+        squareSide = Math.min((int) Math.ceil(Math.sqrt(width * height * percentage/ 100.0)), Math.min(width, height));
         lowerLeftCorner = new Vector2d((width - squareSide) / 2, (height - squareSide) / 2);
         this.definePreferredFields();
     }
@@ -50,4 +50,7 @@ public class JungleFields implements Fields {
         return regularFields;
     }
 
+    int getSquareSide() {
+        return squareSide;
+    }
 }
