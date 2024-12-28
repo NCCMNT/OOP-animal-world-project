@@ -1,10 +1,12 @@
 package org.agh.model;
 
 import org.agh.utils.EquatorFields;
+import org.agh.utils.Fields;
+import org.agh.utils.JungleFields;
 
 import java.util.*;
 
-public class EquatorPlanter implements Planter{
+public class JunglePlanter implements Planter{
 
     private HashMap<Vector2d, Plant> plants = new HashMap<>();
 
@@ -17,15 +19,15 @@ public class EquatorPlanter implements Planter{
 
     private static final Random random = new Random();
 
-    public EquatorPlanter(int width, int height, int plantEnergy) {
-        EquatorFields fields = (new EquatorFields(width, height, 20));
+    public JunglePlanter(int width, int height, int plantEnergy) {
+        Fields fields = (new JungleFields(width, height, 20));
         this.plantEnergy = plantEnergy;
         this.preferredFields = fields.getPreferredFields();
         this.regularFields = fields.getRegularFields();
         this.preferredFieldsAvailable = new ArrayList<>(preferredFields);
         this.regularFieldsAvailable = new ArrayList<>(regularFields);
     }
-    public EquatorPlanter(int width, int height, int plantEnergy, int startingPlants) {
+    public JunglePlanter(int width, int height, int plantEnergy, int startingPlants) {
         this(width, height, plantEnergy);
         generatePlants(startingPlants);
     }
