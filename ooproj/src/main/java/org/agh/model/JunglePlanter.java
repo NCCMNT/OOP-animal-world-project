@@ -1,6 +1,5 @@
 package org.agh.model;
 
-import org.agh.utils.EquatorFields;
 import org.agh.utils.Fields;
 import org.agh.utils.JungleFields;
 
@@ -10,7 +9,7 @@ public class JunglePlanter implements Planter{
 
     private final static int BIGENERGYMULTIPLIER = 3;
 
-    private HashMap<Vector2d, Plant> plants = new HashMap<>();
+    private final HashMap<Vector2d, Plant> plants = new HashMap<>();
 
     //private Fields fields;
     private final Set<Vector2d> preferredFields;
@@ -35,14 +34,11 @@ public class JunglePlanter implements Planter{
 
     @Override
     public void generatePlants(int plantAmount) {
-        int selectedIndex = 0;
-        Vector2d selectedPosition = null;
         for (int i = 0; i < plantAmount; i++) {
             if(fieldsAvailable.isEmpty()) break;
-            selectedIndex = random.nextInt(fieldsAvailable.size());
-            selectedPosition = fieldsAvailable.get(selectedIndex);
+            int selectedIndex = random.nextInt(fieldsAvailable.size());
+            Vector2d selectedPosition = fieldsAvailable.get(selectedIndex);
             if(!tryBigPlacing(selectedPosition)) {
-
                 plants.put(selectedPosition, new Plant(selectedPosition, plantEnergy));
             }
             fieldsAvailable.set(selectedIndex, fieldsAvailable.getLast());

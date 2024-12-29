@@ -9,8 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JungleFieldsTest {
 
-    private JungleFields jungleFields = new JungleFields(10, 10, 20);
-
+    private final JungleFields jungleFields = new JungleFields(10, 10, 20);
 
     @Test
     void testPreferredFieldsDefinedCorrectly() {
@@ -54,9 +53,4 @@ class JungleFieldsTest {
         assertTrue( smallJungleFields.getRegularFields().isEmpty(), "Regular fields set is not empty.");
     }
 
-    @Test
-    void testConstructorHandlesZeroDimensions() {
-        // Test the constructor with zero dimensions
-
-    }
 }

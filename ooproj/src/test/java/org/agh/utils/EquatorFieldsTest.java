@@ -1,7 +1,6 @@
 package org.agh.utils;
 
 import org.agh.model.Vector2d;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -10,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EquatorFieldsTest {
 
-    private EquatorFields equatorFields = new EquatorFields(10, 10, 20);;
+    private final EquatorFields equatorFields = new EquatorFields(10, 10, 20);
 
     @Test
     void testEquatorBoundsCalculation() {
