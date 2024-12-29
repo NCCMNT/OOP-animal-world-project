@@ -8,7 +8,7 @@ public class EquatorPlanter implements Planter{
 
     private HashMap<Vector2d, Plant> plants = new HashMap<>();
 
-    private Fields fields;
+    //private Fields fields;
     private final Set<Vector2d> preferredFields;
     private final Set<Vector2d> regularFields;
     private final List<Vector2d> preferredFieldsAvailable;
@@ -18,7 +18,7 @@ public class EquatorPlanter implements Planter{
     private static final Random random = new Random();
 
     public EquatorPlanter(int width, int height, int plantEnergy) {
-        this.fields = (new Fields(width, height, 20));
+        Fields fields = (new Fields(width, height, 20));
         this.plantEnergy = plantEnergy;
         this.preferredFields = fields.getPreferredFields();
         this.regularFields = fields.getRegularFields();
@@ -104,9 +104,9 @@ public class EquatorPlanter implements Planter{
         return plants.get(position);
     }
 
-    public Fields getFields() {
-        return fields;
-    }
+//    public Fields getFields() {
+//        return fields;
+//    }
 
     public HashMap<Vector2d, Plant> getPlants() {
         return plants;
