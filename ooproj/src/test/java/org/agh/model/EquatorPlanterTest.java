@@ -13,10 +13,6 @@ class EquatorPlanterTest {
 
     @Test
     void testPlantInitialization() {
-        //tests for planter1
-        assertEquals(2, planter1.getFields().getEquatorStart());
-        assertEquals(3, planter1.getFields().getEquatorEnd());
-
         //initial number of plants must always equal size of hashmap with plants positions
         assertEquals(5, planter1.getPlants().size());
 
@@ -60,11 +56,11 @@ class EquatorPlanterTest {
         List<Vector2d> regular = planter1.getRegularFieldsAvailable();
 
         for (Vector2d field : preferred) {
-            assertTrue(planter1.getFields().isPreferredField(field));
+            assertTrue(planter1.isPreferred(field));
         }
 
         for (Vector2d field : regular) {
-            assertFalse(planter1.getFields().isPreferredField(field));
+            assertFalse(planter1.isPreferred(field));
         }
     }
 }

@@ -1,6 +1,6 @@
 package org.agh.model;
 
-import org.agh.utils.Fields;
+import org.agh.utils.EquatorFields;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class EquatorPlanter implements Planter{
     private static final Random random = new Random();
 
     public EquatorPlanter(int width, int height, int plantEnergy) {
-        Fields fields = (new Fields(width, height, 20));
+        EquatorFields fields = (new EquatorFields(width, height, 20));
         this.plantEnergy = plantEnergy;
         this.preferredFields = fields.getPreferredFields();
         this.regularFields = fields.getRegularFields();

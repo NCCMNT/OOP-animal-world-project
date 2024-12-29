@@ -20,4 +20,9 @@ public class Plant extends WorldElement{
     public int getEnergy() {
         return energy;
     }
+
+    @Override
+    public String toString() {
+        return position.toString() + " " + energy;
+    }
 }
