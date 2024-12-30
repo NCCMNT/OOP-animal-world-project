@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SimulationTest {
 
     MapSettings mapSettings = new MapSettings(10,10,17,2,3,7,10,
-            7,4, 1,3,8);
+            7,4, false, 1,3,8);
 
     WorldMap worldMap = new WorldMap(mapSettings);
 

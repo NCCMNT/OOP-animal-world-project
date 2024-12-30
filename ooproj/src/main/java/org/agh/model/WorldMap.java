@@ -20,9 +20,10 @@ public class WorldMap {
     private List<Animal> animals;
     private int animalId = 0;
     private Mutator mutator;
+    private final boolean isAging;
     private static final Random random = new Random();
 
-    public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations) {
+    public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations, boolean isAging) {
         if (energeticBreedingCost < energeticFertilityThreshold) throw new IllegalArgumentException("breedingCost < fertilityThreshold");
         if (minMutations > maxMutations) throw new IllegalArgumentException("minMutations > maxMutations");
         this.settings = null; // <- for implementation without map settings
@@ -32,13 +33,14 @@ public class WorldMap {
         this.plantEnergy = plantEnergy;
         this.energeticFertilityThreshold = energeticFertilityThreshold;
         this.energeticBreedingCost = energeticBreedingCost;
+        this.isAging = isAging;
 
         planter = new EquatorPlanter(width, height, plantEnergy);
     }
 
     public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations,
-                    int startingAnimals, int startingEnergy, int genomLen, int startingPlants) {
-        this(width, height, plantsPerTurn, plantEnergy, energeticFertilityThreshold, energeticBreedingCost, minMutations, maxMutations);
+                    int startingAnimals, int startingEnergy, int genomLen, int startingPlants, boolean isAging) {
+        this(width, height, plantsPerTurn, plantEnergy, energeticFertilityThreshold, energeticBreedingCost, minMutations, maxMutations, isAging);
         initializeAnimals(startingAnimals, startingEnergy, genomLen);
         initializeMutator(minMutations, maxMutations, genomLen);
         planter.generatePlants(startingPlants);
@@ -52,6 +54,7 @@ public class WorldMap {
         this.plantEnergy =  mapSettings.plantEnergy();
         this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
         this.energeticBreedingCost = mapSettings.energeticBreedingCost();
+        this.isAging = mapSettings.isAging();
 
         planter = new EquatorPlanter(width, height, plantEnergy, mapSettings.startingNumberOfPlants());
 
@@ -174,6 +177,12 @@ public class WorldMap {
         System.out.println("All animals were moved");
     }
 
+    public void ageAllAnimals(){
+        for (Animal animal : animals) {
+            animal.age(1);
+        }
+    }
+
     // Visual helpers
 
     public Optional<WorldElement> elementAt(Vector2d position) {
@@ -204,4 +213,7 @@ public class WorldMap {
         return planter.isPreferred( position );
     }
 
+    public boolean isAging() {
+        return isAging;
+    }
 }

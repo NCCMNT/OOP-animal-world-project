@@ -26,6 +26,9 @@ public class Simulation implements Runnable {
         //if there is two or more animals on the same field then the strongest eats
         worldMap.feedAllAnimals();
 
+        //then all animals age, knowing that they survived another day
+        worldMap.ageAllAnimals();
+
         //then fed animals can copulate in order to make new animals
         worldMap.breedAllAnimals();
 

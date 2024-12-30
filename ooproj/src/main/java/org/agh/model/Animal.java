@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 public class Animal extends WorldElement implements Comparable<Animal> {
     private int energy;
@@ -16,6 +16,9 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private int animalId;
     private final WorldMap worldMap;
     private static final Random random = new Random();
+
+    private static final double AGING_CONSTANT = 1.0/30.0;
+    private static final double AGING_SHIFT = log(5.0/4.0); // do not touch
 
     private Animal(WorldMap worldMap, int energy, Vector2d position){
         this.worldMap = worldMap;
@@ -69,6 +72,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     }
 
     public void move(){
+        energy -= 1;
+        if(worldMap.isAging() && skipOfOldAge()){ return; }
         direction = direction.rotate(genom.get(activeGen));
         activeGen = (activeGen + 1)%genom.size();
         Vector2d desiredPosition = position.add(this.direction.toUnitVector());
@@ -79,7 +84,11 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         else{
             position = actualPosition;
         }
-        energy -= 1;
+    }
+
+    private boolean skipOfOldAge(){
+        double threshold = exp(-1*age/ AGING_CONSTANT - AGING_SHIFT) + 0.2;
+        return (random.nextDouble() > threshold);
     }
 
     public void feed(int energy){

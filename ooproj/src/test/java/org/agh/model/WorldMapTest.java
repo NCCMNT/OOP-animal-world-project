@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class WorldMapTest {
 
     WorldMap worldMap1 = new WorldMap(5, 5, 2, 3,
-            0, 1, 0, 0, 4, 10, 2, 5);
+            0, 1, 0, 0, 4, 10, 2, 5, false);
 
     MapSettings mapSettings2 = new MapSettings(50, 50, 100, 1, 20,
-            0, 0, 0, 1, 10, 2, 2);
+            0, 0, 0, 1,false, 10, 2, 2);
     WorldMap worldMap2 = new WorldMap(mapSettings2);
 
     @Test

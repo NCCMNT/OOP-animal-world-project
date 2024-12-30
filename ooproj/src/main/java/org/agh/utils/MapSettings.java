@@ -11,7 +11,7 @@ public record MapSettings(
         int startingEnergy,
         int energeticFertilityThreshold,
         int energeticBreedingCost,
-        //uzupełnić <- wariant starzenia się animali
+        boolean isAging,
         int minMutations,
         int maxMutations,
         int genomLen
