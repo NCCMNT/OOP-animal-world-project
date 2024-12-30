@@ -16,6 +16,9 @@ class WorldMapTest {
             0, 0, 0, 1,false, 10, 2, 2);
     WorldMap worldMap2 = new WorldMap(mapSettings2);
 
+    WorldMap worldMap1withAging = new WorldMap(5, 5, 2, 3,
+            0, 1, 0, 0, 4, 10, 2, 5, true);
+
     @Test
     void testMoveAllAnimals() {
         worldMap1.printAnimalInfo();
@@ -66,5 +69,31 @@ class WorldMapTest {
             System.out.println(worldMap1);
         }
         worldMap1.printAnimalInfo();
+    }
+
+    @Test
+    void manualWithAging(){
+        for (int i = 0; i < 10; i++) {
+            worldMap1withAging.ageAllAnimals();
+        }
+        worldMap1withAging.printAnimalInfo();
+        System.out.println(worldMap1);
+        for (int i = 0; i < 5; i++) {
+            worldMap1withAging.moveAllAnimals();
+            worldMap1withAging.ageAllAnimals();
+            worldMap1withAging.printAnimalInfo();
+            System.out.println(worldMap1withAging);
+        }
+        for (int i = 0; i < 100; i++) {
+            worldMap1withAging.ageAllAnimals();
+        }
+        worldMap1withAging.printAnimalInfo();
+        System.out.println(worldMap1);
+        for (int i = 0; i < 5; i++) {
+            worldMap1withAging.moveAllAnimals();
+            worldMap1withAging.ageAllAnimals();
+            worldMap1withAging.printAnimalInfo();
+            System.out.println(worldMap1withAging);
+        }
     }
 }

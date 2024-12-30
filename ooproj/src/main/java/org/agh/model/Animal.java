@@ -87,7 +87,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     }
 
     private boolean skipOfOldAge(){
-        double threshold = exp(-1*age/ AGING_CONSTANT - AGING_SHIFT) + 0.2;
+        double threshold = exp(-1.0*age*AGING_CONSTANT - AGING_SHIFT) + 0.2;
         return (random.nextDouble() > threshold);
     }
 
