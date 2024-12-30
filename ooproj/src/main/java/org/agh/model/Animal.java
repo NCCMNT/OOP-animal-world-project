@@ -156,4 +156,17 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         if (childCount - other.childCount != 0){return childCount - other.childCount;}
         return 0;
     }
+
+    // For testing purposes
+    public static Animal createCustomAnimal(Vector2d position, int energy, MapDirection direction, int age, List<Integer> genom,
+                                             int activeGen, int childCount, int animalId, final WorldMap worldMap){
+        Animal newAnimal = new Animal(worldMap, energy, position);
+        newAnimal.direction = direction;
+        newAnimal.age = age;
+        newAnimal.genom = genom;
+        newAnimal.activeGen = activeGen;
+        newAnimal.animalId = animalId;
+        newAnimal.childCount = childCount;
+        return newAnimal;
+    }
 }

@@ -144,7 +144,7 @@ public class WorldMap {
 
     public void feedAllAnimals(){
         //list of animals must be sorted by energy
-        animals.sort(Animal::compareTo);
+        animals.sort(Comparator.reverseOrder());
         //we feed strongest first due to how list is sorted
         for (Animal animal : animals) {
             feedAnimal(animal);
@@ -191,6 +191,10 @@ public class WorldMap {
         }
     }
 
+    public boolean isAging() {
+        return isAging;
+    }
+
     // Visual helpers
 
     public Optional<WorldElement> elementAt(Vector2d position) {
@@ -221,7 +225,13 @@ public class WorldMap {
         return planter.isPreferred( position );
     }
 
-    public boolean isAging() {
-        return isAging;
+    // For Testing Purposes
+
+    void setAnimals (List<Animal> animals) {
+        this.animals = animals;
+        System.out.println("Animals were set, if that's not a test contact your local software engineer");
+    }
+    List<Animal> getAnimals ( ) {
+        return animals;
     }
 }

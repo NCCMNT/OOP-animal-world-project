@@ -40,9 +40,10 @@ public class JunglePlanter implements Planter{
             Vector2d selectedPosition = fieldsAvailable.get(selectedIndex);
             if(!tryBigPlacing(selectedPosition)) {
                 plants.put(selectedPosition, new Plant(selectedPosition, plantEnergy));
+                fieldsAvailable.set(selectedIndex, fieldsAvailable.getLast());
+                fieldsAvailable.removeLast();
             }
-            fieldsAvailable.set(selectedIndex, fieldsAvailable.getLast());
-            fieldsAvailable.removeLast();
+
         }
     }
 
@@ -61,6 +62,8 @@ public class JunglePlanter implements Planter{
             for(Vector2d position: neighbours){
                 plants.put(position, bigPlant);
             }
+            fieldsAvailable.removeAll(neighbours);
+            fieldsAvailable.remove(lowerLeft);
             return true;
         }
         return false;
