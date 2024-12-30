@@ -1,23 +1,29 @@
 package org.agh.model;
 
 import org.agh.utils.MapSettings;
+import org.agh.utils.PlanterType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class WorldMapTest {
 
-    WorldMap worldMap1 = new WorldMap(5, 5, 2, 3,
-            0, 1, 0, 0, 4, 10, 2, 5, false);
+    MapSettings mapSettings1 = new MapSettings(5, 5 ,5, 3, 2, PlanterType.EQUATOR, 4,
+            10, 0, 1, false, 0, 0, 2);
+
+    MapSettings mapSettings1withAging = new MapSettings(5, 5 ,5, 3, 2, PlanterType.EQUATOR, 4,
+            10, 0, 1, true, 0, 0, 2);
+
+    WorldMap worldMap1 = new WorldMap(mapSettings1);
 
     MapSettings mapSettings2 = new MapSettings(50, 50, 100, 1, 20,
-            0, 0, 0, 1,false, 10, 2, 2);
+            PlanterType.EQUATOR, 0, 0, 0, 1,false, 10, 2, 2);
     WorldMap worldMap2 = new WorldMap(mapSettings2);
 
-    WorldMap worldMap1withAging = new WorldMap(5, 5, 2, 3,
-            0, 1, 0, 0, 4, 10, 2, 5, true);
+    WorldMap worldMap1withAging = new WorldMap(mapSettings1withAging);
 
     @Test
     void testMoveAllAnimals() {

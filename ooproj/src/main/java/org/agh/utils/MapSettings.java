@@ -1,12 +1,14 @@
 package org.agh.utils;
 
+import org.agh.model.Plant;
+
 public record MapSettings(
         int height,
         int width,
         int startingNumberOfPlants,
         int plantEnergy,
         int plantsPerTurn,
-        //uzupełnić <- wariant wzrostu roślin
+        PlanterType planterType,
         int startingNumberOfAnimals,
         int startingEnergy,
         int energeticFertilityThreshold,
