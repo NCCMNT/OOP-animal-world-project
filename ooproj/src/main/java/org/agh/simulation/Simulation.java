@@ -1,6 +1,10 @@
 package org.agh.simulation;
 
 import org.agh.model.WorldMap;
+import org.agh.utils.SimulationChangeListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Simulation implements Runnable {
     private final WorldMap worldMap;
@@ -8,8 +12,11 @@ public class Simulation implements Runnable {
     private int turn = 0;
     private int speed = 500;
 
+    private List<SimulationChangeListener> observers;
+
     public Simulation(WorldMap worldMap) {
         this.worldMap = worldMap;
+        observers = new ArrayList<SimulationChangeListener>();
     }
 
     //each turn execution is composed of few steps
@@ -38,6 +45,8 @@ public class Simulation implements Runnable {
         worldMap.printAnimalInfo();
         System.out.println(worldMap);
         turn++;
+
+        notifyObservers(String.valueOf(turn));
     }
 
     public void setSpeed(int speed) {
@@ -57,11 +66,22 @@ public class Simulation implements Runnable {
         }
     }
 
+    public void addObserver(SimulationChangeListener observer) {
+        observers.add(observer);
+    }
+    public void notifyObservers(String message) {
+        for (SimulationChangeListener observer : observers) {
+            observer.simulationChanged(message);
+        }
+    }
+
+
     public void stop(){
         running = false;
     }
 
     public void resume(){
         running = true;
+        this.run();
     }
 }
