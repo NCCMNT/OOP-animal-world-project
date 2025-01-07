@@ -1,22 +1,22 @@
 package org.agh.simulation;
 
 import javafx.application.Platform;
-import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import org.agh.utils.SimulationChangeListener;
-
-import java.util.List;
 
 public class SimulationPresenter implements SimulationChangeListener {
 
+
     Simulation simulation;
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation; simulation.addObserver(this);
+        stopButton.disableProperty().bind(simulation.stoppedProperty());
+    }
 
     @FXML
     private GridPane worldMapPane;
@@ -26,9 +26,13 @@ public class SimulationPresenter implements SimulationChangeListener {
     private TextField movesField;
     @FXML
     private Button startButton;
+    @FXML
+    private Button stopButton;
 
-    public void setSimulation(Simulation simulation) {
-        this.simulation = simulation;
+
+    @FXML
+    public void initialize() {
+        startButton.disableProperty().bind(stopButton.disableProperty().not());
     }
 
     private void clearGrid(GridPane mapGrid) {
@@ -64,7 +68,9 @@ public class SimulationPresenter implements SimulationChangeListener {
     }
 
     public void onSimulationStartClicked(ActionEvent actionEvent) {
-        Thread simulationThread = new Thread(simulation);
-        simulationThread.start();
+        simulation.start();
+    }
+    public void onSimulationStopClicked(ActionEvent actionEvent) {
+        simulation.stop();
     }
 }

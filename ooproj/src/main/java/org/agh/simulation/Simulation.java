@@ -1,22 +1,33 @@
 package org.agh.simulation;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.agh.model.WorldMap;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Simulation implements Runnable {
     private final WorldMap worldMap;
-    private boolean running = true;
     private int turn = 0;
     private int speed = 500;
+
+    private BooleanProperty stopped = new SimpleBooleanProperty(true);
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private List<SimulationChangeListener> observers;
 
     public Simulation(WorldMap worldMap) {
         this.worldMap = worldMap;
         observers = new ArrayList<SimulationChangeListener>();
+    }
+
+    public void start() {
+        //stop();
+        executorService.submit(this);
     }
 
     //each turn execution is composed of few steps
@@ -55,15 +66,33 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-        while(running){
+        stopped.set(false);
+        while(!stopped.get()){
             try {
                 Thread.sleep(speed);
             }
             catch (InterruptedException e){
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             this.executeTurn();
         }
+    }
+
+    public boolean isStopped() {
+        return stopped.get();
+    }
+
+    public BooleanProperty stoppedProperty() {
+        return stopped;
+    }
+
+    public void stop() {
+        this.stopped.set(true);
+    }
+
+    public void shutdown() {
+        stop();
+        executorService.shutdown();
     }
 
     public void addObserver(SimulationChangeListener observer) {
@@ -75,13 +104,4 @@ public class Simulation implements Runnable {
         }
     }
 
-
-    public void stop(){
-        running = false;
-    }
-
-    public void resume(){
-        running = true;
-        this.run();
-    }
 }

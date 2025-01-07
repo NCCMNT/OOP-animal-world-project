@@ -15,6 +15,7 @@
             <Label fx:id="moveDescription" text="Here last move will be shown" prefWidth="200" />
             <TextField fx:id="movesField" text="Input moves" prefWidth="200" />
             <Button fx:id="startButton" text="Start" onAction="#onSimulationStartClicked" prefWidth="200" />
+            <Button fx:id="stopButton" text="Stop" onAction="#onSimulationStopClicked" prefWidth="200" />
         </VBox>
     </left>
     <center>
