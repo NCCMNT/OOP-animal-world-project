@@ -40,7 +40,7 @@ public class SimulationApp extends Application {
             Simulation simulation = exampleSim();
             presenter.setSimulation(simulation);
 
-            primaryStage.setScene(new Scene(viewRoot));
+            configureStage(primaryStage, viewRoot);
             primaryStage.show();
 
             primaryStage.setOnCloseRequest(event -> simulation.shutdown());

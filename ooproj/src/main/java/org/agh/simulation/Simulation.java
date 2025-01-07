@@ -18,7 +18,7 @@ public class Simulation implements Runnable {
     private BooleanProperty stopped = new SimpleBooleanProperty(true);
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private List<SimulationChangeListener> observers;
+    private final List<SimulationChangeListener> observers;
 
     public Simulation(WorldMap worldMap) {
         this.worldMap = worldMap;
