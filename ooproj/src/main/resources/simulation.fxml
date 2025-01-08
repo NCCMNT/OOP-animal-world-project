@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane minHeight="800.0" minWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.simulation.SimulationPresenter">
+<BorderPane fx:id="borderPane" minHeight="800.0" minWidth="1400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.simulation.SimulationPresenter">
     <center>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox fx:id="backHBox" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <children>
-              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" prefHeight="500.0" prefWidth="850.0" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </GridPane>
-            <VBox fx:id="sideBox" alignment="CENTER" minWidth="200.0" HBox.hgrow="ALWAYS">
+              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" minWidth="1200.0" />
+            <VBox fx:id="AllInfoBox" alignment="CENTER" minWidth="400.0" styleClass="sidePanel" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets bottom="-100.0" />
                </HBox.margin>
                <children>
-                  <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+                  <VBox fx:id="sidePanel" alignment="CENTER" prefWidth="200.0">
                      <children>
-                        <Label fx:id="infoLabel" alignment="CENTER" styleClass="infoLabel" text="Click on a field&#10;to display information&#10;" textAlignment="CENTER" VBox.vgrow="ALWAYS">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <padding>
-                              <Insets left="10.0" right="10.0" />
-                           </padding>
-                        </Label>
-                        <Label fx:id="AnimalInfoLabel" lineSpacing="8.0" styleClass="infoLabel" />
+                        <LineChart VBox.vgrow="ALWAYS">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </LineChart>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label fx:id="AnimalCountInfoLabel" styleClass="infoLabel" text="Animals: " />
-                        <Label fx:id="PlantCountInfoLabel" styleClass="infoLabel" text="Plants: " />
-                        <Label fx:id="EmptyFieldsCountInfoLabel" styleClass="infoLabel" text="Empty fields: " />
-                        <Label fx:id="MostPopularGenomInfoLabel" styleClass="infoLabel" text="Most popular genom: " />
-                        <Label fx:id="AvgAnimalEnergyInfoLabel" styleClass="infoLabel" text="Average animal energy: " />
-                        <Label fx:id="AvgLifeSpanInfoLabel" styleClass="infoLabel" text="Average life span: " />
-                        <Label fx:id="AvgChildrenCountInfoLabel" styleClass="infoLabel" text="Average number of children: " />
+                        <Label fx:id="AnimalCountInfoLabel" styleClass="infoLabel" text="Animals: " wrapText="true" />
+                        <Label fx:id="PlantCountInfoLabel" styleClass="infoLabel" text="Plants: " wrapText="true" />
+                        <Label fx:id="EmptyFieldsCountInfoLabel" styleClass="infoLabel" text="Empty fields: " wrapText="true" />
+                        <Label fx:id="MostPopularGenomInfoLabel" styleClass="infoLabel" text="Most popular genom: " wrapText="true" />
+                        <Label fx:id="AvgAnimalEnergyInfoLabel" styleClass="infoLabel" text="Average animal energy: " wrapText="true" />
+                        <Label fx:id="AvgLifeSpanInfoLabel" styleClass="infoLabel" text="Average life span: " wrapText="true" />
+                        <Label fx:id="AvgChildrenCountInfoLabel" styleClass="infoLabel" text="Average number of children: " wrapText="true" />
                      </children>
                      <VBox.margin>
                         <Insets />
@@ -60,8 +59,30 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0" BorderPane.alignment="CENTER">
          <children>
                <Button fx:id="startButton" onAction="#onSimulationStartClicked" prefWidth="200" styleClass="button" text="Start" />
+               <Button fx:id="chartsButton" alignment="CENTER" mnemonicParsing="false" onAction="#onChartDisplayClicked" text="Hide Info Panel" />
                <Button fx:id="stopButton" onAction="#onSimulationStopClicked" prefWidth="200" styleClass="button" text="Stop" />
          </children>
       </HBox>
    </bottom>
+   <left>
+      <VBox fx:id="AnimalInfoBox" alignment="CENTER" fillWidth="false" maxWidth="300.0" minWidth="300.0" spacing="20.0" styleClass="sidePanel" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="infoLabel" alignment="CENTER" styleClass="infoLabel" text="Click on a field&#10;to display information&#10;" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="AnimalInfoLabel" contentDisplay="CENTER" graphicTextGap="8.0" lineSpacing="8.0" styleClass="infoLabel" wrapText="true" VBox.vgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="-100.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
 </BorderPane>

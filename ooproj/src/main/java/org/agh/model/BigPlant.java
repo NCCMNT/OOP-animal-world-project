@@ -8,8 +8,6 @@ public class BigPlant extends Plant {
         upperRight = lowerLeft.add(new Vector2d(1,1));
     }
 
-
-
     @Override
     public String mapMarker() {
         return "#";

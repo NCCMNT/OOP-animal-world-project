@@ -24,7 +24,7 @@ public class SimulationApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation app");
         primaryStage.setMinHeight(800);
-        primaryStage.setMinWidth(1000);
+        primaryStage.setMinWidth(1400);
 //        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
 //        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }

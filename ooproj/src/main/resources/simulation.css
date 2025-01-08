@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .animal {
-    -fx-background-color: red;
+    -fx-background-color: #b16c16;
 }
 
 .plant {
@@ -13,7 +13,7 @@
 }
 
 .empty-field {
-    -fx-background-color: #bd8138;
+    -fx-background-color: #73634e;
 }
 
 .infoLabel {
@@ -35,6 +35,10 @@
     -fx-alignment: center;
 }
 
-#sideBox {
+#borderPane {
+    -fx-background-color: grey;
+}
+
+.sidePanel {
     -fx-background-color: rgba(0, 0, 0, 0.3);
 }

@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import org.agh.World;
 import org.agh.model.*;
@@ -38,6 +35,10 @@ public class SimulationPresenter implements SimulationChangeListener {
     @FXML
     public Label AnimalInfoLabel;
     @FXML
+    public BorderPane borderPane;
+    @FXML
+    public Button chartsButton;
+    @FXML
     private GridPane worldMapPane;
     @FXML
     private Label moveDescription;
@@ -49,12 +50,15 @@ public class SimulationPresenter implements SimulationChangeListener {
     private Button stopButton;
     @FXML
     private Label infoLabel;
+    @FXML
+    private VBox sidePanel;
 
     private Simulation simulation;
     private WorldMap worldMap;
     private HashMap<Vector2d, Pane> cellPanes = new HashMap<>();
     private Animal LastViewedAnimal;
     private boolean cleared = true;
+    private boolean isSidePanelVisible = true;
 
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;
@@ -67,7 +71,7 @@ public class SimulationPresenter implements SimulationChangeListener {
 
     @FXML
     public void initialize() {
-        MapSettings mapSettings = new MapSettings(30,50,17,5,3, PlanterType.EQUATOR, 15,10,
+        MapSettings mapSettings = new MapSettings(40,40,17,5,3, PlanterType.EQUATOR, 15,10,
                 7,4, false, 1,3,8);
         WorldMap worldMap = new WorldMap(mapSettings);
         this.worldMap = worldMap;
@@ -78,6 +82,8 @@ public class SimulationPresenter implements SimulationChangeListener {
 
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
+
+        sidePanel = (VBox) borderPane.getLeft();
     }
 
     private void clearGrid() {
@@ -93,9 +99,10 @@ public class SimulationPresenter implements SimulationChangeListener {
         AnimalInfoLabel.setText(
                 "Status: " + animal.getStatus() + "\n"
                 + "Age: " + animal.getAge() + "\n"
-                + "Genom: " + animal.getGenom() + "\n"
+                + "Genom: " + "\n" + animal.getGenom() + "\n"
                 + "Active gen: " + animal.getActiveGen() + "\n"
                 + "Energy: " + animal.getEnergy() + "\n"
+                + "Children: " + animal.getChildCount() + "\n"
         );
     }
 
@@ -125,13 +132,13 @@ public class SimulationPresenter implements SimulationChangeListener {
                         cell.getStyleClass().add("animal");
                         cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element.get()));
                     }
-                    else if (element.get() instanceof Plant){
-                        cell.getStyleClass().add("plant");
-                        cell.setOnMouseClicked(event -> {infoLabel.setText("Plant"); clearAnimalInfo(); cleared = true;});
-                    }
                     else if (element.get() instanceof BigPlant){
                         cell.getStyleClass().add("big-plant");
                         cell.setOnMouseClicked(event -> {infoLabel.setText("Big Plant"); clearAnimalInfo(); cleared = true;});
+                    }
+                    else if (element.get() instanceof Plant){
+                        cell.getStyleClass().add("plant");
+                        cell.setOnMouseClicked(event -> {infoLabel.setText("Plant"); clearAnimalInfo(); cleared = true;});
                     }
                     worldMapPane.add(cell, col, row);
                 }
@@ -182,5 +189,18 @@ public class SimulationPresenter implements SimulationChangeListener {
 
     public Simulation getSimulation() {
         return simulation;
+    }
+
+    public void onChartDisplayClicked(ActionEvent actionEvent) {
+        if (isSidePanelVisible) {
+            // Remove VBox from the BorderPane (leave the space open)
+            borderPane.setLeft(null);
+            chartsButton.setText("Show Info Panel");
+        } else {
+            // Add VBox back to the left side of BorderPane
+            borderPane.setLeft(sidePanel);
+            chartsButton.setText("Hide Info Panel");
+        }
+        isSidePanelVisible = !isSidePanelVisible; // Toggle visibility state
     }
 }
