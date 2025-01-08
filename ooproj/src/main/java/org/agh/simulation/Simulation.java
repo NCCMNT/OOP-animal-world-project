@@ -95,12 +95,16 @@ public class Simulation implements Runnable {
         executorService.shutdown();
     }
 
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
+
     public void addObserver(SimulationChangeListener observer) {
         observers.add(observer);
     }
     public void notifyObservers(String message) {
         for (SimulationChangeListener observer : observers) {
-            observer.simulationChanged(message);
+            observer.mapChanged(this.worldMap, message);
         }
     }
 

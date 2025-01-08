@@ -4,6 +4,7 @@ import org.agh.utils.MapSettings;
 import org.agh.utils.MapVisualizer;
 import org.agh.utils.PlanterType;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class WorldMap {
@@ -23,29 +24,42 @@ public class WorldMap {
     private final boolean isAging;
     private static final Random random = new Random();
 
-// Replaced by Mapsetting constructor.
-//
-//    public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations, boolean isAging) {
-//        if (energeticBreedingCost < energeticFertilityThreshold) throw new IllegalArgumentException("breedingCost < fertilityThreshold");
-//        if (minMutations > maxMutations) throw new IllegalArgumentException("minMutations > maxMutations");
-//        this.settings = null; // <- for implementation without map settings
-//        this.width = width;
-//        this.height = height;
-//        this.plantsPerTurn = plantsPerTurn;
-//        this.energeticFertilityThreshold = energeticFertilityThreshold;
-//        this.energeticBreedingCost = energeticBreedingCost;
-//        this.isAging = isAging;
-//
-//        planter = new EquatorPlanter(width, height, plantEnergy);
-//    }
-//
-//    public WorldMap(int width, int height, int plantsPerTurn, int plantEnergy, int energeticFertilityThreshold, int energeticBreedingCost, int minMutations, int maxMutations,
-//                    int startingAnimals, int startingEnergy, int genomLen, int startingPlants, boolean isAging) {
-//        this(width, height, plantsPerTurn, plantEnergy, energeticFertilityThreshold, energeticBreedingCost, minMutations, maxMutations, isAging);
-//        initializeAnimals(startingAnimals, startingEnergy, genomLen);
-//        initializeMutator(minMutations, maxMutations, genomLen);
-//        planter.generatePlants(startingPlants);
-//    }
+    // getters for statistics of given simulation
+    public int getNumOfAnimals() {
+        return animals.size();
+    }
+
+    public int getNumOfPlants(){
+        HashSet<WorldElement> plants = new HashSet<>(planter.getPlants().values());
+        return plants.size();
+    }
+
+    public int getNumOfEmptyFields(){
+        return width * height - planter.getPlants().size() - getNumOfAnimals();
+    }
+
+    public List<Integer> getMostPopularGenom() {
+        HashMap<List<Integer>, Integer> genomCnt = new HashMap<>();
+        for (Animal animal : animals) {
+            List<Integer> genom = animal.getGenom();
+            if (genomCnt.containsKey(genom)) {
+                genomCnt.put(genom, genomCnt.get(genom) + 1);
+            }
+            else {
+                genomCnt.put(genom, 1);
+            }
+        }
+        return Collections.max(genomCnt.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+
+    public String getAvgAnimalEnergy(){
+        int avgEnergy = 0;
+        for (Animal animal : animals) {
+            avgEnergy += animal.getEnergy();
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format((double) avgEnergy / getNumOfAnimals());
+    }
 
     public WorldMap(MapSettings mapSettings){
         this.height = mapSettings.height();
@@ -219,7 +233,7 @@ public class WorldMap {
 
     public String toString(){
         MapVisualizer visualizer = new MapVisualizer(this);
-        return  visualizer.draw(new Vector2d(width - 1, height - 1));
+        return visualizer.draw(new Vector2d(width - 1, height - 1));
     }
 
     public void printAnimalInfo(){
@@ -245,4 +259,7 @@ public class WorldMap {
     List<Animal> getAnimals ( ) {
         return animals;
     }
+
+    public int getWidth() { return this.width; }
+    public int getHeight() { return this.height; }
 }
