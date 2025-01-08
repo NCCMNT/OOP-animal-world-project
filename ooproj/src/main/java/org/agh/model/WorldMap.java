@@ -137,6 +137,7 @@ public class WorldMap {
         animalId++;
         mutator.mutate(child);
         animals.add(child);
+        updateDescendants();
 
         //printing info for logs
         System.out.println("Animal " + child.getAnimalId() + " was born");
@@ -195,6 +196,12 @@ public class WorldMap {
         return isAging;
     }
 
+    public void updateDescendants(){
+        for (Animal animal : animals) {
+            animal.updateDescendant();
+        }
+    }
+
     // Visual helpers
 
     public Optional<WorldElement> elementAt(Vector2d position) {
@@ -217,7 +224,7 @@ public class WorldMap {
         for(Animal animal: animals) {
             System.out.println("Animal: " + animal.getAnimalId() + " | energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
                     " | direction: " + animal.getDirection().toString() + " | genom: " + animal.getGenom().toString() +
-                    " | active gen: " + animal.getActiveGen() + " | age: " + animal.getAge()) ;
+                    " | active gen: " + animal.getActiveGen() + " | age: " + animal.getAge() + " | desc: " + animal.getDescendants());
         }
     }
 
