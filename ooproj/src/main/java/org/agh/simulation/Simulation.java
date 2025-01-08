@@ -104,7 +104,7 @@ public class Simulation implements Runnable {
     }
     public void notifyObservers(String message) {
         for (SimulationChangeListener observer : observers) {
-            observer.simulationChanged(message);
+            observer.mapChanged(this.worldMap, message);
         }
     }
 

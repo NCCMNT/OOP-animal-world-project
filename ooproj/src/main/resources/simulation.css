@@ -1,5 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+.animal {
+    -fx-background-color: red;
+}
+
+.plant {
+    -fx-background-color: green;
+}
+
+.big-plant {
+    -fx-background-color: #003c00;
+}
+
+.empty-field {
+    -fx-background-color: #bd8138;
+}
+
+.infoLabel {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+}
+
 .button {
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-text-fill: #ffffff;
