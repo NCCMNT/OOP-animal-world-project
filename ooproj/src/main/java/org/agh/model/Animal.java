@@ -132,6 +132,15 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     public int getAnimalId() { return animalId; }
 
+    public String getStatus(){
+        if(energy == 0) return "Dead";
+        return "Alive";
+    }
+
+    public int getChildCount(){
+        return childCount;
+    }
+
     /**
      * Comparator used for sorting the animals in List, it sorts first by position then by all other factors.
      * After sorting using this animals will be grouped by position and inside a position those with the priority to

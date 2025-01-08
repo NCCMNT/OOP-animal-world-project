@@ -1,5 +1,7 @@
 package org.agh.utils;
 
+import org.agh.model.WorldMap;
+
 public interface SimulationChangeListener {
-    void simulationChanged(String message);
+    void mapChanged(WorldMap worldMap, String message);
 }
