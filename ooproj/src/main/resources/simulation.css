@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.button {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12;
+    -fx-min-width: 200;
+    -fx-min-height: 40;
+
+    -fx-background-color: #353535;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+
+    -fx-alignment: center;
+}
+
+#sideBox {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+}

@@ -7,17 +7,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import org.agh.World;
+import org.agh.model.Vector2d;
+import org.agh.model.WorldElement;
+import org.agh.model.WorldMap;
+import org.agh.utils.MapSettings;
+import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
+import java.util.Optional;
+
 public class SimulationPresenter implements SimulationChangeListener {
-
-
-    Simulation simulation;
-    public void setSimulation(Simulation simulation) {
-        this.simulation = simulation; simulation.addObserver(this);
-        stopButton.disableProperty().bind(simulation.stoppedProperty());
-    }
-
     @FXML
     private GridPane worldMapPane;
     @FXML
@@ -29,6 +29,18 @@ public class SimulationPresenter implements SimulationChangeListener {
     @FXML
     private Button stopButton;
 
+    private int cellSize = 20;
+    private Simulation simulation;
+    private WorldMap worldMap;
+
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation; simulation.addObserver(this);
+        stopButton.disableProperty().bind(simulation.stoppedProperty());
+    }
+
+    public void setWorldMap(WorldMap worldMap) {
+        this.worldMap = worldMap;
+    }
 
     @FXML
     public void initialize() {
@@ -41,22 +53,28 @@ public class SimulationPresenter implements SimulationChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
+    private void setGrid(GridPane mapGrid) {
+        int rows = worldMap.getWidth();
+        int cols = worldMap.getHeight();
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Optional<WorldElement> element = this.worldMap.elementAt(new Vector2d(col,row));
+                if (element.isPresent()) {
+                    Label label = new Label(element.toString());
+                    mapGrid.add(label, col, row);
+                }
+                else {
+                    Label label = new Label(" ");
+                    mapGrid.add(label, col, row);
+                }
+            }
+        }
+        mapGrid.setGridLinesVisible(true);
+    }
+
     public void drawMap(){
         clearGrid(worldMapPane);
-//        Boundary mapBounds = worldMap.getCurrentBounds();
-//        int rowCount = mapBounds.max().getY() - mapBounds.min().getY() + 1;
-//        int columnCount = mapBounds.max().getX() - mapBounds.min().getX() + 1;
-//        int rowHeight = (360/rowCount);
-//        int columnWidth = (360/columnCount);
-//        for (int i = 0; i < rowCount; i++) {
-//            worldMapPane.getRowConstraints().add(new RowConstraints(rowHeight));
-//        }
-//        for (int i = 0; i < columnCount; i++) {
-//            worldMapPane.getColumnConstraints().add(new ColumnConstraints(columnWidth));
-//        }
-//        for (WorldElement element:worldMap.getElements().values()) {
-//            worldMapPane.add(new Label(element.toString()),element.getPosition().getX() - mapBounds.min().getX(), mapBounds.max().getY() - element.getPosition().getY() );
-//        }
+        setGrid(worldMapPane);
     }
 
     @Override

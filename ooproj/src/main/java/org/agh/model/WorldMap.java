@@ -234,4 +234,7 @@ public class WorldMap {
     List<Animal> getAnimals ( ) {
         return animals;
     }
+
+    public int getWidth() { return this.width; }
+    public int getHeight() { return this.height; }
 }

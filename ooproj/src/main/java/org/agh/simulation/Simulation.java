@@ -95,6 +95,10 @@ public class Simulation implements Runnable {
         executorService.shutdown();
     }
 
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
+
     public void addObserver(SimulationChangeListener observer) {
         observers.add(observer);
     }

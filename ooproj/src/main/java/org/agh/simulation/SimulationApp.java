@@ -14,11 +14,19 @@ import java.io.IOException;
 public class SimulationApp extends Application {
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
-        var scene = new Scene(viewRoot);
+        Scene scene = new Scene(viewRoot);
+
+        //handling CSS file
+        String cssPath = getClass().getClassLoader().getResource("simulation.css").toExternalForm();
+        scene.getStylesheets().add(cssPath);
+
+        //setting scene and size for stage
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation app");
-        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
-        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+        primaryStage.setMinHeight(800);
+        primaryStage.setMinWidth(800);
+//        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
+//        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
 
     private Simulation exampleSim(){
@@ -38,13 +46,13 @@ public class SimulationApp extends Application {
 
             SimulationPresenter presenter = loader.getController();
             Simulation simulation = exampleSim();
+            presenter.setWorldMap(simulation.getWorldMap());
             presenter.setSimulation(simulation);
 
             configureStage(primaryStage, viewRoot);
             primaryStage.show();
 
             primaryStage.setOnCloseRequest(event -> simulation.shutdown());
-
 
         } catch (IOException e) {
             e.printStackTrace();
