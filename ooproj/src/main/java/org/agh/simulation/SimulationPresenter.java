@@ -41,10 +41,6 @@ public class SimulationPresenter implements SimulationChangeListener {
     @FXML
     private GridPane worldMapPane;
     @FXML
-    private Label moveDescription;
-    @FXML
-    private TextField movesField;
-    @FXML
     private Button startButton;
     @FXML
     private Button stopButton;
@@ -176,7 +172,6 @@ public class SimulationPresenter implements SimulationChangeListener {
         Platform.runLater(() -> {
             drawMap();
             updateInfo();
-            moveDescription.setText(message);
         });
     }
 
