@@ -56,7 +56,7 @@ public class Simulation implements Runnable {
         worldMap.printAnimalInfo();
         System.out.println(worldMap);
         turn++;
-
+        worldMap.setTurn(turn);
         notifyObservers(String.valueOf(turn));
     }
 

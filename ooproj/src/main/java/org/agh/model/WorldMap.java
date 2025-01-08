@@ -7,7 +7,6 @@ import org.agh.utils.PlanterType;
 import java.util.*;
 
 public class WorldMap {
-    private final MapSettings settings;
     private final int width;
     private final int height;
 
@@ -19,6 +18,7 @@ public class WorldMap {
 
     private List<Animal> animals;
     private int animalId = 0;
+    private int turn = 0;
     private Mutator mutator;
     private final boolean isAging;
     private static final Random random = new Random();
@@ -48,7 +48,6 @@ public class WorldMap {
 //    }
 
     public WorldMap(MapSettings mapSettings){
-        this.settings = mapSettings;
         this.height = mapSettings.height();
         this.width = mapSettings.width();
         this.plantsPerTurn = mapSettings.plantsPerTurn();
@@ -93,6 +92,7 @@ public class WorldMap {
         for (int i = animals.size() - 1; i >= 0; i--) {
             //if animal has 0 energy - it dies
             if (animals.get(i).getEnergy() == 0) {
+                animals.get(i).setDeathDate(turn);
                 animals.remove(i);
                 count++;
             }
@@ -194,6 +194,10 @@ public class WorldMap {
 
     public boolean isAging() {
         return isAging;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 
     public void updateDescendants(){

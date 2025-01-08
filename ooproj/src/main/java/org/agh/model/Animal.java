@@ -1,9 +1,6 @@
 package org.agh.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.*;
 
@@ -22,6 +19,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private Optional<Animal> parent2;
     private int plantsEaten;
     private int descendants;
+    private Optional<Integer> deathDate;
 
     private Boolean isRelatedToNewborn;
 
@@ -37,6 +35,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.plantsEaten = 0;
         this.descendants = 0;
         this.isRelatedToNewborn = false;
+        this.deathDate = Optional.empty();
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
     // Animal when born in the beginning of simulation
@@ -159,6 +158,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         }
     }
 
+    public void setDeathDate(int deathDate) {
+        this.deathDate = Optional.of(deathDate);
+    }
+
     /**
      * Comparator used for sorting the animals in List, it sorts first by position then by all other factors.
      * After sorting using this animals will be grouped by position and inside a position those with the priority to
@@ -194,6 +197,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         newAnimal.activeGen = activeGen;
         newAnimal.animalId = animalId;
         newAnimal.childCount = childCount;
+        newAnimal.parent1 = Optional.empty();
+        newAnimal.parent2 = Optional.empty();
         return newAnimal;
     }
 
@@ -203,4 +208,18 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         animal.parent1.ifPresent(Animal::descendantNotified);
         animal.parent2.ifPresent(Animal::descendantNotified);
     }
+
+    public String infoUI(){
+        return( "Status: " + deathDate.map(Integer -> "Alive").orElse("Dead") + "\n"
+                + "Genom: " + genom.toString() + "\n"
+                + "Active gen: " + activeGen + "\n"
+                + "Energy: " + energy + "\n"
+                + "Plants eaten: " + plantsEaten + "\n"
+                + "Children number: " + childCount + "\n"
+                + "Descendants number" + descendants + "\n"
+                + "Age: " + age + "\n"
+                + "Death date: " + deathDate.map(Objects::toString).orElse("N/A")
+        );
+    }
+
 }
