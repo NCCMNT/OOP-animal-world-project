@@ -39,6 +39,7 @@ public class WorldMap {
     }
 
     public List<Integer> getMostPopularGenom() {
+        if(animals.isEmpty()) return List.of();
         HashMap<List<Integer>, Integer> genomCnt = new HashMap<>();
         for (Animal animal : animals) {
             List<Integer> genom = animal.getGenom();
@@ -107,6 +108,7 @@ public class WorldMap {
             //if animal has 0 energy - it dies
             if (animals.get(i).getEnergy() == 0) {
                 animals.get(i).setDeathDate(turn);
+                System.out.println("setDeathDate called");
                 animals.remove(i);
                 count++;
             }
@@ -198,12 +200,6 @@ public class WorldMap {
 
         //printing info for logs
         System.out.println("All animals were moved");
-    }
-
-    public void ageAllAnimals(){
-        for (Animal animal : animals) {
-            animal.age(1);
-        }
     }
 
     public boolean isAging() {

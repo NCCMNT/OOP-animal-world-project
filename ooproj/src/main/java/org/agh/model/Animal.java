@@ -210,13 +210,13 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     }
 
     public String infoUI(){
-        return( "Status: " + deathDate.map(Integer -> "Alive").orElse("Dead") + "\n"
+        return( "Status: " + deathDate.map(Integer -> "Dead").orElse("Alive") + "\n"
                 + "Genom: " + genom.toString() + "\n"
                 + "Active gen: " + activeGen + "\n"
                 + "Energy: " + energy + "\n"
                 + "Plants eaten: " + plantsEaten + "\n"
                 + "Children number: " + childCount + "\n"
-                + "Descendants number" + descendants + "\n"
+                + "Descendants number: " + descendants + "\n"
                 + "Age: " + age + "\n"
                 + "Death date: " + deathDate.map(Objects::toString).orElse("N/A")
         );
