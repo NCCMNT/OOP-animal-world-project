@@ -22,7 +22,22 @@ public class WorldMap {
     private int turn = 0;
     private Mutator mutator;
     private final boolean isAging;
+    private int deadAmount = 0;
+    private int deadTotalAge = 0;
     private static final Random random = new Random();
+
+    public WorldMap(MapSettings mapSettings){
+        this.height = mapSettings.height();
+        this.width = mapSettings.width();
+        this.plantsPerTurn = mapSettings.plantsPerTurn();
+        this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
+        this.energeticBreedingCost = mapSettings.energeticBreedingCost();
+        this.isAging = mapSettings.isAging();
+
+        initializePlanter(this.width, this.height, mapSettings.plantEnergy(), mapSettings.startingNumberOfPlants(), mapSettings.planterType());
+        initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
+        initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
+    }
 
     // getters for statistics of given simulation
     public int getNumOfAnimals() {
@@ -35,6 +50,7 @@ public class WorldMap {
     }
 
     public int getNumOfEmptyFields(){
+        // Po prostu błędne, jak na tym samym polu jest więcej niż jeden animal, albo więcej niż 1 plant itd to jest przypał.
         return width * height - planter.getPlants().size() - getNumOfAnimals();
     }
 
@@ -62,17 +78,16 @@ public class WorldMap {
         return df.format((double) avgEnergy / getNumOfAnimals());
     }
 
-    public WorldMap(MapSettings mapSettings){
-        this.height = mapSettings.height();
-        this.width = mapSettings.width();
-        this.plantsPerTurn = mapSettings.plantsPerTurn();
-        this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
-        this.energeticBreedingCost = mapSettings.energeticBreedingCost();
-        this.isAging = mapSettings.isAging();
+    public float getAvgDeadAge(){
+        return (float)deadTotalAge/deadAmount;
+    }
 
-        initializePlanter(this.width, this.height, mapSettings.plantEnergy(), mapSettings.startingNumberOfPlants(), mapSettings.planterType());
-        initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
-        initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
+    public float getAvgChildren(){
+        int childrenAmount = 0;
+        for (Animal animal : animals) {
+            childrenAmount += animal.getChildCount();
+        }
+        return (float)childrenAmount/animals.size();
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -108,7 +123,8 @@ public class WorldMap {
             //if animal has 0 energy - it dies
             if (animals.get(i).getEnergy() == 0) {
                 animals.get(i).setDeathDate(turn);
-                System.out.println("setDeathDate called");
+                deadTotalAge += animals.get(i).getAge();
+                deadAmount += 1;
                 animals.remove(i);
                 count++;
             }

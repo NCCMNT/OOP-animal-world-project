@@ -147,6 +147,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     public int getAnimalId() { return animalId; }
 
+    public int getChildCount() {
+        return childCount;
+    }
+
     public int getDescendants() {
         return descendants;
     }
@@ -209,9 +213,21 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         animal.parent2.ifPresent(Animal::descendantNotified);
     }
 
+    private String genomHighlight(){
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < genom.size(); i++) {
+            if(i == activeGen) result.append("<");
+            result.append(genom.get(i));
+            if(i == activeGen) result.append(">");
+            if(i != genom.size()-1) result.append(", ");
+        }
+        result.append("]");
+        return result.toString();
+    }
+
     public String infoUI(){
         return( "Status: " + deathDate.map(Integer -> "Dead").orElse("Alive") + "\n"
-                + "Genom: " + genom.toString() + "\n"
+                + "Genom: " + genomHighlight() + "\n"
                 + "Active gen: " + activeGen + "\n"
                 + "Energy: " + energy + "\n"
                 + "Plants eaten: " + plantsEaten + "\n"

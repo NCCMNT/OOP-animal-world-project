@@ -67,7 +67,7 @@ public class SimulationPresenter implements SimulationChangeListener {
 
     @FXML
     public void initialize() {
-        MapSettings mapSettings = new MapSettings(40,40,17,5,3, PlanterType.EQUATOR, 15,10,
+        MapSettings mapSettings = new MapSettings(40,40,17,5,10, PlanterType.EQUATOR, 15,20,
                 7,4, false, 1,3,8);
         WorldMap worldMap = new WorldMap(mapSettings);
         this.worldMap = worldMap;
@@ -151,8 +151,8 @@ public class SimulationPresenter implements SimulationChangeListener {
         MostPopularGenomInfoLabel.setText("Most popular genom: " + worldMap.getMostPopularGenom().toString());
         AvgAnimalEnergyInfoLabel.setText("Average animal energy: " + worldMap.getAvgAnimalEnergy());
         //TODO
-        AvgLifeSpanInfoLabel.setText("Average life span: ");
-        AvgChildrenCountInfoLabel.setText("Average number of children: ");
+        AvgLifeSpanInfoLabel.setText("Average life span: " + worldMap.getAvgDeadAge());
+        AvgChildrenCountInfoLabel.setText("Average number of children: " + worldMap.getAvgChildren());
         if (!cleared) displayAnimalInfo(LastViewedAnimal);
     }
 
