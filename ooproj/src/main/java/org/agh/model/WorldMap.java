@@ -78,16 +78,18 @@ public class WorldMap {
         return df.format((double) avgEnergy / getNumOfAnimals());
     }
 
-    public float getAvgDeadAge(){
-        return (float)deadTotalAge/deadAmount;
+    public String getAvgDeadAge(){
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format((double)deadTotalAge/deadAmount);
     }
 
-    public float getAvgChildren(){
+    public String getAvgChildren(){
         int childrenAmount = 0;
         for (Animal animal : animals) {
             childrenAmount += animal.getChildCount();
         }
-        return (float)childrenAmount/animals.size();
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format((double)childrenAmount/animals.size());
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
