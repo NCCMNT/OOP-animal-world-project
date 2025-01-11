@@ -93,12 +93,7 @@ public class SimulationPresenter implements SimulationChangeListener {
         LastViewedAnimal = animal;
         infoLabel.setText("Animal");
         AnimalInfoLabel.setText(
-                "Status: " + animal.getStatus() + "\n"
-                + "Age: " + animal.getAge() + "\n"
-                + "Genom: " + "\n" + animal.getGenom() + "\n"
-                + "Active gen: " + animal.getActiveGen() + "\n"
-                + "Energy: " + animal.getEnergy() + "\n"
-                + "Children: " + animal.getChildCount() + "\n"
+                animal.infoUI()
         );
     }
 

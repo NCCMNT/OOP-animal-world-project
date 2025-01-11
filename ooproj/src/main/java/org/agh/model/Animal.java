@@ -1,8 +1,6 @@
 package org.agh.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.*;
 
@@ -17,6 +15,14 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private final WorldMap worldMap;
     private static final Random random = new Random();
 
+    private Optional<Animal> parent1;
+    private Optional<Animal> parent2;
+    private int plantsEaten;
+    private int descendants;
+    private Optional<Integer> deathDate;
+
+    private Boolean isRelatedToNewborn;
+
     private static final double AGING_CONSTANT = 1.0/30.0;
     private static final double AGING_SHIFT = log(5.0/4.0); // do not touch
 
@@ -26,6 +32,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.position = position;
         this.age = 0;
         this.childCount = 0;
+        this.plantsEaten = 0;
+        this.descendants = 0;
+        this.isRelatedToNewborn = false;
+        this.deathDate = Optional.empty();
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
     // Animal when born in the beginning of simulation
@@ -37,7 +47,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         }
         this.activeGen = random.nextInt(genomLen);
         this.animalId = animalId;
-
+        this.parent1 = Optional.empty();
+        this.parent2 = Optional.empty();
     }
     // Animal when born from two parents
     public Animal(Animal parent1, Animal parent2, int energy, int animalId) {
@@ -45,7 +56,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         parent1.childCount += 1; parent2.childCount += 1;
         int genomLen = parent1.genom.size();
         int sumEnergy = parent1.energy + parent2.energy;
-        int gensFromParent1 = round((float) (genomLen * parent1.energy) / sumEnergy); // Straszne susge, trzeba poczytać
+        int gensFromParent1 = round(((float) (genomLen * parent1.energy) )/ ((float) sumEnergy)); // Straszne susge, trzeba poczytać
         int gensFromParent2 = genomLen - gensFromParent1;
         this.genom = new ArrayList<>(genomLen);
 
@@ -68,7 +79,10 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
         this.animalId = animalId;
         this.activeGen = random.nextInt(genomLen);
-
+        this.parent1 = Optional.of(parent1);
+        this.parent2 = Optional.of(parent2);
+        descendantNotified(parent1);
+        descendantNotified(parent2);
     }
 
     public void move(){
@@ -93,6 +107,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     public void feed(int energy){
         this.energy += energy;
+        this.plantsEaten += 1;
     }
 
     public void loseEnergy(int energy){
@@ -132,13 +147,19 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     public int getAnimalId() { return animalId; }
 
-    public String getStatus(){
-        if(energy == 0) return "Dead";
-        return "Alive";
+    public int getDescendants() {
+        return descendants;
     }
 
-    public int getChildCount(){
-        return childCount;
+    public void updateDescendant(){
+        if(this.isRelatedToNewborn){
+            descendants++;
+            this.isRelatedToNewborn = false;
+        }
+    }
+
+    public void setDeathDate(int deathDate) {
+        this.deathDate = Optional.of(deathDate);
     }
 
     /**
@@ -176,6 +197,29 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         newAnimal.activeGen = activeGen;
         newAnimal.animalId = animalId;
         newAnimal.childCount = childCount;
+        newAnimal.parent1 = Optional.empty();
+        newAnimal.parent2 = Optional.empty();
         return newAnimal;
     }
+
+    private static void descendantNotified(Animal animal){
+        if(animal.isRelatedToNewborn) return;
+        animal.isRelatedToNewborn = true;
+        animal.parent1.ifPresent(Animal::descendantNotified);
+        animal.parent2.ifPresent(Animal::descendantNotified);
+    }
+
+    public String infoUI(){
+        return( "Status: " + deathDate.map(Integer -> "Dead").orElse("Alive") + "\n"
+                + "Genom: " + genom.toString() + "\n"
+                + "Active gen: " + activeGen + "\n"
+                + "Energy: " + energy + "\n"
+                + "Plants eaten: " + plantsEaten + "\n"
+                + "Children number: " + childCount + "\n"
+                + "Descendants number: " + descendants + "\n"
+                + "Age: " + age + "\n"
+                + "Death date: " + deathDate.map(Objects::toString).orElse("N/A")
+        );
+    }
+
 }

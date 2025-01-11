@@ -60,7 +60,7 @@ class WorldMapTest {
     void testBreedingAllAnimals() {
         worldMap1.printAnimalInfo();
         System.out.println(worldMap1);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             worldMap1.moveAllAnimals();
             System.out.println("PRZED ROZMNAŻANIEM");
             worldMap1.printAnimalInfo();

@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class WorldMap {
-    private final MapSettings settings;
     private final int width;
     private final int height;
 
@@ -20,6 +19,7 @@ public class WorldMap {
 
     private List<Animal> animals;
     private int animalId = 0;
+    private int turn = 0;
     private Mutator mutator;
     private final boolean isAging;
     private static final Random random = new Random();
@@ -39,6 +39,7 @@ public class WorldMap {
     }
 
     public List<Integer> getMostPopularGenom() {
+        if(animals.isEmpty()) return List.of();
         HashMap<List<Integer>, Integer> genomCnt = new HashMap<>();
         for (Animal animal : animals) {
             List<Integer> genom = animal.getGenom();
@@ -62,7 +63,6 @@ public class WorldMap {
     }
 
     public WorldMap(MapSettings mapSettings){
-        this.settings = mapSettings;
         this.height = mapSettings.height();
         this.width = mapSettings.width();
         this.plantsPerTurn = mapSettings.plantsPerTurn();
@@ -107,6 +107,8 @@ public class WorldMap {
         for (int i = animals.size() - 1; i >= 0; i--) {
             //if animal has 0 energy - it dies
             if (animals.get(i).getEnergy() == 0) {
+                animals.get(i).setDeathDate(turn);
+                System.out.println("setDeathDate called");
                 animals.remove(i);
                 count++;
             }
@@ -151,6 +153,7 @@ public class WorldMap {
         animalId++;
         mutator.mutate(child);
         animals.add(child);
+        updateDescendants();
 
         //printing info for logs
         System.out.println("Animal " + child.getAnimalId() + " was born");
@@ -199,14 +202,18 @@ public class WorldMap {
         System.out.println("All animals were moved");
     }
 
-    public void ageAllAnimals(){
-        for (Animal animal : animals) {
-            animal.age(1);
-        }
-    }
-
     public boolean isAging() {
         return isAging;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public void updateDescendants(){
+        for (Animal animal : animals) {
+            animal.updateDescendant();
+        }
     }
 
     // Visual helpers
@@ -231,7 +238,7 @@ public class WorldMap {
         for(Animal animal: animals) {
             System.out.println("Animal: " + animal.getAnimalId() + " | energy: " + animal.getEnergy() + " | position: " + animal.getPosition().toString() +
                     " | direction: " + animal.getDirection().toString() + " | genom: " + animal.getGenom().toString() +
-                    " | active gen: " + animal.getActiveGen() + " | age: " + animal.getAge()) ;
+                    " | active gen: " + animal.getActiveGen() + " | age: " + animal.getAge() + " | desc: " + animal.getDescendants());
         }
     }
 
