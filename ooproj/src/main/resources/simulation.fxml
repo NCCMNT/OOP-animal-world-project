@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" minHeight="800.0" minWidth="1400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.simulation.SimulationPresenter">
+<BorderPane fx:id="borderPane" minHeight="800.0" minWidth="1400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.controller.SimulationController">
     <center>
       <HBox fx:id="backHBox" BorderPane.alignment="CENTER">
          <BorderPane.margin>

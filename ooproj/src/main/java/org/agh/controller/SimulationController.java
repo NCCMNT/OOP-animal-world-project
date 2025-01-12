@@ -1,22 +1,22 @@
-package org.agh.simulation;
+package org.agh.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import org.agh.World;
+import javafx.stage.Stage;
 import org.agh.model.*;
+import org.agh.simulation.Simulation;
 import org.agh.utils.MapSettings;
 import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.HashMap;
 
-public class SimulationPresenter implements SimulationChangeListener {
+public class SimulationController implements SimulationChangeListener, Controller {
     @FXML
     public Label AnimalCountInfoLabel;
     @FXML
@@ -54,6 +54,20 @@ public class SimulationPresenter implements SimulationChangeListener {
     private Animal LastViewedAnimal;
     private boolean cleared = true;
     private boolean isSidePanelVisible = true;
+    private MapSettings mapSettings;
+
+    private Scene scene;
+    private Stage stage;
+
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @Override
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
 
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;
@@ -63,11 +77,14 @@ public class SimulationPresenter implements SimulationChangeListener {
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
+    public void setMapSettings(MapSettings mapSettings) { this.mapSettings = mapSettings; }
 
     @FXML
-    public void initialize() {
-        MapSettings mapSettings = new MapSettings(40,40,60,5,10, PlanterType.EQUATOR, 15,20,
-                30,10, false, 0,1,1);
+    public void initialize(MapSettings mapSettings) {
+        if(mapSettings == null) {
+            throw new IllegalStateException("MapSettings not set");
+        }
+        setMapSettings(mapSettings);
         WorldMap worldMap = new WorldMap(mapSettings);
         this.worldMap = worldMap;
 
