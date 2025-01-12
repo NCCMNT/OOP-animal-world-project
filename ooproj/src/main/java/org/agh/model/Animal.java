@@ -56,7 +56,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         parent1.childCount += 1; parent2.childCount += 1;
         int genomLen = parent1.genom.size();
         int sumEnergy = parent1.energy + parent2.energy;
-        int gensFromParent1 = round(((float) (genomLen * parent1.energy) )/ ((float) sumEnergy)); // Straszne susge, trzeba poczytać
+        int gensFromParent1 = round(((float) (genomLen * parent1.energy) )/ sumEnergy); // Straszne susge, trzeba poczytać
         int gensFromParent2 = genomLen - gensFromParent1;
         this.genom = new ArrayList<>(genomLen);
 

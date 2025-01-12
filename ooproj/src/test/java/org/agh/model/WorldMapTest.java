@@ -11,16 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class WorldMapTest {
 
     MapSettings mapSettings1 = new MapSettings(5, 5, 5, 3, 2, PlanterType.EQUATOR, 4,
-            10, 0, 1, false, 0, 0, 2);
+            10, 1, 1, false, 0, 0, 2);
 
     MapSettings mapSettings1withAging = new MapSettings(5, 5, 5, 3, 2, PlanterType.EQUATOR, 4,
             10, 0, 1, true, 0, 0, 2);
 
     WorldMap worldMap1 = new WorldMap(mapSettings1);
 
-    MapSettings mapSettings2 = new MapSettings(50, 50, 100, 1, 20,
-            PlanterType.EQUATOR, 0, 0, 0, 1, false, 10, 2, 2);
-    WorldMap worldMap2 = new WorldMap(mapSettings2);
+    // MapSettings mapSettings2 = new MapSettings(50, 50, 100, 1, 20, PlanterType.EQUATOR, 0, 0, 0, 1, false, 10, 2, 2);
+    // WorldMap worldMap2 = new WorldMap(mapSettings2);
 
     WorldMap worldMap1withAging = new WorldMap(mapSettings1withAging);
 
@@ -57,7 +56,7 @@ class WorldMapTest {
     }
 
     @Test
-    void testBreedingAllAnimals() {
+    void manualBreedingAllAnimals() {
         worldMap1.printAnimalInfo();
         System.out.println(worldMap1);
         for (int i = 0; i < 30; i++) {
@@ -76,31 +75,31 @@ class WorldMapTest {
         worldMap1.printAnimalInfo();
     }
 
-//    @Test
-//    void manualWithAging() {
-//        for (int i = 0; i < 10; i++) {
-//            worldMap1withAging.ageAllAnimals();
-//        }
-//        worldMap1withAging.printAnimalInfo();
-//        System.out.println(worldMap1);
-//        for (int i = 0; i < 5; i++) {
-//            worldMap1withAging.moveAllAnimals();
-//            worldMap1withAging.ageAllAnimals();
-//            worldMap1withAging.printAnimalInfo();
-//            System.out.println(worldMap1withAging);
-//        }
-//        for (int i = 0; i < 100; i++) {
-//            worldMap1withAging.ageAllAnimals();
-//        }
-//        worldMap1withAging.printAnimalInfo();
-//        System.out.println(worldMap1);
-//        for (int i = 0; i < 5; i++) {
-//            worldMap1withAging.moveAllAnimals();
-//            worldMap1withAging.ageAllAnimals();
-//            worldMap1withAging.printAnimalInfo();
-//            System.out.println(worldMap1withAging);
-//        }
-//    }
+    @Test
+    void manualWithAging() {
+        for (int i = 0; i < 10; i++) {
+            worldMap1withAging.checkStateOfAllAnimals();
+        }
+        worldMap1withAging.printAnimalInfo();
+        System.out.println(worldMap1);
+        for (int i = 0; i < 5; i++) {
+            worldMap1withAging.moveAllAnimals();
+            worldMap1withAging.checkStateOfAllAnimals();
+            worldMap1withAging.printAnimalInfo();
+            System.out.println(worldMap1withAging);
+        }
+        for (int i = 0; i < 100; i++) {
+            worldMap1withAging.checkStateOfAllAnimals();
+        }
+        worldMap1withAging.printAnimalInfo();
+        System.out.println(worldMap1);
+        for (int i = 0; i < 5; i++) {
+            worldMap1withAging.moveAllAnimals();
+            worldMap1withAging.checkStateOfAllAnimals();
+            worldMap1withAging.printAnimalInfo();
+            System.out.println(worldMap1withAging);
+        }
+    }
 
     // Custom tests
 
@@ -111,7 +110,7 @@ class WorldMapTest {
 
     Vector2d place1 = new Vector2d(0, 0);
     Vector2d place2 = new Vector2d(0, 1);
-    Vector2d place3 = new Vector2d(0, 2);
+    // Vector2d place3 = new Vector2d(0, 2);
 
     WorldMap customMap = null;
     Animal animal1 = null;
@@ -137,7 +136,7 @@ class WorldMapTest {
     void breedingInOneSpot(){
         setup();
 
-        List<Animal> animalsBeforeBreeding = new ArrayList<Animal>(List.of(animal1, animal2, animal3, animal4, animal5));
+        List<Animal> animalsBeforeBreeding = new ArrayList<>(List.of(animal1, animal2, animal3, animal4, animal5));
         customMap.setAnimals( animalsBeforeBreeding);
         customMap.breedAllAnimals();
         assertEquals(5, animal1.getEnergy());
@@ -192,7 +191,7 @@ class WorldMapTest {
     void breedingInTwoSpots(){
         setup();
 
-        List<Animal> animalsBeforeBreeding = new ArrayList<Animal>(List.of(animal1, animal2, animal3, animal6, animal7));
+        List<Animal> animalsBeforeBreeding = new ArrayList<>(List.of(animal1, animal2, animal3, animal6, animal7));
         customMap.setAnimals( animalsBeforeBreeding);
         customMap.breedAllAnimals();
         assertEquals(5, animal1.getEnergy());
@@ -212,10 +211,27 @@ class WorldMapTest {
     }
 
     @Test
+    void descendants(){
+        MapSettings customSettings = new MapSettings(3, 1, 3, 3, 2, PlanterType.EQUATOR, 0,
+                0, 5, 3, false, 0, 0, 2);
+        WorldMap customMap = new WorldMap(customSettings);
+        animal1 = Animal.createCustomAnimal(place1, 10, MapDirection.NORTH, 5, List.of(1, 1), 0, 3, 11, customMap);
+        animal2 = Animal.createCustomAnimal(place1, 7, MapDirection.NORTH, 5, List.of(2, 2), 0, 3, 12, customMap);
+        animal3 = Animal.createCustomAnimal(place1, 7, MapDirection.NORTH, 5, List.of(3, 3), 0, 3, 13, customMap);
+        customMap.setAnimals(new ArrayList<>(List.of(animal1, animal2, animal3)));
+        customMap.breedAllAnimals();
+        customMap.breedAllAnimals();
+        customMap.breedAllAnimals();
+        assertEquals(3, animal1.getDescendants());
+        assertEquals(2, animal2.getDescendants());
+        assertEquals(2, animal3.getDescendants());
+    }
+
+    @Test
     void eatingSmall(){
         setup();
 
-        List<Animal> animalsBeforeEating = new ArrayList<Animal>(List.of( animal3, animal5, animal6, animal7));
+        List<Animal> animalsBeforeEating = new ArrayList<>(List.of( animal3, animal5, animal6, animal7));
         customMap.setAnimals( animalsBeforeEating);
         customMap.feedAllAnimals();
         assertEquals(8, animal3.getEnergy());
