@@ -24,7 +24,9 @@ public class WorldMap {
     private final boolean isAging;
     private int deadAmount = 0;
     private int deadTotalAge = 0;
+    private int lastEmptyFields = -1;
     private static final Random random = new Random();
+
 
     public WorldMap(MapSettings mapSettings){
         this.height = mapSettings.height();
@@ -50,8 +52,7 @@ public class WorldMap {
     }
 
     public int getNumOfEmptyFields(){
-        // Po prostu błędne, jak na tym samym polu jest więcej niż jeden animal, albo więcej niż 1 plant itd to jest przypał.
-        return width * height - planter.getPlants().size() - getNumOfAnimals();
+        return  lastEmptyFields;
     }
 
     public List<Integer> getMostPopularGenom() {
@@ -84,12 +85,12 @@ public class WorldMap {
     }
 
     public String getAvgChildren(){
-        int childrenAmount = 0;
+        int childrenNumber = 0;
         for (Animal animal : animals) {
-            childrenAmount += animal.getChildCount();
+            childrenNumber += animal.getChildCount();
         }
         DecimalFormat df = new DecimalFormat("#.##");
-        return df.format((double)childrenAmount/animals.size());
+        return df.format((double) childrenNumber /animals.size());
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -171,7 +172,6 @@ public class WorldMap {
         animalId++;
         mutator.mutate(child);
         animals.add(child);
-        updateDescendants();
 
         //printing info for logs
         System.out.println("Animal " + child.getAnimalId() + " was born");
@@ -228,12 +228,6 @@ public class WorldMap {
         this.turn = turn;
     }
 
-    public void updateDescendants(){
-        for (Animal animal : animals) {
-            animal.updateDescendant();
-        }
-    }
-
     // Visual helpers
 
     public Optional<WorldElement> elementAt(Vector2d position) {
@@ -243,6 +237,17 @@ public class WorldMap {
             }
         }
         return Optional.ofNullable(planter.plantAt(position));
+    }
+
+    public HashMap<Vector2d, WorldElement> upperLayer(){
+        HashMap<Vector2d, WorldElement> upperLayer = new HashMap<>(planter.getPlants());
+        animals.sort(Animal::compareTo);
+        for (Animal animal : animals) {
+            Vector2d position = animal.getPosition();
+            upperLayer.put(position, animal);
+        }
+        lastEmptyFields = width*height-upperLayer.size();
+        return upperLayer;
     }
 
     public String toString(){

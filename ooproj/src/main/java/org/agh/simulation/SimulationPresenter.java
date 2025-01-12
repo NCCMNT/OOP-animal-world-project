@@ -67,8 +67,8 @@ public class SimulationPresenter implements SimulationChangeListener {
 
     @FXML
     public void initialize() {
-        MapSettings mapSettings = new MapSettings(40,40,17,5,10, PlanterType.EQUATOR, 15,20,
-                7,4, false, 1,3,8);
+        MapSettings mapSettings = new MapSettings(40,40,60,5,10, PlanterType.EQUATOR, 15,20,
+                30,10, false, 0,1,1);
         WorldMap worldMap = new WorldMap(mapSettings);
         this.worldMap = worldMap;
 
@@ -110,24 +110,26 @@ public class SimulationPresenter implements SimulationChangeListener {
         worldMapPane.getRowConstraints().clear();
         worldMapPane.getColumnConstraints().clear();
 
+        HashMap<Vector2d, WorldElement> upperLayer = this.worldMap.upperLayer();
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Vector2d position = new Vector2d(col, row);
-                Optional<WorldElement> element = this.worldMap.elementAt(position);
+                WorldElement element = upperLayer.get(position);
 
                 Pane cell = new Pane();
                 cell.setPrefSize(cellSize, cellSize);
 
-                if (element.isPresent()) {
-                    if (element.get() instanceof Animal){
+                if (element != null) {
+                    if (element instanceof Animal){
                         cell.getStyleClass().add("animal");
-                        cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element.get()));
+                        cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
                     }
-                    else if (element.get() instanceof BigPlant){
+                    else if (element instanceof BigPlant){
                         cell.getStyleClass().add("big-plant");
                         cell.setOnMouseClicked(event -> {infoLabel.setText("Big Plant"); clearAnimalInfo(); cleared = true;});
                     }
-                    else if (element.get() instanceof Plant){
+                    else if (element instanceof Plant){
                         cell.getStyleClass().add("plant");
                         cell.setOnMouseClicked(event -> {infoLabel.setText("Plant"); clearAnimalInfo(); cleared = true;});
                     }
@@ -150,7 +152,6 @@ public class SimulationPresenter implements SimulationChangeListener {
         EmptyFieldsCountInfoLabel.setText("Empty fields: " + worldMap.getNumOfEmptyFields());
         MostPopularGenomInfoLabel.setText("Most popular genom: " + worldMap.getMostPopularGenom().toString());
         AvgAnimalEnergyInfoLabel.setText("Average animal energy: " + worldMap.getAvgAnimalEnergy());
-        //TODO
         AvgLifeSpanInfoLabel.setText("Average life span: " + worldMap.getAvgDeadAge());
         AvgChildrenCountInfoLabel.setText("Average number of children: " + worldMap.getAvgChildren());
         if (!cleared) displayAnimalInfo(LastViewedAnimal);

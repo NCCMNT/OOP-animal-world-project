@@ -83,6 +83,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.parent2 = Optional.of(parent2);
         descendantNotified(parent1);
         descendantNotified(parent2);
+        descendantFinished(parent1);
+        descendantFinished(parent2);
     }
 
     public void move(){
@@ -155,13 +157,6 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return descendants;
     }
 
-    public void updateDescendant(){
-        if(this.isRelatedToNewborn){
-            descendants++;
-            this.isRelatedToNewborn = false;
-        }
-    }
-
     public void setDeathDate(int deathDate) {
         this.deathDate = Optional.of(deathDate);
     }
@@ -209,8 +204,15 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private static void descendantNotified(Animal animal){
         if(animal.isRelatedToNewborn) return;
         animal.isRelatedToNewborn = true;
+        animal.descendants += 1;
         animal.parent1.ifPresent(Animal::descendantNotified);
         animal.parent2.ifPresent(Animal::descendantNotified);
+    }
+    private static void descendantFinished(Animal animal){
+        if(!animal.isRelatedToNewborn) return;
+        animal.isRelatedToNewborn = false;
+        animal.parent1.ifPresent(Animal::descendantFinished);
+        animal.parent2.ifPresent(Animal::descendantFinished);
     }
 
     private String genomHighlight(){
@@ -226,7 +228,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     }
 
     public String infoUI(){
-        return( "Status: " + deathDate.map(Integer -> "Dead").orElse("Alive") + "\n"
+        return( "Status: " + deathDate.map(integer -> "Dead").orElse("Alive") + "\n"
                 + "Genom: " + genomHighlight() + "\n"
                 + "Active gen: " + activeGen + "\n"
                 + "Energy: " + energy + "\n"
@@ -234,7 +236,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
                 + "Children number: " + childCount + "\n"
                 + "Descendants number: " + descendants + "\n"
                 + "Age: " + age + "\n"
-                + "Death date: " + deathDate.map(Objects::toString).orElse("N/A")
+                + "Death date: " + deathDate.map(Objects::toString).orElse("NaN")
         );
     }
 
