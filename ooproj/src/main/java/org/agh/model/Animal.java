@@ -15,8 +15,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private final WorldMap worldMap;
     private static final Random random = new Random();
 
-    private Optional<Animal> parent1;
-    private Optional<Animal> parent2;
+    private Animal parent1;
+    private Animal parent2;
     private int plantsEaten;
     private int descendants;
     private Optional<Integer> deathDate;
@@ -47,8 +47,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         }
         this.activeGen = random.nextInt(genomLen);
         this.animalId = animalId;
-        this.parent1 = Optional.empty();
-        this.parent2 = Optional.empty();
+        this.parent1 = null;
+        this.parent2 = null;
     }
     // Animal when born from two parents
     public Animal(Animal parent1, Animal parent2, int energy, int animalId) {
@@ -79,8 +79,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
         this.animalId = animalId;
         this.activeGen = random.nextInt(genomLen);
-        this.parent1 = Optional.of(parent1);
-        this.parent2 = Optional.of(parent2);
+        this.parent1 = parent1;
+        this.parent2 = parent2;
         descendantNotified(parent1);
         descendantNotified(parent2);
         descendantFinished(parent1);
@@ -196,8 +196,6 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         newAnimal.activeGen = activeGen;
         newAnimal.animalId = animalId;
         newAnimal.childCount = childCount;
-        newAnimal.parent1 = Optional.empty();
-        newAnimal.parent2 = Optional.empty();
         return newAnimal;
     }
 
@@ -205,14 +203,14 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         if(animal.isRelatedToNewborn) return;
         animal.isRelatedToNewborn = true;
         animal.descendants += 1;
-        animal.parent1.ifPresent(Animal::descendantNotified);
-        animal.parent2.ifPresent(Animal::descendantNotified);
+        if(animal.parent1 != null) descendantNotified(animal.parent1);
+        if(animal.parent2 != null) descendantNotified(animal.parent2);
     }
     private static void descendantFinished(Animal animal){
         if(!animal.isRelatedToNewborn) return;
         animal.isRelatedToNewborn = false;
-        animal.parent1.ifPresent(Animal::descendantFinished);
-        animal.parent2.ifPresent(Animal::descendantFinished);
+        if(animal.parent1 != null) descendantFinished(animal.parent1);
+        if(animal.parent2 != null) descendantFinished(animal.parent2);
     }
 
     private String genomHighlight(){

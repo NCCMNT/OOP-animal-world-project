@@ -15,7 +15,6 @@ import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class SimulationPresenter implements SimulationChangeListener {
     @FXML
@@ -121,17 +120,29 @@ public class SimulationPresenter implements SimulationChangeListener {
                 cell.setPrefSize(cellSize, cellSize);
 
                 if (element != null) {
-                    if (element instanceof Animal){
-                        cell.getStyleClass().add("animal");
-                        cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
-                    }
-                    else if (element instanceof BigPlant){
-                        cell.getStyleClass().add("big-plant");
-                        cell.setOnMouseClicked(event -> {infoLabel.setText("Big Plant"); clearAnimalInfo(); cleared = true;});
-                    }
-                    else if (element instanceof Plant){
-                        cell.getStyleClass().add("plant");
-                        cell.setOnMouseClicked(event -> {infoLabel.setText("Plant"); clearAnimalInfo(); cleared = true;});
+                    switch (element) {
+                        case Animal animal -> {
+                            cell.getStyleClass().add("animal");
+                            cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
+                        }
+                        case BigPlant bigPlant -> {
+                            cell.getStyleClass().add("big-plant");
+                            cell.setOnMouseClicked(event -> {
+                                infoLabel.setText("Big Plant");
+                                clearAnimalInfo();
+                                cleared = true;
+                            });
+                        }
+                        case Plant plant -> {
+                            cell.getStyleClass().add("plant");
+                            cell.setOnMouseClicked(event -> {
+                                infoLabel.setText("Plant");
+                                clearAnimalInfo();
+                                cleared = true;
+                            });
+                        }
+                        default -> {
+                        }
                     }
                     worldMapPane.add(cell, col, row);
                 }

@@ -76,31 +76,31 @@ class WorldMapTest {
         worldMap1.printAnimalInfo();
     }
 
-    @Test
-    void manualWithAging() {
-        for (int i = 0; i < 10; i++) {
-            worldMap1withAging.ageAllAnimals();
-        }
-        worldMap1withAging.printAnimalInfo();
-        System.out.println(worldMap1);
-        for (int i = 0; i < 5; i++) {
-            worldMap1withAging.moveAllAnimals();
-            worldMap1withAging.ageAllAnimals();
-            worldMap1withAging.printAnimalInfo();
-            System.out.println(worldMap1withAging);
-        }
-        for (int i = 0; i < 100; i++) {
-            worldMap1withAging.ageAllAnimals();
-        }
-        worldMap1withAging.printAnimalInfo();
-        System.out.println(worldMap1);
-        for (int i = 0; i < 5; i++) {
-            worldMap1withAging.moveAllAnimals();
-            worldMap1withAging.ageAllAnimals();
-            worldMap1withAging.printAnimalInfo();
-            System.out.println(worldMap1withAging);
-        }
-    }
+//    @Test
+//    void manualWithAging() {
+//        for (int i = 0; i < 10; i++) {
+//            worldMap1withAging.ageAllAnimals();
+//        }
+//        worldMap1withAging.printAnimalInfo();
+//        System.out.println(worldMap1);
+//        for (int i = 0; i < 5; i++) {
+//            worldMap1withAging.moveAllAnimals();
+//            worldMap1withAging.ageAllAnimals();
+//            worldMap1withAging.printAnimalInfo();
+//            System.out.println(worldMap1withAging);
+//        }
+//        for (int i = 0; i < 100; i++) {
+//            worldMap1withAging.ageAllAnimals();
+//        }
+//        worldMap1withAging.printAnimalInfo();
+//        System.out.println(worldMap1);
+//        for (int i = 0; i < 5; i++) {
+//            worldMap1withAging.moveAllAnimals();
+//            worldMap1withAging.ageAllAnimals();
+//            worldMap1withAging.printAnimalInfo();
+//            System.out.println(worldMap1withAging);
+//        }
+//    }
 
     // Custom tests
 
