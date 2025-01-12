@@ -15,8 +15,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private final WorldMap worldMap;
     private static final Random random = new Random();
 
-    private Optional<Animal> parent1;
-    private Optional<Animal> parent2;
+    private Animal parent1;
+    private Animal parent2;
     private int plantsEaten;
     private int descendants;
     private Optional<Integer> deathDate;
@@ -47,8 +47,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         }
         this.activeGen = random.nextInt(genomLen);
         this.animalId = animalId;
-        this.parent1 = Optional.empty();
-        this.parent2 = Optional.empty();
+        this.parent1 = null;
+        this.parent2 = null;
     }
     // Animal when born from two parents
     public Animal(Animal parent1, Animal parent2, int energy, int animalId) {
@@ -56,7 +56,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         parent1.childCount += 1; parent2.childCount += 1;
         int genomLen = parent1.genom.size();
         int sumEnergy = parent1.energy + parent2.energy;
-        int gensFromParent1 = round(((float) (genomLen * parent1.energy) )/ ((float) sumEnergy)); // Straszne susge, trzeba poczytać
+        int gensFromParent1 = round(((float) (genomLen * parent1.energy) )/ sumEnergy); // Straszne susge, trzeba poczytać
         int gensFromParent2 = genomLen - gensFromParent1;
         this.genom = new ArrayList<>(genomLen);
 
@@ -79,10 +79,12 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
         this.animalId = animalId;
         this.activeGen = random.nextInt(genomLen);
-        this.parent1 = Optional.of(parent1);
-        this.parent2 = Optional.of(parent2);
+        this.parent1 = parent1;
+        this.parent2 = parent2;
         descendantNotified(parent1);
         descendantNotified(parent2);
+        descendantFinished(parent1);
+        descendantFinished(parent2);
     }
 
     public void move(){
@@ -147,15 +149,12 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     public int getAnimalId() { return animalId; }
 
-    public int getDescendants() {
-        return descendants;
+    public int getChildCount() {
+        return childCount;
     }
 
-    public void updateDescendant(){
-        if(this.isRelatedToNewborn){
-            descendants++;
-            this.isRelatedToNewborn = false;
-        }
+    public int getDescendants() {
+        return descendants;
     }
 
     public void setDeathDate(int deathDate) {
@@ -197,28 +196,45 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         newAnimal.activeGen = activeGen;
         newAnimal.animalId = animalId;
         newAnimal.childCount = childCount;
-        newAnimal.parent1 = Optional.empty();
-        newAnimal.parent2 = Optional.empty();
         return newAnimal;
     }
 
     private static void descendantNotified(Animal animal){
         if(animal.isRelatedToNewborn) return;
         animal.isRelatedToNewborn = true;
-        animal.parent1.ifPresent(Animal::descendantNotified);
-        animal.parent2.ifPresent(Animal::descendantNotified);
+        animal.descendants += 1;
+        if(animal.parent1 != null) descendantNotified(animal.parent1);
+        if(animal.parent2 != null) descendantNotified(animal.parent2);
+    }
+    private static void descendantFinished(Animal animal){
+        if(!animal.isRelatedToNewborn) return;
+        animal.isRelatedToNewborn = false;
+        if(animal.parent1 != null) descendantFinished(animal.parent1);
+        if(animal.parent2 != null) descendantFinished(animal.parent2);
+    }
+
+    private String genomHighlight(){
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < genom.size(); i++) {
+            if(i == activeGen) result.append("<");
+            result.append(genom.get(i));
+            if(i == activeGen) result.append(">");
+            if(i != genom.size()-1) result.append(", ");
+        }
+        result.append("]");
+        return result.toString();
     }
 
     public String infoUI(){
-        return( "Status: " + deathDate.map(Integer -> "Dead").orElse("Alive") + "\n"
-                + "Genom: " + genom.toString() + "\n"
+        return( "Status: " + deathDate.map(integer -> "Dead").orElse("Alive") + "\n"
+                + "Genom: " + genomHighlight() + "\n"
                 + "Active gen: " + activeGen + "\n"
                 + "Energy: " + energy + "\n"
                 + "Plants eaten: " + plantsEaten + "\n"
                 + "Children number: " + childCount + "\n"
                 + "Descendants number: " + descendants + "\n"
                 + "Age: " + age + "\n"
-                + "Death date: " + deathDate.map(Objects::toString).orElse("N/A")
+                + "Death date: " + deathDate.map(Objects::toString).orElse("NaN")
         );
     }
 

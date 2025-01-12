@@ -22,7 +22,24 @@ public class WorldMap {
     private int turn = 0;
     private Mutator mutator;
     private final boolean isAging;
+    private int deadAmount = 0;
+    private int deadTotalAge = 0;
+    private int lastEmptyFields = -1;
     private static final Random random = new Random();
+
+
+    public WorldMap(MapSettings mapSettings){
+        this.height = mapSettings.height();
+        this.width = mapSettings.width();
+        this.plantsPerTurn = mapSettings.plantsPerTurn();
+        this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
+        this.energeticBreedingCost = mapSettings.energeticBreedingCost();
+        this.isAging = mapSettings.isAging();
+
+        initializePlanter(this.width, this.height, mapSettings.plantEnergy(), mapSettings.startingNumberOfPlants(), mapSettings.planterType());
+        initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
+        initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
+    }
 
     // getters for statistics of given simulation
     public int getNumOfAnimals() {
@@ -35,7 +52,7 @@ public class WorldMap {
     }
 
     public int getNumOfEmptyFields(){
-        return width * height - planter.getPlants().size() - getNumOfAnimals();
+        return  lastEmptyFields;
     }
 
     public List<Integer> getMostPopularGenom() {
@@ -62,17 +79,18 @@ public class WorldMap {
         return df.format((double) avgEnergy / getNumOfAnimals());
     }
 
-    public WorldMap(MapSettings mapSettings){
-        this.height = mapSettings.height();
-        this.width = mapSettings.width();
-        this.plantsPerTurn = mapSettings.plantsPerTurn();
-        this.energeticFertilityThreshold =  mapSettings.energeticFertilityThreshold();
-        this.energeticBreedingCost = mapSettings.energeticBreedingCost();
-        this.isAging = mapSettings.isAging();
+    public String getAvgDeadAge(){
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format((double)deadTotalAge/deadAmount);
+    }
 
-        initializePlanter(this.width, this.height, mapSettings.plantEnergy(), mapSettings.startingNumberOfPlants(), mapSettings.planterType());
-        initializeMutator(mapSettings.minMutations(), mapSettings.maxMutations(), mapSettings.genomLen());
-        initializeAnimals(mapSettings.startingNumberOfAnimals(), mapSettings.startingEnergy(), mapSettings.genomLen());
+    public String getAvgChildren(){
+        int childrenNumber = 0;
+        for (Animal animal : animals) {
+            childrenNumber += animal.getChildCount();
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format((double) childrenNumber /animals.size());
     }
 
     private void initializeAnimals(int amountOfAnimals, int startingEnergy, int genomLen) {
@@ -108,7 +126,8 @@ public class WorldMap {
             //if animal has 0 energy - it dies
             if (animals.get(i).getEnergy() == 0) {
                 animals.get(i).setDeathDate(turn);
-                System.out.println("setDeathDate called");
+                deadTotalAge += animals.get(i).getAge();
+                deadAmount += 1;
                 animals.remove(i);
                 count++;
             }
@@ -153,7 +172,6 @@ public class WorldMap {
         animalId++;
         mutator.mutate(child);
         animals.add(child);
-        updateDescendants();
 
         //printing info for logs
         System.out.println("Animal " + child.getAnimalId() + " was born");
@@ -210,12 +228,6 @@ public class WorldMap {
         this.turn = turn;
     }
 
-    public void updateDescendants(){
-        for (Animal animal : animals) {
-            animal.updateDescendant();
-        }
-    }
-
     // Visual helpers
 
     public Optional<WorldElement> elementAt(Vector2d position) {
@@ -225,6 +237,17 @@ public class WorldMap {
             }
         }
         return Optional.ofNullable(planter.plantAt(position));
+    }
+
+    public HashMap<Vector2d, WorldElement> upperLayer(){
+        HashMap<Vector2d, WorldElement> upperLayer = new HashMap<>(planter.getPlants());
+        animals.sort(Animal::compareTo);
+        for (Animal animal : animals) {
+            Vector2d position = animal.getPosition();
+            upperLayer.put(position, animal);
+        }
+        lastEmptyFields = width*height-upperLayer.size();
+        return upperLayer;
     }
 
     public String toString(){
