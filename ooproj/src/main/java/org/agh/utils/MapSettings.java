@@ -2,6 +2,8 @@ package org.agh.utils;
 
 import org.agh.model.Plant;
 
+import java.io.Serializable;
+
 public record MapSettings(
         int height,
         int width,
@@ -17,4 +19,4 @@ public record MapSettings(
         int minMutations,
         int maxMutations,
         int genomLen
-) {}
+) implements Serializable {}
