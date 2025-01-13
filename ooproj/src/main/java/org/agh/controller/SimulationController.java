@@ -1,22 +1,23 @@
-package org.agh.simulation;
+package org.agh.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import org.agh.World;
+import javafx.stage.Stage;
 import org.agh.model.*;
+import org.agh.simulation.Simulation;
 import org.agh.utils.MapSettings;
 import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.HashMap;
 
-public class SimulationPresenter implements SimulationChangeListener {
+public class SimulationController implements SimulationChangeListener, Controller {
     @FXML
     public Label AnimalCountInfoLabel;
     @FXML
@@ -36,7 +37,9 @@ public class SimulationPresenter implements SimulationChangeListener {
     @FXML
     public BorderPane borderPane;
     @FXML
-    public Button chartsButton;
+    public Button AnimalInfoButton;
+    @FXML
+    public VBox AnimalInfoBox;
     @FXML
     private GridPane worldMapPane;
     @FXML
@@ -53,7 +56,21 @@ public class SimulationPresenter implements SimulationChangeListener {
     private HashMap<Vector2d, Pane> cellPanes = new HashMap<>();
     private Animal LastViewedAnimal;
     private boolean cleared = true;
-    private boolean isSidePanelVisible = true;
+    private boolean isAnimalInfoVisible = true;
+    private MapSettings mapSettings;
+
+    private Scene scene;
+    private Stage stage;
+
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @Override
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
 
     public void setSimulation(Simulation simulation) {
         this.simulation = simulation;
@@ -63,11 +80,14 @@ public class SimulationPresenter implements SimulationChangeListener {
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
+    public void setMapSettings(MapSettings mapSettings) { this.mapSettings = mapSettings; }
 
     @FXML
-    public void initialize() {
-        MapSettings mapSettings = new MapSettings(40,40,60,5,10, PlanterType.EQUATOR, 15,20,
-                30,10, false, 0,1,1);
+    public void initialize(MapSettings mapSettings) {
+        if(mapSettings == null) {
+            throw new IllegalStateException("MapSettings not set");
+        }
+        setMapSettings(mapSettings);
         WorldMap worldMap = new WorldMap(mapSettings);
         this.worldMap = worldMap;
 
@@ -194,15 +214,17 @@ public class SimulationPresenter implements SimulationChangeListener {
     }
 
     public void onChartDisplayClicked(ActionEvent actionEvent) {
-        if (isSidePanelVisible) {
-            // Remove VBox from the BorderPane (leave the space open)
-            borderPane.setLeft(null);
-            chartsButton.setText("Show Info Panel");
-        } else {
-            // Add VBox back to the left side of BorderPane
-            borderPane.setLeft(sidePanel);
-            chartsButton.setText("Hide Info Panel");
+        if (AnimalInfoBox != null) {
+            if (isAnimalInfoVisible) {
+                AnimalInfoBox.setVisible(false); // Hide the VBox
+                AnimalInfoBox.setManaged(false); // Remove it from the layout entirely
+                AnimalInfoButton.setText("Show Animal Info");
+            } else {
+                AnimalInfoBox.setVisible(true); // Show the VBox
+                AnimalInfoBox.setManaged(true); // Add it back to the layout
+                AnimalInfoButton.setText("Hide Animal Info");
+            }
+            isAnimalInfoVisible = !isAnimalInfoVisible; // Toggle the state
         }
-        isSidePanelVisible = !isSidePanelVisible; // Toggle visibility state
     }
 }

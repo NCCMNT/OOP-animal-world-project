@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.button {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12;
+    -fx-min-width: 200;
+    -fx-min-height: 40;
+
+    -fx-background-color: #353535;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+
+    -fx-alignment: center;
+}
+
+.config-files-pane {
+    -fx-background-color: #676767;
+}
+
+#borderPane {
+    -fx-background-color: #676767;
+}
+
+.tooltip-info {
+    -fx-line-spacing: 10;
+    -fx-font-size: 12;
+}
+
+.setting-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+}
+
+.setting-label:hover {
+    -fx-text-fill: #7cb5ff;
+}
+
+.title-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 36;
+    -fx-text-fill: #ffffff;
+}
+
+.subtitle-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 18;
+    -fx-text-fill: #b1b1b1;
+}
+
+.section-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 18;
+    -fx-text-fill: #0ba820;
+}
+
+.text-field {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-background-color: #d3d3d3;
+    -fx-text-fill: #535353;
+}
+
+.option-menu {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-background-color: #cdcdcd;
+    -fx-text-fill: #636363;
+}
+
+.option-menu .arrow {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
+}
+
+.check-box {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+}
+
+.check-box .box {
+    -fx-background-color: #ffffff;
+}
+
+.check-box:selected .box {
+    -fx-border-color: green;
+}
+
