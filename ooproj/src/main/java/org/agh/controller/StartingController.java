@@ -121,7 +121,7 @@ public class StartingController implements Controller {
             simulationStage.setScene(simulationScene);
             simulationStage.setTitle("Simulation");
             simulationStage.setMinHeight(800);
-            simulationStage.setMinWidth(1000);
+//            simulationStage.setMinWidth(1000);
 
             // handling closing window of simulation
             simulationStage.setOnCloseRequest(event -> simulationController.getSimulation().shutdown());

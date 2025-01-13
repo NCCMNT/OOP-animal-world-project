@@ -226,15 +226,5 @@ public class SimulationController implements SimulationChangeListener, Controlle
             }
             isAnimalInfoVisible = !isAnimalInfoVisible; // Toggle the state
         }
-//        if (isSidePanelVisible) {
-//            // Remove VBox from the BorderPane (leave the space open)
-//            borderPane.setLeft(null);
-//            chartsButton.setText("Show Info Panel");
-//        } else {
-//            // Add VBox back to the left side of BorderPane
-//            borderPane.setLeft(sidePanel);
-//            chartsButton.setText("Hide Info Panel");
-//        }
-//        isSidePanelVisible = !isSidePanelVisible; // Toggle visibility state
     }
 }
