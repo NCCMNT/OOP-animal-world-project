@@ -141,11 +141,11 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
                 if (element != null) {
                     switch (element) {
-                        case Animal animal -> {
+                        case Animal ignored -> {
                             cell.getStyleClass().add("animal");
                             cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
                         }
-                        case BigPlant bigPlant -> {
+                        case BigPlant ignored -> {
                             cell.getStyleClass().add("big-plant");
                             cell.setOnMouseClicked(event -> {
                                 infoLabel.setText("Big Plant");
@@ -153,7 +153,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                                 cleared = true;
                             });
                         }
-                        case Plant plant -> {
+                        case Plant ignored -> {
                             cell.getStyleClass().add("plant");
                             cell.setOnMouseClicked(event -> {
                                 infoLabel.setText("Plant");

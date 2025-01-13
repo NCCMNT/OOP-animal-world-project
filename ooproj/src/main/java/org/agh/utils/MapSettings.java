@@ -1,7 +1,5 @@
 package org.agh.utils;
 
-import org.agh.model.Plant;
-
 import java.io.Serializable;
 
 public record MapSettings(
