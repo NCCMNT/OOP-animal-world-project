@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.agh.utils.MapSettings;
+import org.agh.utils.MapSettingsException;
 import org.agh.utils.PlanterType;
 
 import java.io.*;
@@ -106,6 +107,14 @@ public class StartingController implements Controller {
             // storing input data into MapSettings record
             MapSettings mapSettings = new MapSettings(height, width, startingNumberOfPlants, plantEnergy, plantsPerTurn, PlanterType.fromString(MapVariant.getValue()),
                     startingNumberOfAnimals, startingEnergyOfAnimals, fertility, breedingCost, isAgingCheckBox.isSelected(), minMutations, maxMutations, genomLength);
+
+            // Validating all inputed values
+            try {
+                mapSettings.validate();
+            } catch (MapSettingsException exception) {
+                System.out.println(exception.getMessage());
+                return;
+            }
 
             // initialize new simulation controller with given settings
             simulationController.initialize(mapSettings);
