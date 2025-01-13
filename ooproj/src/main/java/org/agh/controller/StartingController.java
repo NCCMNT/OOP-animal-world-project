@@ -3,7 +3,6 @@ package org.agh.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,10 +14,8 @@ import javafx.stage.Stage;
 import org.agh.utils.MapSettings;
 import org.agh.utils.PlanterType;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.Map;
 
 public class StartingController implements Controller {
 
@@ -78,6 +75,7 @@ public class StartingController implements Controller {
     }
 
     private int getValidatedIntValue(String text, int defaultValue) {
+        // if there is no user input or input is different from positive integer, then default value will be returned
         if (text == null || !text.matches("[1-9]\\d*")) {
             return defaultValue;
         }
@@ -90,6 +88,8 @@ public class StartingController implements Controller {
             root = loader.load();
             SimulationController simulationController = loader.getController();
 
+            // getting map settings input with adjustments -> if user inputs wrong values then
+            // default values will be put into map settings
             int height = getValidatedIntValue(HeightInput.getText(), 20);
             int width = getValidatedIntValue(WidthInput.getText(), 20);
             int startingNumberOfPlants = getValidatedIntValue(StartingNumberOfPlantsInput.getText(), 10);
@@ -103,26 +103,31 @@ public class StartingController implements Controller {
             int maxMutations = getValidatedIntValue(MaxNumberOfMutationsInput.getText(), 3);
             int genomLength = getValidatedIntValue(GenomLengthInput.getText(), 5);
 
+            // storing input data into MapSettings record
             MapSettings mapSettings = new MapSettings(height, width, startingNumberOfPlants, plantEnergy, plantsPerTurn, PlanterType.fromString(MapVariant.getValue()),
                     startingNumberOfAnimals, startingEnergyOfAnimals, fertility, breedingCost, isAgingCheckBox.isSelected(), minMutations, maxMutations, genomLength);
 
+            // initialize new simulation controller with given settings
             simulationController.initialize(mapSettings);
 
-            stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-
-            simulationController.setScene(scene);
+            // scene config
+            Scene simulationScene = new Scene(root);
+            simulationController.setScene(simulationScene);
             String cssPath = getClass().getClassLoader().getResource("simulation.css").toExternalForm();
-            scene.getStylesheets().add(cssPath);
-            stage.setScene(scene);
+            simulationScene.getStylesheets().add(cssPath);
 
-            stage.setTitle("Simulation");
-            stage.setMinHeight(800);
-            stage.setMinWidth(1400);
+            // stage config
+            Stage simulationStage = new Stage();
+            simulationStage.setScene(simulationScene);
+            simulationStage.setTitle("Simulation");
+            simulationStage.setMinHeight(800);
+            simulationStage.setMinWidth(1000);
 
-            stage.show();
+            // handling closing window of simulation
+            simulationStage.setOnCloseRequest(event -> simulationController.getSimulation().shutdown());
 
-            stage.setOnCloseRequest(event -> simulationController.getSimulation().shutdown());
+            // show new window of simulation
+            simulationStage.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -130,6 +135,12 @@ public class StartingController implements Controller {
     }
 
     public void OnConfigSaveClick(ActionEvent actionEvent) {
+
+        if (ConfigurationName.getText().isEmpty()){
+            showAlert("Error", "Configuration name is required", Alert.AlertType.ERROR);
+            return;
+        }
+
         int height = getValidatedIntValue(HeightInput.getText(), 20);
         int width = getValidatedIntValue(WidthInput.getText(), 20);
         int startingNumberOfPlants = getValidatedIntValue(StartingNumberOfPlantsInput.getText(), 10);
@@ -148,7 +159,7 @@ public class StartingController implements Controller {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Configuration Files", "*.config"));
-        fileChooser.setInitialFileName(ConfigurationName.getText() +  ".config");
+        fileChooser.setInitialFileName(ConfigurationName.getText() + ".config");
 
         String currentPath = System.getProperty("user.dir");
         String configurationsPath = currentPath + "/configurations";  // Path to the configurations folder
@@ -184,5 +195,43 @@ public class StartingController implements Controller {
     }
 
     public void OnLoadConfigClick(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Configuration Files", "*.config"));
+
+        String currentPath = System.getProperty("user.dir");
+        String configurationsPath = currentPath + "/configurations";  // Path to the configurations folder
+        File configurationsDir = new File(configurationsPath);
+
+        fileChooser.setInitialDirectory(configurationsDir);
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            try (FileInputStream fileIn = new FileInputStream(file); ObjectInputStream in = new ObjectInputStream(fileIn)){
+
+                MapSettings mapSettings = (MapSettings) in.readObject();
+                HeightInput.setText(String.valueOf(mapSettings.height()));
+                WidthInput.setText(String.valueOf(mapSettings.width()));
+                StartingNumberOfPlantsInput.setText(String.valueOf(mapSettings.startingNumberOfPlants()));
+                PlantEnergyInput.setText(String.valueOf(mapSettings.plantEnergy()));
+                PlantsPerTurnInput.setText(String.valueOf(mapSettings.plantsPerTurn()));
+                StartingNumberOfAnimalsInput.setText(String.valueOf(mapSettings.startingNumberOfAnimals()));
+                StartingEnergyOfAnimalsInput.setText(String.valueOf(mapSettings.startingEnergy()));
+                FertilityThresholdInput.setText(String.valueOf(mapSettings.energeticFertilityThreshold()));
+                EnergeticBreedingCostInput.setText(String.valueOf(mapSettings.energeticBreedingCost()));
+                MinNumberOfMutationsInput.setText(String.valueOf(mapSettings.minMutations()));
+                MaxNumberOfMutationsInput.setText(String.valueOf(mapSettings.maxMutations()));
+                GenomLengthInput.setText(String.valueOf(mapSettings.genomLen()));
+                isAgingCheckBox.setSelected(mapSettings.isAging());
+                MapVariant.setValue(mapSettings.planterType().toString());
+
+                ConfigurationName.clear();
+
+            }
+            catch (IOException | ClassNotFoundException e) {
+                showAlert("Error", "Failed to load configuration.", Alert.AlertType.ERROR);
+                e.printStackTrace();
+            }
+        }
     }
 }

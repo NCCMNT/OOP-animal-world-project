@@ -22,15 +22,30 @@
     -fx-background-color: #676767;
 }
 
+.tooltip-info {
+    -fx-line-spacing: 10;
+    -fx-font-size: 12;
+}
+
 .setting-label {
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-text-fill: #ffffff;
+}
+
+.setting-label:hover {
+    -fx-text-fill: #7cb5ff;
 }
 
 .title-label {
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-font-size: 36;
     -fx-text-fill: #ffffff;
+}
+
+.subtitle-label {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 18;
+    -fx-text-fill: #b1b1b1;
 }
 
 .section-label {
@@ -68,3 +83,4 @@
 .check-box:selected .box {
     -fx-border-color: green;
 }
+

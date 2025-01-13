@@ -3,6 +3,7 @@ package org.agh.controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,7 +37,9 @@ public class SimulationController implements SimulationChangeListener, Controlle
     @FXML
     public BorderPane borderPane;
     @FXML
-    public Button chartsButton;
+    public Button AnimalInfoButton;
+    @FXML
+    public VBox AnimalInfoBox;
     @FXML
     private GridPane worldMapPane;
     @FXML
@@ -53,7 +56,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private HashMap<Vector2d, Pane> cellPanes = new HashMap<>();
     private Animal LastViewedAnimal;
     private boolean cleared = true;
-    private boolean isSidePanelVisible = true;
+    private boolean isAnimalInfoVisible = true;
     private MapSettings mapSettings;
 
     private Scene scene;
@@ -211,15 +214,27 @@ public class SimulationController implements SimulationChangeListener, Controlle
     }
 
     public void onChartDisplayClicked(ActionEvent actionEvent) {
-        if (isSidePanelVisible) {
-            // Remove VBox from the BorderPane (leave the space open)
-            borderPane.setLeft(null);
-            chartsButton.setText("Show Info Panel");
-        } else {
-            // Add VBox back to the left side of BorderPane
-            borderPane.setLeft(sidePanel);
-            chartsButton.setText("Hide Info Panel");
+        if (AnimalInfoBox != null) {
+            if (isAnimalInfoVisible) {
+                AnimalInfoBox.setVisible(false); // Hide the VBox
+                AnimalInfoBox.setManaged(false); // Remove it from the layout entirely
+                AnimalInfoButton.setText("Show Animal Info");
+            } else {
+                AnimalInfoBox.setVisible(true); // Show the VBox
+                AnimalInfoBox.setManaged(true); // Add it back to the layout
+                AnimalInfoButton.setText("Hide Animal Info");
+            }
+            isAnimalInfoVisible = !isAnimalInfoVisible; // Toggle the state
         }
-        isSidePanelVisible = !isSidePanelVisible; // Toggle visibility state
+//        if (isSidePanelVisible) {
+//            // Remove VBox from the BorderPane (leave the space open)
+//            borderPane.setLeft(null);
+//            chartsButton.setText("Show Info Panel");
+//        } else {
+//            // Add VBox back to the left side of BorderPane
+//            borderPane.setLeft(sidePanel);
+//            chartsButton.setText("Hide Info Panel");
+//        }
+//        isSidePanelVisible = !isSidePanelVisible; // Toggle visibility state
     }
 }

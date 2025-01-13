@@ -5,38 +5,34 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.controller.StartingController">
-   <left>
-      <VBox alignment="CENTER" minWidth="230.0" styleClass="config-files-pane">
-         <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label alignment="CENTER" styleClass="setting-label" text="Your&#10;configurations" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
-                     <padding>
-                        <Insets left="10.0" right="10.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-   </left>
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Height" />
-                        <TextField fx:id="HeightInput" prefWidth="50.0" styleClass="text-field" />
-                        <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width" />
-                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="50.0" styleClass="text-field" />
+                        <Label styleClass="setting-label" text="Height">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
+                           </tooltip>
+                        </Label>
+                        <TextField fx:id="HeightInput" prefWidth="100.0" styleClass="text-field" />
+                        <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
+                           </tooltip>
+                        </Label>
+                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Map variant" />
+                        <Label styleClass="setting-label" text="Map variant">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Map variants:&#10;&#10;EQUATOR - plants grow in fertile areas which are mainly distributed at the central zone of a map&#10;&#10;JUNGLE - plants grow randomly on whole map, but sometimes big plants appear" wrapText="true" />
+                           </tooltip>
+                        </Label>
                         <ChoiceBox fx:id="MapVariant" minWidth="100.0" styleClass="option-menu" />
                      </children>
                   </HBox>
@@ -47,8 +43,12 @@
                               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="section-label" text="PLANTS" textAlignment="CENTER" />
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Plant energy" />
-                                    <TextField fx:id="PlantEnergyInput" prefWidth="50.0" styleClass="text-field" />
+                                    <Label styleClass="setting-label" text="Plant energy">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup how much energy will animal get after consuming plant (big plant has this value tripled)" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
+                                    <TextField fx:id="PlantEnergyInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -59,8 +59,12 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Starting number of plants" />
-                                    <TextField fx:id="StartingNumberOfPlantsInput" prefWidth="50.0" styleClass="text-field" />
+                                    <Label styleClass="setting-label" text="Starting number of plants">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup starting number of plants that will be on the map" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
+                                    <TextField fx:id="StartingNumberOfPlantsInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -72,7 +76,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Plants per turn" />
-                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="50.0" styleClass="text-field" />
+                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -89,7 +93,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Genom length" />
-                                    <TextField fx:id="GenomLengthInput" prefHeight="26.0" prefWidth="50.0" styleClass="text-field" />
+                                    <TextField fx:id="GenomLengthInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -101,7 +105,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting number of animals" />
-                                    <TextField fx:id="StartingNumberOfAnimalsInput" prefWidth="50.0" styleClass="text-field" />
+                                    <TextField fx:id="StartingNumberOfAnimalsInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -113,7 +117,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting energy of animals" />
-                                    <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="50.0" styleClass="text-field" />
+                                    <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="100.0" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -128,25 +132,25 @@
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Fertility threshold" />
-                        <TextField fx:id="FertilityThresholdInput" prefHeight="26.0" prefWidth="50.0" styleClass="text-field" />
+                        <TextField fx:id="FertilityThresholdInput" prefWidth="100.0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Energetic breeding cost" />
-                        <TextField fx:id="EnergeticBreedingCostInput" prefHeight="26.0" prefWidth="50.0" styleClass="text-field" />
+                        <TextField fx:id="EnergeticBreedingCostInput" prefWidth="100.0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="276.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Min number of mutations" />
-                        <TextField fx:id="MinNumberOfMutationsInput" prefHeight="26.0" prefWidth="50.0" styleClass="text-field" />
+                        <TextField fx:id="MinNumberOfMutationsInput" prefWidth="100.0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="280.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Max number of mutations" />
-                        <TextField fx:id="MaxNumberOfMutationsInput" prefHeight="26.0" prefWidth="50.0" styleClass="text-field" />
+                        <TextField fx:id="MaxNumberOfMutationsInput" prefWidth="100.0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="296.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -172,10 +176,17 @@
       </VBox>
    </center>
    <top>
-      <HBox alignment="CENTER" prefHeight="58.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER">
          <children>
-            <Label styleClass="title-label" text="Simulation configuration" textAlignment="CENTER" />
+            <Label alignment="CENTER" styleClass="title-label" text="Simulation configuration" textAlignment="CENTER" />
+            <Label alignment="CENTER" styleClass="subtitle-label" text="Run your cursor over setting to display more information" />
          </children>
-      </HBox>
+         <BorderPane.margin>
+            <Insets bottom="10.0" />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+      </VBox>
    </top>
 </BorderPane>
