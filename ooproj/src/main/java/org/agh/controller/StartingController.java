@@ -85,10 +85,6 @@ public class StartingController implements Controller {
 
     public void OnStartButtonClick(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
-            root = loader.load();
-            SimulationController simulationController = loader.getController();
-
             // getting map settings input with adjustments -> if user inputs wrong values then
             // default values will be put into map settings
             int height = getValidatedIntValue(HeightInput.getText(), 20);
@@ -115,6 +111,10 @@ public class StartingController implements Controller {
                 System.out.println(exception.getMessage());
                 return;
             }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
+            root = loader.load();
+            SimulationController simulationController = loader.getController();
 
             // initialize new simulation controller with given settings
             simulationController.initialize(mapSettings);
