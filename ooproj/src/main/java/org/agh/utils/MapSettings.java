@@ -19,30 +19,36 @@ public record MapSettings(
         int genomLen
 ) implements Serializable {
     public void validate() throws MapSettingsException{
+        StringBuilder stringBuilder = new StringBuilder("Map settings validation failed due to:\n");
+
         if(height < 1)
-            throw new MapSettingsException("Height must be greater than 0");
+            stringBuilder.append("Height must be greater than 0\n");
         if(width < 1)
-            throw new MapSettingsException("Width must be greater than 0");
+            stringBuilder.append("Width must be greater than 0\n");
         if(startingNumberOfPlants < 0)
-            throw new MapSettingsException("Starting number must be greater than 0");
+            stringBuilder.append("Starting number must be greater than 0\n");
         if(plantEnergy < 0)
-            throw new MapSettingsException("Plant energy must be greater than 0");
+            stringBuilder.append("Plant energy must be greater than 0\n");
         if(plantsPerTurn < 0)
-            throw new MapSettingsException("Plants per turn must be greater than 0");
+            stringBuilder.append("Plants per turn must be greater than 0\n");
         if(energeticFertilityThreshold < 0)
-            throw new MapSettingsException("Energy fertility threshold must be greater than 0");
+            stringBuilder.append("Energy fertility threshold must be greater than 0\n");
         if(energeticBreedingCost < 0)
-            throw new MapSettingsException("Energy breeding cost must be greater than 0");
+            stringBuilder.append("Energy breeding cost must be greater than 0\n");
         if(energeticBreedingCost > energeticFertilityThreshold)
-            throw new MapSettingsException("Energy fertility threshold must be higher or equal to energy breeding cost");
+            stringBuilder.append("Energy fertility threshold must be higher or equal to energy breeding cost\n");
         if(minMutations < 0)
-            throw new MapSettingsException("Min mutations must be greater than 0");
+            stringBuilder.append("Min mutations must be greater than 0\n");
         if(maxMutations < minMutations)
-            throw new MapSettingsException("Max mutations must be greater than or equal to min mutations");
+            stringBuilder.append("Max mutations must be greater than or equal to min mutations\n");
         if(maxMutations > genomLen)
-            throw new MapSettingsException("Max mutations cannot be greater than genomLen");
+            stringBuilder.append("Max mutations cannot be greater than genomLen\n");
         if(genomLen <= 0)
-            throw new MapSettingsException("GenomLen must be greater than 0");
+            stringBuilder.append("GenomLen must be greater than 0\n");
+
+        if(!stringBuilder.isEmpty()){
+            throw new MapSettingsException(stringBuilder.toString());
+        }
     }
 }
 
