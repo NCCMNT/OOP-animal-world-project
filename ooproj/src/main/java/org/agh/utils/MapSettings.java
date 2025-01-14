@@ -19,7 +19,7 @@ public record MapSettings(
         int genomLen
 ) implements Serializable {
     public void validate() throws MapSettingsException{
-        StringBuilder stringBuilder = new StringBuilder("Map settings validation failed due to:\n");
+        StringBuilder stringBuilder = new StringBuilder();
 
         if(height < 1)
             stringBuilder.append("Height must be greater than 0\n");
@@ -47,6 +47,7 @@ public record MapSettings(
             stringBuilder.append("GenomLen must be greater than 0\n");
 
         if(!stringBuilder.isEmpty()){
+            stringBuilder.insert(0, "Map settings validation failed due to:\n");
             throw new MapSettingsException(stringBuilder.toString());
         }
     }
