@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.effect.Effect;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.agh.model.*;
@@ -142,6 +144,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
                 Pane cell = new Pane();
                 cell.setPrefSize(cellSize, cellSize);
+                cell.setBorder(Border.EMPTY);
 
                 if (element != null) {
                     switch (element) {
@@ -161,6 +164,13 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         }
                         case Plant ignored -> {
                             cell.getStyleClass().add("plant");
+
+                            // Add image for Plant
+                            ImageView plantImageView = new ImageView(new Image(getClass().getClassLoader().getResource("plant.png").toExternalForm()));
+                            plantImageView.setFitWidth(cellSize);
+                            plantImageView.setFitHeight(cellSize);
+                            cell.getChildren().add(plantImageView);
+
                             cell.setOnMouseClicked(event -> {
                                 infoLabel.setText("Plant");
                                 clearAnimalInfo();
