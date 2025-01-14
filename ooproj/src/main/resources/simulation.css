@@ -5,7 +5,9 @@
 }
 
 .plant {
-    -fx-background-color: green;
+    -fx-background-color: #428000;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
 .big-plant {

@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.agh.model.*;
@@ -138,6 +140,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
                 Pane cell = new Pane();
                 cell.setPrefSize(cellSize, cellSize);
+                cell.setBorder(Border.EMPTY);
 
                 if (element != null) {
                     switch (element) {
@@ -155,6 +158,13 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         }
                         case Plant plant -> {
                             cell.getStyleClass().add("plant");
+
+                            // Add image for Plant
+                            ImageView plantImageView = new ImageView(new Image(getClass().getClassLoader().getResource("plant.png").toExternalForm()));
+                            plantImageView.setFitWidth(cellSize);
+                            plantImageView.setFitHeight(cellSize);
+                            cell.getChildren().add(plantImageView);
+
                             cell.setOnMouseClicked(event -> {
                                 infoLabel.setText("Plant");
                                 clearAnimalInfo();
