@@ -1,12 +1,16 @@
 package org.agh.controller;
 
 import javafx.application.Platform;
+import javafx.css.StyleClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.agh.model.*;
@@ -141,9 +145,11 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
                 if (element != null) {
                     switch (element) {
-                        case Animal ignored -> {
+                        case Animal animal -> {
                             cell.getStyleClass().add("animal");
                             cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
+
+                            cell.setEffect(adjustFromEnergy(animal.getEnergy()));
                         }
                         case BigPlant ignored -> {
                             cell.getStyleClass().add("big-plant");
@@ -226,5 +232,18 @@ public class SimulationController implements SimulationChangeListener, Controlle
             }
             isAnimalInfoVisible = !isAnimalInfoVisible; // Toggle the state
         }
+    }
+
+    private Double normalize (int energy){
+        if(energy >= 200) return 1.0;
+        return (double)energy/200;
+    }
+
+    private ColorAdjust adjustFromEnergy(int energy) {
+        ColorAdjust energyAdjust = new ColorAdjust();
+        double energyNormalised = normalize(energy);
+        energyAdjust.setBrightness(energyNormalised);
+        energyAdjust.setContrast(energyNormalised);
+        return energyAdjust;
     }
 }
