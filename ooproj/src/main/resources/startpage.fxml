@@ -156,6 +156,11 @@
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="296.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <CheckBox fx:id="isAgingCheckBox" mnemonicParsing="false" styleClass="check-box" text="Aging animals" />
+                        <CheckBox fx:id="statTrackCheckBox" mnemonicParsing="false" text="Statistics tracking">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Enabling statistics tracking resolves to writing information about each turn into CSV file" wrapText="true" />
+                           </tooltip>
+                        </CheckBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="422.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">

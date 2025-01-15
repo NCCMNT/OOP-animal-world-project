@@ -75,6 +75,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private MapSettings mapSettings;
     private MapStatistics mapStatistics;
     private String simulationName;
+    private String statisticsDir  = System.getProperty("user.dir") + "/statistics";
 
     private Scene scene;
     private Stage stage;
@@ -116,9 +117,35 @@ public class SimulationController implements SimulationChangeListener, Controlle
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
 
-        //create simulation statistics file if needed
+        //create simulation statistics TSV file if needed
         if (statTracking) {
+            //list of headings for TSV file
+            List<String> headings = List.of("Turn", "Number of animals", "Number of plants", "Number of empty fields",
+                    "Most popular genom", "Average animal energy", "Average life span", "Average children count");
 
+            String filePath = statisticsDir + "/" + simulationName + ".tsv";
+            File file = new File(filePath);
+            File dir = new File(statisticsDir);
+
+            if (!file.exists()) {
+                dir.mkdirs();  // Create the directory if it doesn't exist
+            }
+
+            //checking if file with that name exists and deleting it if it does exist
+            if (!file.exists()) {
+                if (file.delete()) System.out.println("Existing file " + filePath + " deleted");
+            }
+
+            //creating new file
+            try {
+                if(file.createNewFile()) System.out.println("Created new file " + filePath);;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //appending headings to TSV file
+            appendFileLine(headings, filePath);
         }
     }
 
@@ -166,7 +193,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         case Animal animal -> {
                             cell.getStyleClass().add("animal");
                             cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
-
                             cell.setEffect(adjustFromEnergy(animal.getEnergy()));
                         }
                         case BigPlant ignored -> {
@@ -179,13 +205,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         }
                         case Plant ignored -> {
                             cell.getStyleClass().add("plant");
-
-                            // Add image for Plant
-                            ImageView plantImageView = new ImageView(new Image(getClass().getClassLoader().getResource("plant.png").toExternalForm()));
-                            plantImageView.setFitWidth(cellSize);
-                            plantImageView.setFitHeight(cellSize);
-                            cell.getChildren().add(plantImageView);
-
                             cell.setOnMouseClicked(event -> {
                                 infoLabel.setText("Plant");
                                 clearAnimalInfo();
@@ -208,23 +227,29 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.setGridLinesVisible(true);
     }
 
+    public void enableStatTracking(){
+        this.statTracking = true;
+    }
+
     public void setSimulationName(String simulationName) {
         this.simulationName = simulationName;
     }
 
-    private void addTurnStatisticsToTSV() {
-        List<String> statisticsList = mapStatistics.getStatisticsStringList();
-
-        String tsvFile = simulationName + ".tsv";
-
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(tsvFile, true))) {
-            String TSVline = String.join("\t", statisticsList);
+    private void appendFileLine(List<String> line, String filePath){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            String TSVline = String.join("\t", line);
             writer.write(TSVline);
             writer.newLine();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void addTurnStatisticsToTSV() {
+        List<String> statisticsList = mapStatistics.getStatisticsStringList();
+        String tsvFile = statisticsDir + "/" + simulationName + ".tsv";
+        appendFileLine(statisticsList, tsvFile);
     }
 
     public void updateInfo(){

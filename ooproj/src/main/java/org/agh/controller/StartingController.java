@@ -49,6 +49,8 @@ public class StartingController implements Controller {
     @FXML
     public TextField ConfigurationName;
     @FXML
+    public CheckBox statTrackCheckBox;
+    @FXML
     private ChoiceBox<String> MapVariant;
 
 
@@ -130,6 +132,16 @@ public class StartingController implements Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
             root = loader.load();
             SimulationController simulationController = loader.getController();
+
+            //handling statistics tracking option
+            if(statTrackCheckBox.isSelected()) {
+                if (ConfigurationName.getText().isEmpty()){
+                    showAlert("Warning", "Configuration name is required for statistics tracking", Alert.AlertType.WARNING);
+                    return;
+                }
+                simulationController.enableStatTracking();
+                simulationController.setSimulationName(ConfigurationName.getText());
+            }
 
             // initialize new simulation controller with given settings
             simulationController.initialize(mapSettings);
