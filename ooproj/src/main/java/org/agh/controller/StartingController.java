@@ -75,42 +75,57 @@ public class StartingController implements Controller {
         this.scene = scene;
     }
 
-    private int getValidatedIntValue(String text, int defaultValue) {
+    private int getValidatedIntValue(String text, String promptValue) throws NumberFormatException {
         // if there is no user input or input is different from positive integer, then default value will be returned
-        if (text == null || !text.matches("[1-9]\\d*")) {
-            return defaultValue;
+        if (text.isEmpty()) {
+            return Integer.parseInt(promptValue);
         }
         return Integer.parseInt(text);
+    }
+
+    private MapSettings getMapSettings() {
+        MapSettings mapSettings = null;
+
+        try {
+            int height = getValidatedIntValue(HeightInput.getText(), HeightInput.getPromptText());
+            int width = getValidatedIntValue(WidthInput.getText(), WidthInput.getPromptText());
+            int startingNumberOfPlants = getValidatedIntValue(StartingNumberOfPlantsInput.getText(), StartingNumberOfPlantsInput.getPromptText());
+            int plantEnergy = getValidatedIntValue(PlantEnergyInput.getText(), PlantEnergyInput.getPromptText());
+            int plantsPerTurn = getValidatedIntValue(PlantsPerTurnInput.getText(), PlantsPerTurnInput.getPromptText());
+            int startingNumberOfAnimals = getValidatedIntValue(StartingNumberOfAnimalsInput.getText(), StartingNumberOfAnimalsInput.getPromptText());
+            int startingEnergyOfAnimals = getValidatedIntValue(StartingEnergyOfAnimalsInput.getText(), StartingEnergyOfAnimalsInput.getPromptText());
+            int fertility = getValidatedIntValue(FertilityThresholdInput.getText(), FertilityThresholdInput.getPromptText());
+            int breedingCost = getValidatedIntValue(EnergeticBreedingCostInput.getText(), EnergeticBreedingCostInput.getPromptText());
+            int minMutations = getValidatedIntValue(MinNumberOfMutationsInput.getText(), MinNumberOfMutationsInput.getPromptText());
+            int maxMutations = getValidatedIntValue(MaxNumberOfMutationsInput.getText(), MaxNumberOfMutationsInput.getPromptText());
+            int genomLength = getValidatedIntValue(GenomLengthInput.getText(), GenomLengthInput.getPromptText());
+
+            // storing input data into MapSettings record
+            mapSettings = new MapSettings(height, width, startingNumberOfPlants, plantEnergy, plantsPerTurn, PlanterType.fromString(MapVariant.getValue()),
+                    startingNumberOfAnimals, startingEnergyOfAnimals, fertility, breedingCost, isAgingCheckBox.isSelected(), minMutations, maxMutations, genomLength);
+        }catch (NumberFormatException e) {
+            showAlert("Parsing error", "Could not parse inputted value to int", Alert.AlertType.ERROR);
+            return null;
+        }
+
+        // Validating all inputed values
+        try {
+            mapSettings.validate();
+        } catch (MapSettingsException exception) {
+            showAlert("Map Setting Invalid",exception.getMessage(), Alert.AlertType.WARNING);
+            return null;
+        }
+
+        return mapSettings;
     }
 
     public void OnStartButtonClick(ActionEvent actionEvent) {
         try {
             // getting map settings input with adjustments -> if user inputs wrong values then
             // default values will be put into map settings
-            int height = getValidatedIntValue(HeightInput.getText(), 20);
-            int width = getValidatedIntValue(WidthInput.getText(), 20);
-            int startingNumberOfPlants = getValidatedIntValue(StartingNumberOfPlantsInput.getText(), 10);
-            int plantEnergy = getValidatedIntValue(PlantEnergyInput.getText(), 2);
-            int plantsPerTurn = getValidatedIntValue(PlantsPerTurnInput.getText(), 1);
-            int startingNumberOfAnimals = getValidatedIntValue(StartingNumberOfAnimalsInput.getText(), 5);
-            int startingEnergyOfAnimals = getValidatedIntValue(StartingEnergyOfAnimalsInput.getText(), 5);
-            int fertility = getValidatedIntValue(FertilityThresholdInput.getText(), 5);
-            int breedingCost = getValidatedIntValue(EnergeticBreedingCostInput.getText(), 2);
-            int minMutations = getValidatedIntValue(MinNumberOfMutationsInput.getText(), 1);
-            int maxMutations = getValidatedIntValue(MaxNumberOfMutationsInput.getText(), 3);
-            int genomLength = getValidatedIntValue(GenomLengthInput.getText(), 5);
 
-            // storing input data into MapSettings record
-            MapSettings mapSettings = new MapSettings(height, width, startingNumberOfPlants, plantEnergy, plantsPerTurn, PlanterType.fromString(MapVariant.getValue()),
-                    startingNumberOfAnimals, startingEnergyOfAnimals, fertility, breedingCost, isAgingCheckBox.isSelected(), minMutations, maxMutations, genomLength);
-
-            // Validating all inputed values
-            try {
-                mapSettings.validate();
-            } catch (MapSettingsException exception) {
-                System.out.println(exception.getMessage());
-                return;
-            }
+            MapSettings mapSettings = getMapSettings();
+            if(mapSettings == null) return;
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
             root = loader.load();
@@ -150,21 +165,8 @@ public class StartingController implements Controller {
             return;
         }
 
-        int height = getValidatedIntValue(HeightInput.getText(), 20);
-        int width = getValidatedIntValue(WidthInput.getText(), 20);
-        int startingNumberOfPlants = getValidatedIntValue(StartingNumberOfPlantsInput.getText(), 10);
-        int plantEnergy = getValidatedIntValue(PlantEnergyInput.getText(), 2);
-        int plantsPerTurn = getValidatedIntValue(PlantsPerTurnInput.getText(), 1);
-        int startingNumberOfAnimals = getValidatedIntValue(StartingNumberOfAnimalsInput.getText(), 5);
-        int startingEnergyOfAnimals = getValidatedIntValue(StartingEnergyOfAnimalsInput.getText(), 5);
-        int fertility = getValidatedIntValue(FertilityThresholdInput.getText(), 5);
-        int breedingCost = getValidatedIntValue(EnergeticBreedingCostInput.getText(), 2);
-        int minMutations = getValidatedIntValue(MinNumberOfMutationsInput.getText(), 1);
-        int maxMutations = getValidatedIntValue(MaxNumberOfMutationsInput.getText(), 3);
-        int genomLength = getValidatedIntValue(GenomLengthInput.getText(), 5);
-
-        MapSettings mapSettings = new MapSettings(height, width, startingNumberOfPlants, plantEnergy, plantsPerTurn, PlanterType.fromString(MapVariant.getValue()),
-                startingNumberOfAnimals, startingEnergyOfAnimals, fertility, breedingCost, isAgingCheckBox.isSelected(), minMutations, maxMutations, genomLength);
+        MapSettings mapSettings = getMapSettings();
+        if(mapSettings == null) return;
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Configuration Files", "*.config"));
