@@ -17,13 +17,13 @@
                               <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
                            </tooltip>
                         </Label>
-                        <TextField fx:id="HeightInput" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="HeightInput" prefWidth="100.0" promptText="20" styleClass="text-field" />
                         <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width">
                            <tooltip>
                               <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
                            </tooltip>
                         </Label>
-                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" promptText="20" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -48,7 +48,7 @@
                                           <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup how much energy will animal get after consuming plant (big plant has this value tripled)" wrapText="true" />
                                        </tooltip>
                                     </Label>
-                                    <TextField fx:id="PlantEnergyInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="PlantEnergyInput" prefWidth="100.0" promptText="5" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -64,7 +64,7 @@
                                           <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup starting number of plants that will be on the map" wrapText="true" />
                                        </tooltip>
                                     </Label>
-                                    <TextField fx:id="StartingNumberOfPlantsInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="StartingNumberOfPlantsInput" prefWidth="100.0" promptText="50" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -76,7 +76,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Plants per turn" />
-                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" promptText="5" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -93,7 +93,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Genom length" />
-                                    <TextField fx:id="GenomLengthInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="GenomLengthInput" prefWidth="100.0" promptText="4" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -105,7 +105,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting number of animals" />
-                                    <TextField fx:id="StartingNumberOfAnimalsInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="StartingNumberOfAnimalsInput" prefWidth="100.0" promptText="15" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -117,7 +117,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting energy of animals" />
-                                    <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="100.0" styleClass="text-field" />
+                                    <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="100.0" promptText="25" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -132,25 +132,25 @@
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Fertility threshold" />
-                        <TextField fx:id="FertilityThresholdInput" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="FertilityThresholdInput" prefWidth="100.0" promptText="30" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Energetic breeding cost" />
-                        <TextField fx:id="EnergeticBreedingCostInput" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="EnergeticBreedingCostInput" prefWidth="100.0" promptText="10" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="276.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Min number of mutations" />
-                        <TextField fx:id="MinNumberOfMutationsInput" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="MinNumberOfMutationsInput" prefWidth="100.0" promptText="0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="280.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
                         <Label styleClass="setting-label" text="Max number of mutations" />
-                        <TextField fx:id="MaxNumberOfMutationsInput" prefWidth="100.0" styleClass="text-field" />
+                        <TextField fx:id="MaxNumberOfMutationsInput" prefWidth="100.0" promptText="2" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="296.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
