@@ -23,9 +23,11 @@ public class Animal extends WorldElement implements Comparable<Animal> {
 
     private Boolean isRelatedToNewborn;
 
+    //params for aging function, needed when aging animals variant is enabled
     private static final double AGING_CONSTANT = 1.0/30.0;
     private static final double AGING_SHIFT = log(5.0/4.0); // do not touch
 
+    //using constructor overloading when animal is born due to different circumstances
     private Animal(WorldMap worldMap, int energy, Vector2d position){
         this.worldMap = worldMap;
         this.energy = energy;
@@ -38,7 +40,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.deathDate = Optional.empty();
         this.direction = MapDirection.intToMapDirection(random.nextInt(8));
     }
-    // Animal when born in the beginning of simulation
+
+    //when animal is born at the beginning of simulation
     public Animal(WorldMap worldMap, int initEnergy, Vector2d position, int genomLen, int animalId) {
         this(worldMap, initEnergy, position);
         this.genom = new ArrayList<>(genomLen);
@@ -50,7 +53,8 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         this.parent1 = null;
         this.parent2 = null;
     }
-    // Animal when born from two parents
+
+    //when animal is born from two parents
     public Animal(Animal parent1, Animal parent2, int energy, int animalId) {
         this(parent1.worldMap, energy, parent1.getPosition());
         parent1.childCount += 1; parent2.childCount += 1;
@@ -125,7 +129,9 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return this.position.toString();
     }
 
-    public String mapMarker(){return this.direction.toArrow();}
+    public String mapMarker() {
+        return this.direction.toArrow();
+    }
 
     public int getEnergy() {
         return energy;
@@ -147,7 +153,9 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return activeGen;
     }
 
-    public int getAnimalId() { return animalId; }
+    public int getAnimalId() {
+        return animalId;
+    }
 
     public int getChildCount() {
         return childCount;
@@ -186,19 +194,6 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return 0;
     }
 
-    // For testing purposes
-    public static Animal createCustomAnimal(Vector2d position, int energy, MapDirection direction, int age, List<Integer> genom,
-                                             int activeGen, int childCount, int animalId, final WorldMap worldMap){
-        Animal newAnimal = new Animal(worldMap, energy, position);
-        newAnimal.direction = direction;
-        newAnimal.age = age;
-        newAnimal.genom = genom;
-        newAnimal.activeGen = activeGen;
-        newAnimal.animalId = animalId;
-        newAnimal.childCount = childCount;
-        return newAnimal;
-    }
-
     private static void descendantNotified(Animal animal){
         if(animal.isRelatedToNewborn) return;
         animal.isRelatedToNewborn = true;
@@ -225,6 +220,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         return result.toString();
     }
 
+    //required information about given animal for UI
     public String infoUI(){
         return( "Status: " + deathDate.map(integer -> "Dead").orElse("Alive") + "\n"
                 + "Genom: " + genomHighlight() + "\n"
@@ -238,4 +234,16 @@ public class Animal extends WorldElement implements Comparable<Animal> {
         );
     }
 
+    // For testing purposes
+    public static Animal createCustomAnimal(Vector2d position, int energy, MapDirection direction, int age, List<Integer> genom,
+                                             int activeGen, int childCount, int animalId, final WorldMap worldMap){
+        Animal newAnimal = new Animal(worldMap, energy, position);
+        newAnimal.direction = direction;
+        newAnimal.age = age;
+        newAnimal.genom = genom;
+        newAnimal.activeGen = activeGen;
+        newAnimal.animalId = animalId;
+        newAnimal.childCount = childCount;
+        return newAnimal;
+    }
 }

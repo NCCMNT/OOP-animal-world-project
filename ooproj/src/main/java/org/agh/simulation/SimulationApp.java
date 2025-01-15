@@ -12,6 +12,24 @@ import java.io.IOException;
 
 public class SimulationApp extends Application {
 
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("startpage.fxml"));
+            BorderPane root = loader.load();
+
+            Scene scene = configureStage(primaryStage, root);
+            primaryStage.show();
+
+            StartingController startingController= loader.getController();
+            startingController.setStage(primaryStage);
+            startingController.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Scene configureStage(Stage primaryStage, BorderPane viewRoot) {
         Scene scene = new Scene(viewRoot);
 
@@ -26,27 +44,5 @@ public class SimulationApp extends Application {
         primaryStage.setMinWidth(1400);
 
         return scene;
-    }
-
-
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("startpage.fxml"));
-            BorderPane root = loader.load();
-
-            Scene scene = configureStage(primaryStage, root);
-            primaryStage.show();
-
-            StartingController startingController= loader.getController();
-            startingController.setStage(primaryStage);
-            startingController.setScene(scene);
-
-
-//            primaryStage.setOnCloseRequest(event -> presenter.getSimulation().shutdown());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

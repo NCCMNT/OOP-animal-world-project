@@ -110,7 +110,7 @@ public class StartingController implements Controller {
             return null;
         }
 
-        // Validating all inputed values
+        // Validating all input values
         try {
             mapSettings.validate();
         } catch (MapSettingsException exception) {

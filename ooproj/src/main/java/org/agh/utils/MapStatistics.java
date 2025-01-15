@@ -12,6 +12,10 @@ public record MapStatistics (
         String avgLifeSpan,
         String avgChildrenCount
 ) {
+    /**
+     *
+     * @return List of Strings with every map statistics
+     */
     public List<String> getStatisticsStringList() {
         return List.of(
                 String.valueOf(turn),

@@ -178,16 +178,21 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
         HashMap<Vector2d, WorldElement> upperLayer = this.worldMap.upperLayer();
 
+        //creates grid of given dimensions
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Vector2d position = new Vector2d(col, row);
                 WorldElement element = upperLayer.get(position);
 
+                //each element on the grid is implemented as Pane
+                //with given cell size of 20
                 Pane cell = new Pane();
                 cell.setPrefSize(cellSize, cellSize);
                 cell.setBorder(Border.EMPTY);
 
                 if (element != null) {
+                    //if there is world element on a given position
+                    //then it is needed to add on a cell adequate behaviour
                     switch (element) {
                         case Animal animal -> {
                             cell.getStyleClass().add("animal");
@@ -213,6 +218,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         default -> {
                         }
                     }
+                    //add created Pane to a grid pane 
                     worldMapPane.add(cell, col, row);
                 }
                 else {
@@ -284,7 +290,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                 worldMap.getMostPopularGenom(), worldMap.getAvgAnimalEnergy(), worldMap.getAvgDeadAge(), worldMap.getAvgChildren());
     }
 
-    public void drawMap() {
+    private void drawMap() {
         clearGrid();
         makeGrid();
     }
