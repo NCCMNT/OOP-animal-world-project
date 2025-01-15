@@ -92,6 +92,7 @@ public class Simulation implements Runnable {
         executorService.shutdown();
     }
 
+    public int getTurn() { return turn; }
     public WorldMap getWorldMap() {
         return worldMap;
     }
