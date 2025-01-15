@@ -23,6 +23,12 @@
     -fx-text-fill: #ffffff;
 }
 
+.turnLabel {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-font-size: 30;
+    -fx-text-fill: #ffffff;
+}
+
 .button {
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-text-fill: #ffffff;

@@ -55,6 +55,8 @@ public class SimulationController implements SimulationChangeListener, Controlle
     @FXML
     public VBox AnimalInfoBox;
     @FXML
+    public Label TurnLabel;
+    @FXML
     private GridPane worldMapPane;
     @FXML
     private Button startButton;
@@ -95,9 +97,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
         simulation.addObserver(this);
     }
 
-    public void setWorldMap(WorldMap worldMap) {
-        this.worldMap = worldMap;
-    }
     public void setMapSettings(MapSettings mapSettings) { this.mapSettings = mapSettings; }
 
     @FXML
@@ -255,6 +254,9 @@ public class SimulationController implements SimulationChangeListener, Controlle
     public void updateInfo(){
         //update statistics about whole simulation
 
+        //update turn number info
+        TurnLabel.setText("Turn: " + simulation.getTurn());
+
         //stat: number of animals in the simulation
         AnimalCountInfoLabel.setText("Animals: " + worldMap.getNumOfAnimals());
 
@@ -289,7 +291,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
-//        setWorldMap(worldMap);
         Platform.runLater(() -> {
             drawMap();
             updateInfo();

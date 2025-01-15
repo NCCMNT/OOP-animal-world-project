@@ -75,7 +75,11 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Plants per turn" />
+                                    <Label styleClass="setting-label" text="Plants per turn">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of plants that will grow on grid each turn" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
                                     <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" promptText="5" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
@@ -92,7 +96,11 @@
                               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="section-label" text="ANIMALS" textAlignment="CENTER" />
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Genom length" />
+                                    <Label styleClass="setting-label" text="Genom length">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Length of move set for each animal, gens in genom are chosen randomly, but every animal has the same genom length" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
                                     <TextField fx:id="GenomLengthInput" prefWidth="100.0" promptText="4" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
@@ -104,7 +112,11 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Starting number of animals" />
+                                    <Label styleClass="setting-label" text="Starting number of animals">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Starting number of animals in simulation" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
                                     <TextField fx:id="StartingNumberOfAnimalsInput" prefWidth="100.0" promptText="15" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
@@ -116,7 +128,11 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                    <Label styleClass="setting-label" text="Starting energy of animals" />
+                                    <Label styleClass="setting-label" text="Starting energy of animals">
+                                       <tooltip>
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of energy with each animal starts simulation" wrapText="true" />
+                                       </tooltip>
+                                    </Label>
                                     <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="100.0" promptText="25" styleClass="text-field" />
                                  </children>
                                  <VBox.margin>
@@ -131,34 +147,54 @@
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Fertility threshold" />
+                        <Label styleClass="setting-label" text="Fertility threshold">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of energy that is needed for animals to reproduce" wrapText="true" />
+                           </tooltip>
+                        </Label>
                         <TextField fx:id="FertilityThresholdInput" prefWidth="100.0" promptText="30" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="272.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Energetic breeding cost" />
+                        <Label styleClass="setting-label" text="Energetic breeding cost">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of energy that both animals lose upon reproduction, their child will start with double that amount" wrapText="true" />
+                           </tooltip>
+                        </Label>
                         <TextField fx:id="EnergeticBreedingCostInput" prefWidth="100.0" promptText="10" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="276.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Min number of mutations" />
+                        <Label styleClass="setting-label" text="Min number of mutations">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Min number of mutations that can occur when an animal is born and inherits genes from its parents" wrapText="true" />
+                           </tooltip>
+                        </Label>
                         <TextField fx:id="MinNumberOfMutationsInput" prefWidth="100.0" promptText="0" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="280.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <Label styleClass="setting-label" text="Max number of mutations" />
+                        <Label styleClass="setting-label" text="Max number of mutations">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Max number of mutations that can occur when an animal is born and inherits genes from its parents" wrapText="true" />
+                           </tooltip>
+                        </Label>
                         <TextField fx:id="MaxNumberOfMutationsInput" prefWidth="100.0" promptText="2" styleClass="text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="296.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
-                        <CheckBox fx:id="isAgingCheckBox" mnemonicParsing="false" styleClass="check-box" text="Aging animals" />
+                        <CheckBox fx:id="isAgingCheckBox" mnemonicParsing="false" styleClass="check-box" text="Aging animals">
+                           <tooltip>
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Animals that are older are more likely to skip their move during turn execution" wrapText="true" />
+                           </tooltip>
+                        </CheckBox>
                         <CheckBox fx:id="statTrackCheckBox" mnemonicParsing="false" text="Statistics tracking">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Enabling statistics tracking resolves to writing information about each turn into CSV file" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Enabling statistics tracking resolves to writing information about each turn into TSV file" wrapText="true" />
                            </tooltip>
                         </CheckBox>
                      </children>
