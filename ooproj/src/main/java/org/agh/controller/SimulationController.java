@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.agh.model.*;
@@ -181,6 +182,19 @@ public class SimulationController implements SimulationChangeListener, Controlle
             }
         }
         worldMapPane.setGridLinesVisible(true);
+    }
+
+    private void highlightPreferredFields() {
+        int rows = worldMap.getHeight();
+        int cols = worldMap.getWidth();
+        Glow glow = new Glow(0.4);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if(worldMap.isPreferred(new Vector2d(col, row))) {
+                    cellPanes.get(new Vector2d(col, row)).setEffect(glow);
+                }
+            }
+        }
     }
 
     public void updateInfo(){
