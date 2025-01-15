@@ -1,23 +1,18 @@
 package org.agh.controller;
 
 import javafx.application.Platform;
-import javafx.css.StyleClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorInput;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.agh.model.*;
 import org.agh.simulation.Simulation;
 import org.agh.utils.MapSettings;
-import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.HashMap;
@@ -51,6 +46,10 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private Button startButton;
     @FXML
     private Button stopButton;
+    @FXML
+    private Button preferredButton;
+    @FXML
+    private Button genomButton;
     @FXML
     private Label infoLabel;
     @FXML
@@ -102,6 +101,8 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
+        preferredButton.disableProperty().bind(simulation.stoppedProperty().not());
+        genomButton.disableProperty().bind(simulation.stoppedProperty().not());
 
         sidePanel = (VBox) borderPane.getLeft();
     }
@@ -184,7 +185,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.setGridLinesVisible(true);
     }
 
-    private void highlightPreferredFields() {
+    public void highlightPreferredFields() {
         int rows = worldMap.getHeight();
         int cols = worldMap.getWidth();
         Glow glow = new Glow(0.4);

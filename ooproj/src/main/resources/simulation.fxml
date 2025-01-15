@@ -80,9 +80,11 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0" BorderPane.alignment="CENTER">
          <children>
-               <Button fx:id="startButton" onAction="#onSimulationStartClicked" prefWidth="200" styleClass="button" text="Start" />
-               <Button fx:id="AnimalInfoButton" alignment="CENTER" mnemonicParsing="false" onAction="#onChartDisplayClicked" text="Hide Info Panel" />
-               <Button fx:id="stopButton" onAction="#onSimulationStopClicked" prefWidth="200" styleClass="button" text="Stop" />
+             <Button fx:id="startButton" onAction="#onSimulationStartClicked" prefWidth="200" styleClass="button" text="Start" />
+             <Button fx:id="AnimalInfoButton" alignment="CENTER" mnemonicParsing="false" onAction="#onChartDisplayClicked" text="Hide Info Panel" />
+             <Button fx:id="stopButton" onAction="#onSimulationStopClicked" prefWidth="200" styleClass="button" text="Stop" />
+             <Button fx:id="preferredButton" mnemonicParsing="false" text="Highlight preferred fields" onAction="#highlightPreferredFields" />
+             <Button fx:id="genomButton" mnemonicParsing="false" text="Highlight animals with most popular genom" />
          </children>
       </HBox>
    </bottom>
