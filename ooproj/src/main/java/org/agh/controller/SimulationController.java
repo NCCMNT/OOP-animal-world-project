@@ -14,14 +14,22 @@ import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.agh.model.*;
 import org.agh.simulation.Simulation;
 import org.agh.utils.MapSettings;
+import org.agh.utils.MapStatistics;
 import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class SimulationController implements SimulationChangeListener, Controller {
     @FXML
@@ -63,7 +71,10 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private Animal LastViewedAnimal;
     private boolean cleared = true;
     private boolean isAnimalInfoVisible = true;
+    private boolean statTracking = false;
     private MapSettings mapSettings;
+    private MapStatistics mapStatistics;
+    private String simulationName;
 
     private Scene scene;
     private Stage stage;
@@ -101,10 +112,14 @@ public class SimulationController implements SimulationChangeListener, Controlle
         setSimulation(simulation);
         simulation.setSpeed(500);
 
+        //binding start and stop button so that when one is enabled the other one is disabled
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
 
-        sidePanel = (VBox) borderPane.getLeft();
+        //create simulation statistics file if needed
+        if (statTracking) {
+
+        }
     }
 
     private void clearGrid() {
@@ -193,15 +208,53 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.setGridLinesVisible(true);
     }
 
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
+    }
+
+    private void addTurnStatisticsToTSV() {
+        List<String> statisticsList = mapStatistics.getStatisticsStringList();
+
+        String tsvFile = simulationName + ".tsv";
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(tsvFile, true))) {
+            String TSVline = String.join("\t", statisticsList);
+            writer.write(TSVline);
+            writer.newLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateInfo(){
+        //update statistics about whole simulation
+
+        //stat: number of animals in the simulation
         AnimalCountInfoLabel.setText("Animals: " + worldMap.getNumOfAnimals());
+
+        //stat: number of plants in the simulation
         PlantCountInfoLabel.setText("Plants: " + worldMap.getNumOfPlants());
+
+        //stat: number of empty fields in the simulation
         EmptyFieldsCountInfoLabel.setText("Empty fields: " + worldMap.getNumOfEmptyFields());
+
+        //stat: most popular genom amongst the animals
         MostPopularGenomInfoLabel.setText("Most popular genom: " + worldMap.getMostPopularGenom().toString());
+
+        //stat: average animal energy
         AvgAnimalEnergyInfoLabel.setText("Average animal energy: " + worldMap.getAvgAnimalEnergy());
+
+        //stat: average life span of animals that died
         AvgLifeSpanInfoLabel.setText("Average life span: " + worldMap.getAvgDeadAge());
+
+        //stat: average children count for animals
         AvgChildrenCountInfoLabel.setText("Average number of children: " + worldMap.getAvgChildren());
         if (!cleared) displayAnimalInfo(LastViewedAnimal);
+
+        //updating statistics record
+        this.mapStatistics = new MapStatistics(simulation.getTurn(), worldMap.getNumOfAnimals(), worldMap.getNumOfPlants(), worldMap.getNumOfEmptyFields(),
+                worldMap.getMostPopularGenom(), worldMap.getAvgAnimalEnergy(), worldMap.getAvgDeadAge(), worldMap.getAvgChildren());
     }
 
     public void drawMap() {
@@ -215,6 +268,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
         Platform.runLater(() -> {
             drawMap();
             updateInfo();
+            if (statTracking) addTurnStatisticsToTSV();
         });
     }
 
