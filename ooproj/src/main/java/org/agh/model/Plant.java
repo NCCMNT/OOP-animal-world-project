@@ -12,7 +12,6 @@ public class Plant extends WorldElement{
         this.energy = energy;
     }
 
-
     public String mapMarker() {
         return "*";
     }

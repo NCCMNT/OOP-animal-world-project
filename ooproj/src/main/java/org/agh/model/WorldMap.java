@@ -141,7 +141,7 @@ public class WorldMap {
     }
 
     public void breedAllAnimals(){
-        //wariant dwóch najsilniejszych na danym polu
+        //variant: two animals with most energy will reproduce
         animals.sort(Animal::compareByPosition);
 
         int i = 0;

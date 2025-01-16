@@ -25,11 +25,6 @@ public class Simulation implements Runnable {
         observers = new ArrayList<SimulationChangeListener>();
     }
 
-    public void start() {
-        //stop();
-        executorService.submit(this);
-    }
-
     //each turn execution is composed of few steps
     private void executeTurn(){
         System.out.println("Start of " + turn + " turn");
@@ -57,10 +52,6 @@ public class Simulation implements Runnable {
         notifyObservers(String.valueOf(turn));
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
     @Override
     public void run() {
         stopped.set(false);
@@ -75,6 +66,19 @@ public class Simulation implements Runnable {
         }
     }
 
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void start() {
+        //stop();
+        executorService.submit(this);
+    }
+
+    public void stop() {
+        this.stopped.set(true);
+    }
+
     public boolean isStopped() {
         return stopped.get();
     }
@@ -83,22 +87,24 @@ public class Simulation implements Runnable {
         return stopped;
     }
 
-    public void stop() {
-        this.stopped.set(true);
-    }
-
     public void shutdown() {
         stop();
         executorService.shutdown();
+    }
+
+    public int getTurn() {
+        return turn;
     }
 
     public WorldMap getWorldMap() {
         return worldMap;
     }
 
+    //handling observers
     public void addObserver(SimulationChangeListener observer) {
         observers.add(observer);
     }
+
     public void notifyObservers(String message) {
         for (SimulationChangeListener observer : observers) {
             observer.mapChanged(this.worldMap, message);

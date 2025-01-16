@@ -37,6 +37,7 @@ public class EquatorFields implements Fields {
         return preferredFields.contains(position);
     }
 
+    //getters
     public Set<Vector2d> getPreferredFields() {
         return preferredFields;
     }
@@ -45,6 +46,11 @@ public class EquatorFields implements Fields {
         return regularFields;
     }
 
-    public int getEquatorStart() { return equatorStart; }
-    public int getEquatorEnd() { return equatorEnd; }
+    public int getEquatorStart() {
+        return equatorStart;
+    }
+
+    public int getEquatorEnd() {
+        return equatorEnd;
+    }
 }

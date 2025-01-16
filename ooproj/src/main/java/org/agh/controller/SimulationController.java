@@ -11,15 +11,25 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.effect.Effect;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.agh.model.*;
 import org.agh.simulation.Simulation;
 import org.agh.utils.MapSettings;
+import org.agh.utils.MapStatistics;
 import org.agh.utils.PlanterType;
 import org.agh.utils.SimulationChangeListener;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class SimulationController implements SimulationChangeListener, Controller {
     @FXML
@@ -45,6 +55,8 @@ public class SimulationController implements SimulationChangeListener, Controlle
     @FXML
     public VBox AnimalInfoBox;
     @FXML
+    public Label TurnLabel;
+    @FXML
     private GridPane worldMapPane;
     @FXML
     private Button startButton;
@@ -61,7 +73,11 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private Animal LastViewedAnimal;
     private boolean cleared = true;
     private boolean isAnimalInfoVisible = true;
+    private boolean statTracking = false;
     private MapSettings mapSettings;
+    private MapStatistics mapStatistics;
+    private String simulationName;
+    private String statisticsDir  = System.getProperty("user.dir") + "/statistics";
 
     private Scene scene;
     private Stage stage;
@@ -81,9 +97,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
         simulation.addObserver(this);
     }
 
-    public void setWorldMap(WorldMap worldMap) {
-        this.worldMap = worldMap;
-    }
     public void setMapSettings(MapSettings mapSettings) { this.mapSettings = mapSettings; }
 
     @FXML
@@ -99,10 +112,40 @@ public class SimulationController implements SimulationChangeListener, Controlle
         setSimulation(simulation);
         simulation.setSpeed(500);
 
+        //binding start and stop button so that when one is enabled the other one is disabled
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
 
-        sidePanel = (VBox) borderPane.getLeft();
+        //create simulation statistics TSV file if needed
+        if (statTracking) {
+            //list of headings for TSV file
+            List<String> headings = List.of("Turn", "Number of animals", "Number of plants", "Number of empty fields",
+                    "Most popular genom", "Average animal energy", "Average life span", "Average children count");
+
+            String filePath = statisticsDir + "/" + simulationName + ".tsv";
+            File file = new File(filePath);
+            File dir = new File(statisticsDir);
+
+            if (!file.exists()) {
+                dir.mkdirs();  // Create the directory if it doesn't exist
+            }
+
+            //checking if file with that name exists and deleting it if it does exist
+            if (!file.exists()) {
+                if (file.delete()) System.out.println("Existing file " + filePath + " deleted");
+            }
+
+            //creating new file
+            try {
+                if(file.createNewFile()) System.out.println("Created new file " + filePath);;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //appending headings to TSV file
+            appendFileLine(headings, filePath);
+        }
     }
 
     private void clearGrid() {
@@ -135,20 +178,25 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
         HashMap<Vector2d, WorldElement> upperLayer = this.worldMap.upperLayer();
 
+        //creates grid of given dimensions
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Vector2d position = new Vector2d(col, row);
                 WorldElement element = upperLayer.get(position);
 
+                //each element on the grid is implemented as Pane
+                //with given cell size of 20
                 Pane cell = new Pane();
                 cell.setPrefSize(cellSize, cellSize);
+                cell.setBorder(Border.EMPTY);
 
                 if (element != null) {
+                    //if there is world element on a given position
+                    //then it is needed to add on a cell adequate behaviour
                     switch (element) {
                         case Animal animal -> {
                             cell.getStyleClass().add("animal");
                             cell.setOnMouseClicked(event -> displayAnimalInfo((Animal) element));
-
                             cell.setEffect(adjustFromEnergy(animal.getEnergy()));
                         }
                         case BigPlant ignored -> {
@@ -170,6 +218,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         default -> {
                         }
                     }
+                    //add created Pane to a grid pane 
                     worldMapPane.add(cell, col, row);
                 }
                 else {
@@ -183,28 +232,75 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.setGridLinesVisible(true);
     }
 
-    public void updateInfo(){
-        AnimalCountInfoLabel.setText("Animals: " + worldMap.getNumOfAnimals());
-        PlantCountInfoLabel.setText("Plants: " + worldMap.getNumOfPlants());
-        EmptyFieldsCountInfoLabel.setText("Empty fields: " + worldMap.getNumOfEmptyFields());
-        MostPopularGenomInfoLabel.setText("Most popular genom: " + worldMap.getMostPopularGenom().toString());
-        AvgAnimalEnergyInfoLabel.setText("Average animal energy: " + worldMap.getAvgAnimalEnergy());
-        AvgLifeSpanInfoLabel.setText("Average life span: " + worldMap.getAvgDeadAge());
-        AvgChildrenCountInfoLabel.setText("Average number of children: " + worldMap.getAvgChildren());
-        if (!cleared) displayAnimalInfo(LastViewedAnimal);
+    public void enableStatTracking(){
+        this.statTracking = true;
     }
 
-    public void drawMap() {
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
+    }
+
+    private void appendFileLine(List<String> line, String filePath){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            String TSVline = String.join("\t", line);
+            writer.write(TSVline);
+            writer.newLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addTurnStatisticsToTSV() {
+        List<String> statisticsList = mapStatistics.getStatisticsStringList();
+        String tsvFile = statisticsDir + "/" + simulationName + ".tsv";
+        appendFileLine(statisticsList, tsvFile);
+    }
+
+    public void updateInfo(){
+        //update statistics about whole simulation
+
+        //update turn number info
+        TurnLabel.setText("Turn: " + simulation.getTurn());
+
+        //stat: number of animals in the simulation
+        AnimalCountInfoLabel.setText("Animals: " + worldMap.getNumOfAnimals());
+
+        //stat: number of plants in the simulation
+        PlantCountInfoLabel.setText("Plants: " + worldMap.getNumOfPlants());
+
+        //stat: number of empty fields in the simulation
+        EmptyFieldsCountInfoLabel.setText("Empty fields: " + worldMap.getNumOfEmptyFields());
+
+        //stat: most popular genom amongst the animals
+        MostPopularGenomInfoLabel.setText("Most popular genom: " + worldMap.getMostPopularGenom().toString());
+
+        //stat: average animal energy
+        AvgAnimalEnergyInfoLabel.setText("Average animal energy: " + worldMap.getAvgAnimalEnergy());
+
+        //stat: average life span of animals that died
+        AvgLifeSpanInfoLabel.setText("Average life span: " + worldMap.getAvgDeadAge());
+
+        //stat: average children count for animals
+        AvgChildrenCountInfoLabel.setText("Average number of children: " + worldMap.getAvgChildren());
+        if (!cleared) displayAnimalInfo(LastViewedAnimal);
+
+        //updating statistics record
+        this.mapStatistics = new MapStatistics(simulation.getTurn(), worldMap.getNumOfAnimals(), worldMap.getNumOfPlants(), worldMap.getNumOfEmptyFields(),
+                worldMap.getMostPopularGenom(), worldMap.getAvgAnimalEnergy(), worldMap.getAvgDeadAge(), worldMap.getAvgChildren());
+    }
+
+    private void drawMap() {
         clearGrid();
         makeGrid();
     }
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
-//        setWorldMap(worldMap);
         Platform.runLater(() -> {
             drawMap();
             updateInfo();
+            if (statTracking) addTurnStatisticsToTSV();
         });
     }
 

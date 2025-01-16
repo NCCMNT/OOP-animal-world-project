@@ -7,11 +7,15 @@
     -fx-min-width: 200;
     -fx-min-height: 40;
 
-    -fx-background-color: #353535;
+    -fx-background-color: #357d61;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 
     -fx-alignment: center;
+}
+
+.button:hover {
+    -fx-background-color: #88b388;
 }
 
 .config-files-pane {
@@ -19,7 +23,7 @@
 }
 
 #borderPane {
-    -fx-background-color: #676767;
+    -fx-background-color: #11564b;
 }
 
 .tooltip-info {
@@ -33,7 +37,12 @@
 }
 
 .setting-label:hover {
-    -fx-text-fill: #7cb5ff;
+    -fx-text-fill: #cce1aa
+}
+
+.setting-text-field {
+    -fx-background-color: white;
+    -fx-prompt-text-fill: rgba(53, 125, 97, 0.6);
 }
 
 .title-label {
@@ -51,7 +60,7 @@
 .section-label {
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-font-size: 18;
-    -fx-text-fill: #0ba820;
+    -fx-text-fill: #e7e9a5;
 }
 
 .text-field {
@@ -84,3 +93,13 @@
     -fx-border-color: green;
 }
 
+.settingsVBox {
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+
+.mainVBox {
+    -fx-background-image: url("background.jpeg");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}

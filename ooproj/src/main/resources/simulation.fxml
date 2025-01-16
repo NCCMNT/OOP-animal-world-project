@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <BorderPane fx:id="borderPane" minHeight="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.controller.SimulationController">
     <center>
-      <HBox fx:id="backHBox" BorderPane.alignment="CENTER">
+      <HBox fx:id="backHBox" styleClass="dimm" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
@@ -38,22 +37,9 @@
                   <Insets bottom="-100.0" />
                </HBox.margin>
                <children>
-                  <VBox fx:id="sidePanel" alignment="CENTER" prefWidth="200.0">
+                  <VBox fx:id="sidePanel" alignment="CENTER" VBox.vgrow="ALWAYS">
                      <children>
-                        <LineChart VBox.vgrow="ALWAYS">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                           <VBox.margin>
-                              <Insets left="10.0" right="10.0" top="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="10.0" right="20.0" />
-                           </padding>
-                        </LineChart>
+                        <Label fx:id="TurnLabel" styleClass="turnLabel" text="Turn" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
@@ -78,7 +64,7 @@
       </HBox>
     </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0" styleClass="dimm" BorderPane.alignment="CENTER">
          <children>
                <Button fx:id="startButton" onAction="#onSimulationStartClicked" prefWidth="200" styleClass="button" text="Start" />
                <Button fx:id="AnimalInfoButton" alignment="CENTER" mnemonicParsing="false" onAction="#onChartDisplayClicked" text="Hide Info Panel" />
