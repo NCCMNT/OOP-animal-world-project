@@ -1,18 +1,17 @@
 package org.agh.controller;
 
 import javafx.application.Platform;
-import javafx.css.StyleClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorInput;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -62,6 +61,12 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private Button startButton;
     @FXML
     private Button stopButton;
+    @FXML
+    private Button preferButton;
+    @FXML
+    private Button genButton;
+    @FXML
+    private Button clearHighlightButton;
     @FXML
     private Label infoLabel;
     @FXML
@@ -115,6 +120,10 @@ public class SimulationController implements SimulationChangeListener, Controlle
         //binding start and stop button so that when one is enabled the other one is disabled
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
+        //binding highlight buttons so they are only accessible when the simulation is stopped
+        preferButton.disableProperty().bind(simulation.stoppedProperty().not());
+        genButton.disableProperty().bind(simulation.stoppedProperty().not());
+        clearHighlightButton.disableProperty().bind(simulation.stoppedProperty().not());
 
         //create simulation statistics TSV file if needed
         if (statTracking) {
@@ -218,7 +227,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                         default -> {
                         }
                     }
-                    //add created Pane to a grid pane 
+                    //add created Pane to a grid pane
                     worldMapPane.add(cell, col, row);
                 }
                 else {
@@ -255,6 +264,50 @@ public class SimulationController implements SimulationChangeListener, Controlle
         List<String> statisticsList = mapStatistics.getStatisticsStringList();
         String tsvFile = statisticsDir + "/" + simulationName + ".tsv";
         appendFileLine(statisticsList, tsvFile);
+    }
+
+    public void onPreferredClicked(ActionEvent actionEvent) {
+        System.out.println("Wszystko ok");
+        highlightPreferredFields();
+    }
+
+    private void highlightPreferredFields() {
+        int rows = worldMap.getHeight();
+        int cols = worldMap.getWidth();
+        Effect effect = new Glow(0.4);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if(worldMap.isPreferred(new Vector2d(col, row))) {
+                    cellPanes.get(new Vector2d(col, row)).setEffect(effect);
+                }
+            }
+        }
+
+    }
+
+    public void onGenomClicked(ActionEvent actionEvent) {
+        highlightGenom();
+    }
+
+    private void highlightGenom() {
+        int rows = worldMap.getHeight();
+        int cols = worldMap.getWidth();
+        Effect effect = new Bloom();
+        HashMap<Vector2d, WorldElement> upperLayer = worldMap.upperLayer();
+        List<Integer> genom = worldMap.getMostPopularGenom();
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Vector2d position = new Vector2d(col, row);
+                WorldElement element = upperLayer.get(position);
+                if(element instanceof Animal && ((Animal) element).getGenom().equals(genom)) {
+                    cellPanes.get(new Vector2d(col, row)).setEffect(effect);
+                }
+            }
+        }
+    }
+
+    public void onClearHighlightClicked(ActionEvent actionEvent) {
+        drawMap();
     }
 
     public void updateInfo(){
@@ -331,15 +384,18 @@ public class SimulationController implements SimulationChangeListener, Controlle
     }
 
     private Double normalize (int energy){
+        // In order to use ColorAdjust energy value must be normalized
         if(energy >= 200) return 1.0;
         return (double)energy/200;
     }
 
     private ColorAdjust adjustFromEnergy(int energy) {
+        // Creating ColorAdjust effect to show amount of energy of each animal
         ColorAdjust energyAdjust = new ColorAdjust();
         double energyNormalised = normalize(energy);
         energyAdjust.setBrightness(energyNormalised);
-        energyAdjust.setContrast(energyNormalised);
+        energyAdjust.setSaturation(energyNormalised);
         return energyAdjust;
     }
+
 }

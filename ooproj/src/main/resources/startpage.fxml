@@ -14,13 +14,13 @@
                      <children>
                         <Label styleClass="setting-label" text="Height">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
                         <TextField fx:id="HeightInput" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
                         <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, wrong input will be redirected to default value of 20)" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
                         <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
@@ -30,7 +30,7 @@
                      <children>
                         <Label styleClass="setting-label" text="Map variant">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Map variants:&#10;&#10;EQUATOR - plants grow in fertile areas which are mainly distributed at the central zone of a map&#10;&#10;JUNGLE - plants grow randomly on whole map, but sometimes big plants appear" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Map variants:&#10;&#10;EQUATOR - plants grow in fertile areas which are mainly distributed at the central zone of a map&#10;&#10;JUNGLE - plants grow randomly on whole map, but sometimes big plants appear in the middle of the map" wrapText="true" />
                            </tooltip>
                         </Label>
                         <ChoiceBox fx:id="MapVariant" minWidth="100.0" styleClass="option-menu" />
@@ -45,7 +45,7 @@
                                  <children>
                                     <Label styleClass="setting-label" text="Plant energy">
                                        <tooltip>
-                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup how much energy will animal get after consuming plant (big plant has this value tripled (JUNGLE))" wrapText="true" />
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup how much energy will animal get after consuming plant (big plant has this value tripled in JUNGLE map variant)" wrapText="true" />
                                        </tooltip>
                                     </Label>
                                     <TextField fx:id="PlantEnergyInput" prefWidth="100.0" promptText="5" styleClass="setting-text-field" />
@@ -130,7 +130,7 @@
                                  <children>
                                     <Label styleClass="setting-label" text="Starting energy of animals">
                                        <tooltip>
-                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of energy with each animal starts simulation" wrapText="true" />
+                                          <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of energy with which each animal starts simulation" wrapText="true" />
                                        </tooltip>
                                     </Label>
                                     <TextField fx:id="StartingEnergyOfAnimalsInput" prefWidth="100.0" promptText="25" styleClass="setting-text-field" />
