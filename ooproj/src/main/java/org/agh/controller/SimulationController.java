@@ -6,7 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -16,6 +18,7 @@ import org.agh.utils.MapSettings;
 import org.agh.utils.SimulationChangeListener;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class SimulationController implements SimulationChangeListener, Controller {
     @FXML
@@ -41,15 +44,19 @@ public class SimulationController implements SimulationChangeListener, Controlle
     @FXML
     public VBox AnimalInfoBox;
     @FXML
+    public VBox AllInfoBox;
+    @FXML
     private GridPane worldMapPane;
     @FXML
     private Button startButton;
     @FXML
     private Button stopButton;
     @FXML
-    private Button preferredButton;
+    private Button preferButton;
     @FXML
-    private Button genomButton;
+    private Button genButton;
+    @FXML
+    private Button clearHighlightButton;
     @FXML
     private Label infoLabel;
     @FXML
@@ -101,8 +108,9 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
-        preferredButton.disableProperty().bind(simulation.stoppedProperty().not());
-        genomButton.disableProperty().bind(simulation.stoppedProperty().not());
+        preferButton.disableProperty().bind(simulation.stoppedProperty().not());
+        genButton.disableProperty().bind(simulation.stoppedProperty().not());
+        clearHighlightButton.disableProperty().bind(simulation.stoppedProperty().not());
 
         sidePanel = (VBox) borderPane.getLeft();
     }
@@ -185,17 +193,48 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.setGridLinesVisible(true);
     }
 
-    public void highlightPreferredFields() {
+    public void onPreferredClicked(ActionEvent actionEvent) {
+        System.out.println("Wszystko ok");
+        highlightPreferredFields();
+    }
+
+    private void highlightPreferredFields() {
         int rows = worldMap.getHeight();
         int cols = worldMap.getWidth();
-        Glow glow = new Glow(0.4);
+        Effect effect = new Glow(0.4);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if(worldMap.isPreferred(new Vector2d(col, row))) {
-                    cellPanes.get(new Vector2d(col, row)).setEffect(glow);
+                    cellPanes.get(new Vector2d(col, row)).setEffect(effect);
                 }
             }
         }
+
+    }
+
+    public void onGenomClicked(ActionEvent actionEvent) {
+        highlightGenom();
+    }
+
+    private void highlightGenom() {
+        int rows = worldMap.getHeight();
+        int cols = worldMap.getWidth();
+        Effect effect = new Bloom();
+        HashMap<Vector2d, WorldElement> upperLayer = worldMap.upperLayer();
+        List<Integer> genom = worldMap.getMostPopularGenom();
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Vector2d position = new Vector2d(col, row);
+                WorldElement element = upperLayer.get(position);
+                if(element instanceof Animal && ((Animal) element).getGenom().equals(genom)) {
+                    cellPanes.get(new Vector2d(col, row)).setEffect(effect);
+                }
+            }
+        }
+    }
+
+    public void onClearHighlightClicked(ActionEvent actionEvent) {
+        drawMap();
     }
 
     public void updateInfo(){
@@ -250,15 +289,19 @@ public class SimulationController implements SimulationChangeListener, Controlle
     }
 
     private Double normalize (int energy){
+        // In order to use ColorAdjust energy value must be normalized
         if(energy >= 200) return 1.0;
         return (double)energy/200;
     }
 
     private ColorAdjust adjustFromEnergy(int energy) {
+        // Creating ColorAdjust effect to show amount of energy of each animal
         ColorAdjust energyAdjust = new ColorAdjust();
         double energyNormalised = normalize(energy);
         energyAdjust.setBrightness(energyNormalised);
-        energyAdjust.setContrast(energyNormalised);
+        energyAdjust.setSaturation(energyNormalised);
         return energyAdjust;
     }
+
+
 }
