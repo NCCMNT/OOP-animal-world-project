@@ -9,7 +9,6 @@ public interface Planter {
      */
     public void generatePlants(int plantAmount);
 
-
     /**
      * Informs whether the position is favourised by planter for map drawing purposes
      * @param position
@@ -24,9 +23,13 @@ public interface Planter {
     public Plant plantAt(Vector2d position);
 
     /**
-     *
+     * @return hashmap of with plants as values and their position - Vector2d as keys
      */
     public HashMap<Vector2d,Plant> getPlants();
 
+    /**
+     * @param position
+     * @return Plant that was removed from Planter (plants hashmap)
+     */
     public Plant removePlant(Vector2d position);
 }

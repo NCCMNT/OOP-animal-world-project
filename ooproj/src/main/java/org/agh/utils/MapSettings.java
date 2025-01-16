@@ -46,6 +46,11 @@ public record MapSettings(
         if(genomLen <= 0)
             stringBuilder.append("- GenomLen must be greater than 0\n");
 
+        if(startingNumberOfAnimals < 0)
+            stringBuilder.append("- Starting number of animals must be greater than 0\n");
+        if(startingEnergy < 0)
+            stringBuilder.append("- Starting energy must be greater than 0\n");
+
         if(!stringBuilder.isEmpty()){
             stringBuilder.insert(0, "Map settings validation failed due to:\n");
             throw new MapSettingsException(stringBuilder.toString());
