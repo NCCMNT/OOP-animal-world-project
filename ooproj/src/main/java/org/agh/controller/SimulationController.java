@@ -443,16 +443,18 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
     private Double normalize (int energy){
         // In order to use ColorAdjust energy value must be normalized
-        if(energy >= 200) return 1.0;
-        return (double)energy/200;
+        double scaledEnergy = Math.sqrt(energy)/15;
+        return Math.min(scaledEnergy, 1.0);
     }
 
     private ColorAdjust adjustFromEnergy(int energy) {
         // Creating ColorAdjust effect to show amount of energy of each animal
+        double MIN_VAL = -0.8; // Lowest possible brightness and saturation stat between -1 and 1 (shown for animals with 0 energy)
+        double MAX_VAL = 0.8; // Highest possible brightness and saturation stat between -1 and 1 (shown for animals with over 200 energy)
         ColorAdjust energyAdjust = new ColorAdjust();
         double energyNormalised = normalize(energy);
-        energyAdjust.setBrightness(energyNormalised);
-        energyAdjust.setSaturation(energyNormalised);
+        energyAdjust.setBrightness(energyNormalised*(MAX_VAL-MIN_VAL)+MIN_VAL);
+        energyAdjust.setSaturation(energyNormalised*(MAX_VAL-MIN_VAL)+MIN_VAL);
         return energyAdjust;
     }
 
