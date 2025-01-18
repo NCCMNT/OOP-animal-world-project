@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .animal {
-    -fx-background-color: #b16c16;
+    -fx-background-color: #da7b7b;
 }
 
 .plant {
-    -fx-background-color: #428000;
+    -fx-background-color: #68a786;
     -fx-border-color: transparent;
     -fx-border-width: 0;
 }
 
 .big-plant {
-    -fx-background-color: #003c00;
+    -fx-background-color: #074e42;
 }
 
 .empty-field {
-    -fx-background-color: #73634e;
+    -fx-background-color: #a5a576;
 }
 
 .infoLabel {
@@ -27,6 +27,24 @@
     -fx-font-family: 'Press Start 2P', monospace;
     -fx-font-size: 30;
     -fx-text-fill: #ffffff;
+}
+
+.button-clicked {
+    -fx-font-family: 'Press Start 2P', monospace;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12;
+    -fx-min-width: 200;
+    -fx-min-height: 40;
+
+    -fx-background-color: #7bb59e;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+
+    -fx-alignment: center;
+}
+
+.button-clicked:hover {
+    -fx-background-color: #88b388;
 }
 
 .button {

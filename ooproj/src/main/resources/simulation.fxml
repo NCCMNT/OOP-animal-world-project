@@ -28,7 +28,6 @@
                         <Label styleClass="infoLabel" text="Highlight:" />
                         <Button fx:id="preferButton" mnemonicParsing="false" onAction="#onPreferredClicked" prefHeight="25.0" prefWidth="500.0" text="Preferred Fields" />
                         <Button fx:id="genButton" mnemonicParsing="false" onAction="#onGenomClicked" prefHeight="25.0" prefWidth="500.0" text="Most Popular Genom" />
-                        <Button fx:id="clearHighlightButton" mnemonicParsing="false" onAction="#onClearHighlightClicked" text="Clear" />
                      </children>
                   </VBox>
                </children>
