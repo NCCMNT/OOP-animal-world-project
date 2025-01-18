@@ -84,6 +84,9 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private String simulationName;
     private String statisticsDir  = System.getProperty("user.dir") + "/statistics";
 
+    private boolean isHighlightedFields = false;
+    private boolean isHighlightedGenom = false;
+
     private Scene scene;
     private Stage stage;
 
@@ -102,7 +105,9 @@ public class SimulationController implements SimulationChangeListener, Controlle
         simulation.addObserver(this);
     }
 
-    public void setMapSettings(MapSettings mapSettings) { this.mapSettings = mapSettings; }
+    public void setMapSettings(MapSettings mapSettings) {
+        this.mapSettings = mapSettings;
+    }
 
     @FXML
     public void initialize(MapSettings mapSettings) {
@@ -120,10 +125,10 @@ public class SimulationController implements SimulationChangeListener, Controlle
         //binding start and stop button so that when one is enabled the other one is disabled
         startButton.disableProperty().bind(stopButton.disableProperty().not());
         stopButton.disableProperty().bind(simulation.stoppedProperty());
+
         //binding highlight buttons so they are only accessible when the simulation is stopped
         preferButton.disableProperty().bind(simulation.stoppedProperty().not());
         genButton.disableProperty().bind(simulation.stoppedProperty().not());
-        clearHighlightButton.disableProperty().bind(simulation.stoppedProperty().not());
 
         //create simulation statistics TSV file if needed
         if (statTracking) {
@@ -249,9 +254,16 @@ public class SimulationController implements SimulationChangeListener, Controlle
         this.simulationName = simulationName;
     }
 
-    private void appendFileLine(List<String> line, String filePath){
+    /**
+     * Gets a List of Strings that is to be put in a TSV file, each element is this
+     * list will be separated from another with tabulation so that each element will
+     * be separate element in TSV file.
+     * @param TSVLine Elements to be but separately into TSV file
+     * @param filePath Path to the TSV file
+     */
+    private void appendFileLine(List<String> TSVLine, String filePath){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            String TSVline = String.join("\t", line);
+            String TSVline = String.join("\t", TSVLine);
             writer.write(TSVline);
             writer.newLine();
 
@@ -267,8 +279,27 @@ public class SimulationController implements SimulationChangeListener, Controlle
     }
 
     public void onPreferredClicked(ActionEvent actionEvent) {
-        System.out.println("Wszystko ok");
-        highlightPreferredFields();
+        //handling button that highlights preferred fields on a map
+        if (!isHighlightedFields) { //if highlight is off and user clicks the button
+            System.out.println("Preferred fields highlight on");
+            //set highlight bool on true and handle button CSS classes
+            isHighlightedFields = true;
+            preferButton.getStyleClass().remove("button");
+            preferButton.getStyleClass().add("button-clicked");
+            //highlight fields on a map
+            highlightPreferredFields();
+        }
+        else { //if highlight is on and user clicks the button
+            System.out.println("Preferred fields highlight off");
+            //set highlight bool on false and handle button CSS classes
+            isHighlightedFields = false;
+            preferButton.getStyleClass().remove("button-clicked");
+            preferButton.getStyleClass().add("button");
+            //bring back map without highlights
+            drawMap();
+            //leave genom highlight if it was on
+            if(isHighlightedGenom) highlightGenom();
+        }
     }
 
     private void highlightPreferredFields() {
@@ -282,11 +313,30 @@ public class SimulationController implements SimulationChangeListener, Controlle
                 }
             }
         }
-
     }
 
     public void onGenomClicked(ActionEvent actionEvent) {
-        highlightGenom();
+        //handling button that highlights most popular genom on a map
+        if (!isHighlightedGenom) { //if highlight is off and user clicks the button
+            System.out.println("Genom highlight on");
+            //set highlight bool on true and handle button CSS classes
+            isHighlightedGenom = true;
+            genButton.getStyleClass().remove("button");
+            genButton.getStyleClass().add("button-clicked");
+            //highlight an animal with the most popular genom
+            highlightGenom();
+        }
+        else { //if highlight is on and user clicks the button
+            System.out.println("Genom highlight off");
+            //set highlight bool on false and handle button CSS classes
+            isHighlightedGenom = false;
+            genButton.getStyleClass().remove("button-clicked");
+            genButton.getStyleClass().add("button");
+            //bring back map without highlights
+            drawMap();
+            //leave fields highlight if it was on
+            if(isHighlightedFields) highlightPreferredFields();
+        }
     }
 
     private void highlightGenom() {
@@ -304,10 +354,6 @@ public class SimulationController implements SimulationChangeListener, Controlle
                 }
             }
         }
-    }
-
-    public void onClearHighlightClicked(ActionEvent actionEvent) {
-        drawMap();
     }
 
     public void updateInfo(){
@@ -358,8 +404,20 @@ public class SimulationController implements SimulationChangeListener, Controlle
     }
 
     public void onSimulationStartClicked(ActionEvent actionEvent) {
+        //handle highlight buttons behaviour
+        //clear highlight bool values, clear CSS classes and bring back original button class
+        isHighlightedFields = false;
+        preferButton.getStyleClass().clear();
+        preferButton.getStyleClass().add("button");
+
+        isHighlightedGenom = false;
+        genButton.getStyleClass().clear();
+        genButton.getStyleClass().add("button");
+
+        //start simulation
         simulation.start();
     }
+
     public void onSimulationStopClicked(ActionEvent actionEvent) {
         simulation.stop();
     }
@@ -371,15 +429,15 @@ public class SimulationController implements SimulationChangeListener, Controlle
     public void onChartDisplayClicked(ActionEvent actionEvent) {
         if (AnimalInfoBox != null) {
             if (isAnimalInfoVisible) {
-                AnimalInfoBox.setVisible(false); // Hide the VBox
-                AnimalInfoBox.setManaged(false); // Remove it from the layout entirely
+                AnimalInfoBox.setVisible(false); //hide the VBox
+                AnimalInfoBox.setManaged(false); //remove it from the layout entirely
                 AnimalInfoButton.setText("Show Animal Info");
             } else {
-                AnimalInfoBox.setVisible(true); // Show the VBox
-                AnimalInfoBox.setManaged(true); // Add it back to the layout
+                AnimalInfoBox.setVisible(true); //show the VBox
+                AnimalInfoBox.setManaged(true); //add it back to the layout
                 AnimalInfoButton.setText("Hide Animal Info");
             }
-            isAnimalInfoVisible = !isAnimalInfoVisible; // Toggle the state
+            isAnimalInfoVisible = !isAnimalInfoVisible; //toggle the state
         }
     }
 
