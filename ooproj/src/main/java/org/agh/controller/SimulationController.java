@@ -6,12 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Effect;
+import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -342,8 +339,11 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private void highlightGenom() {
         int rows = worldMap.getHeight();
         int cols = worldMap.getWidth();
-        Effect effect = new Bloom();
         HashMap<Vector2d, WorldElement> upperLayer = worldMap.upperLayer();
+        ColorAdjust effect = new ColorAdjust();
+        effect.setHue(-1.0);
+        effect.setBrightness(0.5);
+        effect.setSaturation(0.9);
         List<Integer> genom = worldMap.getMostPopularGenom();
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
