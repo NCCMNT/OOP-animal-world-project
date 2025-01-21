@@ -225,6 +225,10 @@ public class StartingController implements Controller {
         String configurationsPath = currentPath + "/configurations";  // Path to the configurations folder
         File configurationsDir = new File(configurationsPath);
 
+        if (!configurationsDir.exists()) {
+            configurationsDir.mkdirs();  // Create the directory if it doesn't exist
+        }
+
         fileChooser.setInitialDirectory(configurationsDir);
 
         File file = fileChooser.showOpenDialog(stage);
