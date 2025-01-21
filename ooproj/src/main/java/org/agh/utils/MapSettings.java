@@ -45,11 +45,14 @@ public record MapSettings(
             stringBuilder.append("- Max mutations cannot be greater than genomLen\n");
         if(genomLen <= 0)
             stringBuilder.append("- GenomLen must be greater than 0\n");
-
         if(startingNumberOfAnimals < 0)
             stringBuilder.append("- Starting number of animals must be greater than 0\n");
         if(startingEnergy < 0)
             stringBuilder.append("- Starting energy must be greater than 0\n");
+        if(height > 80)
+            stringBuilder.append("- Height must be less than 80\n");
+        if(width > 80)
+            stringBuilder.append("- Width must be less than 80\n");
 
         if(!stringBuilder.isEmpty()){
             stringBuilder.insert(0, "Map settings validation failed due to:\n");

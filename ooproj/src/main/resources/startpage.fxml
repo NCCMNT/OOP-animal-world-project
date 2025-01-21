@@ -14,13 +14,13 @@
                      <children>
                         <Label styleClass="setting-label" text="Height">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, default value is 20)" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, max 80, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
                         <TextField fx:id="HeightInput" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
                         <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width">
                            <tooltip>
-                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, default value is 20)" wrapText="true" />
+                              <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, max 80, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
                         <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
@@ -41,7 +41,7 @@
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="section-label" text="PLANTS" textAlignment="CENTER" />
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Plant energy">
                                        <tooltip>
@@ -57,7 +57,7 @@
                                     <Insets right="60.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting number of plants">
                                        <tooltip>
@@ -73,7 +73,7 @@
                                     <Insets right="60.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Plants per turn">
                                        <tooltip>
@@ -94,7 +94,7 @@
                         <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="section-label" text="ANIMALS" textAlignment="CENTER" />
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Genom length">
                                        <tooltip>
@@ -110,7 +110,7 @@
                                     <Insets right="60.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting number of animals">
                                        <tooltip>
@@ -126,7 +126,7 @@
                                     <Insets right="60.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                     <Label styleClass="setting-label" text="Starting energy of animals">
                                        <tooltip>

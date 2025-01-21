@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="borderPane" minHeight="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.controller.SimulationController">
+<BorderPane fx:id="borderPane" minHeight="800.0" minWidth="1800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.agh.controller.SimulationController">
     <center>
       <HBox fx:id="backHBox" styleClass="dimm" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -38,8 +38,8 @@
                   <Insets bottom="-100.0" />
                </HBox.margin>
             </VBox>
-              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" minWidth="1200.0" />
-            <VBox fx:id="AllInfoBox" alignment="CENTER" styleClass="sidePanel" HBox.hgrow="ALWAYS">
+              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" minWidth="1100.0" />
+            <VBox fx:id="AllInfoBox" alignment="CENTER" minWidth="400.0" prefWidth="400.0" styleClass="sidePanel" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets bottom="-100.0" />
                </HBox.margin>
@@ -77,6 +77,9 @@
              <Button fx:id="AnimalInfoButton" alignment="CENTER" mnemonicParsing="false" onAction="#onChartDisplayClicked" text="Hide Info Panel" />
              <Button fx:id="stopButton" onAction="#onSimulationStopClicked" prefWidth="200" styleClass="button" text="Stop" />
          </children>
+         <padding>
+            <Insets bottom="20.0" />
+         </padding>
       </HBox>
    </bottom>
 </BorderPane>
