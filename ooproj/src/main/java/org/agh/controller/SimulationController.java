@@ -117,7 +117,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
 
         Simulation simulation = new Simulation(worldMap);
         setSimulation(simulation);
-        simulation.setSpeed(500);
+        simulation.setSpeed(200);
 
         //binding start and stop button so that when one is enabled the other one is disabled
         startButton.disableProperty().bind(stopButton.disableProperty().not());
@@ -165,13 +165,23 @@ public class SimulationController implements SimulationChangeListener, Controlle
         worldMapPane.getRowConstraints().clear();
     }
 
+    private void clearLastViewedAnimalHighlight(){
+        if (LastViewedAnimal != null) cellPanes.get(LastViewedAnimal.getPosition()).setEffect(adjustFromEnergy(LastViewedAnimal.getEnergy()));
+    }
+
     private void displayAnimalInfo(Animal animal) {
         cleared = false;
+        clearLastViewedAnimalHighlight();
         LastViewedAnimal = animal;
         infoLabel.setText("Animal");
         AnimalInfoLabel.setText(
                 animal.infoUI()
         );
+        ColorAdjust effect = new ColorAdjust();
+        effect.setHue(0.4);
+        effect.setBrightness(0.3);
+        effect.setSaturation(0.8);
+        cellPanes.get(animal.getPosition()).setEffect(effect);
     }
 
     private void clearAnimalInfo() {
@@ -181,7 +191,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
     private void makeGrid() {
         int rows = worldMap.getHeight();
         int cols = worldMap.getWidth();
-        int cellSize = 20;
+        int cellSize = Math.min(1100 / worldMap.getHeight(), 700 / worldMap.getWidth());
 
         // Clear existing constraints
         worldMapPane.getRowConstraints().clear();
@@ -216,6 +226,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                                 infoLabel.setText("Big Plant");
                                 clearAnimalInfo();
                                 cleared = true;
+                                clearLastViewedAnimalHighlight();
                             });
                         }
                         case Plant ignored -> {
@@ -224,6 +235,7 @@ public class SimulationController implements SimulationChangeListener, Controlle
                                 infoLabel.setText("Plant");
                                 clearAnimalInfo();
                                 cleared = true;
+                                clearLastViewedAnimalHighlight();
                             });
                         }
                         default -> {
@@ -234,7 +246,12 @@ public class SimulationController implements SimulationChangeListener, Controlle
                 }
                 else {
                     cell.getStyleClass().add("empty-field");
-                    cell.setOnMouseClicked(event -> {infoLabel.setText("Empty Field"); clearAnimalInfo(); cleared = true;});
+                    cell.setOnMouseClicked(event -> {
+                        infoLabel.setText("Empty Field");
+                        clearAnimalInfo();
+                        cleared = true;
+                        clearLastViewedAnimalHighlight();
+                    });
                     worldMapPane.add(cell, col, row);
                 }
                 cellPanes.put(position, cell);
@@ -296,6 +313,8 @@ public class SimulationController implements SimulationChangeListener, Controlle
             drawMap();
             //leave genom highlight if it was on
             if(isHighlightedGenom) highlightGenom();
+            //leave highlight animal if needed
+            if (!cleared && LastViewedAnimal != null) displayAnimalInfo(LastViewedAnimal);
         }
     }
 
@@ -333,6 +352,8 @@ public class SimulationController implements SimulationChangeListener, Controlle
             drawMap();
             //leave fields highlight if it was on
             if(isHighlightedFields) highlightPreferredFields();
+            //leave animal highlight if needed
+            if (!cleared && LastViewedAnimal != null) displayAnimalInfo(LastViewedAnimal);
         }
     }
 

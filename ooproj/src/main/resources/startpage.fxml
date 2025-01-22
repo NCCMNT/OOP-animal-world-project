@@ -17,13 +17,13 @@
                               <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup height of a map as an integer value (min 1, max 80, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
-                        <TextField fx:id="HeightInput" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
+                        <TextField fx:id="HeightInput" prefWidth="100.0" promptText="40" styleClass="setting-text-field" />
                         <Label layoutX="103.0" layoutY="23.0" styleClass="setting-label" text="Width">
                            <tooltip>
                               <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Setup width of a map as an integer value (min 1, max 80, default value is 20)" wrapText="true" />
                            </tooltip>
                         </Label>
-                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" promptText="20" styleClass="setting-text-field" />
+                        <TextField fx:id="WidthInput" layoutX="129.0" layoutY="19.0" prefWidth="100.0" promptText="40" styleClass="setting-text-field" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -80,7 +80,7 @@
                                           <Tooltip maxWidth="400" showDuration="1m" styleClass="tooltip-info" text="Amount of plants that will grow on grid each turn" wrapText="true" />
                                        </tooltip>
                                     </Label>
-                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" promptText="5" styleClass="setting-text-field" />
+                                    <TextField fx:id="PlantsPerTurnInput" prefWidth="100.0" promptText="30" styleClass="setting-text-field" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
