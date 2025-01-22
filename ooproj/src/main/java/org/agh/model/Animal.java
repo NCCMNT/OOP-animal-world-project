@@ -24,8 +24,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     private Boolean isRelatedToNewborn;
 
     //params for aging function, needed when aging animals variant is enabled
-    private static final double AGING_CONSTANT = 1.0/30.0;
-    private static final double AGING_SHIFT = log(5.0/4.0); // do not touch
+    private static final double AGING_CONSTANT = 1.0/100.0;
 
     //using constructor overloading when animal is born due to different circumstances
     private Animal(WorldMap worldMap, int energy, Vector2d position){
@@ -107,7 +106,7 @@ public class Animal extends WorldElement implements Comparable<Animal> {
     }
 
     private boolean skipOfOldAge(){
-        double threshold = exp(-1.0*age*AGING_CONSTANT - AGING_SHIFT) + 0.2;
+        double threshold = max(0.2, 1.0 - age*AGING_CONSTANT);
         return (random.nextDouble() > threshold);
     }
 
