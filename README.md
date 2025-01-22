@@ -2,6 +2,8 @@
 Autorzy:
 - Krzysztof Chmielewski
 - Antoni Maślanka
+
+# Wymagania
 - [obowiązkowo dla wszystkich] kula ziemska - lewa i prawa krawędź mapy zapętlają się (jeżeli zwierzak wyjdzie za lewą krawędź, to pojawi się po prawej stronie - a jeżeli za prawą, to po lewej); górna i dolna krawędź mapy to bieguny - nie można tam wejść (jeżeli zwierzak próbuje wyjść poza te krawędzie mapy, to pozostaje na polu na którym był, a jego kierunek zmienia się na odwrotny);
 - [obowiązkowo dla wszystkich] zalesione równiki - preferowany przez rośliny jest poziomy pas pól w centralnej części mapy (udający równik i okolice);
 - [obowiązkowo dla wszystkich] pełna losowość - mutacja zmienia gen na dowolny inny gen;
