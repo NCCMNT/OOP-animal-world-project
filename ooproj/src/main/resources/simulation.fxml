@@ -38,7 +38,7 @@
                   <Insets bottom="-100.0" />
                </HBox.margin>
             </VBox>
-              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" minWidth="1100.0" />
+              <GridPane fx:id="worldMapPane" alignment="CENTER" gridLinesVisible="true" minWidth="1100.0" scaleShape="false" />
             <VBox fx:id="AllInfoBox" alignment="CENTER" minWidth="400.0" prefWidth="400.0" styleClass="sidePanel" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets bottom="-100.0" />
