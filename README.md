@@ -1,13 +1,39 @@
-# PO-PROJECT
-Autorzy:
-- Krzysztof Chmielewski
-- Antoni Maślanka
+# OOP Animal World Project 🐾
 
-# Wymagania
-- [obowiązkowo dla wszystkich] kula ziemska - lewa i prawa krawędź mapy zapętlają się (jeżeli zwierzak wyjdzie za lewą krawędź, to pojawi się po prawej stronie - a jeżeli za prawą, to po lewej); górna i dolna krawędź mapy to bieguny - nie można tam wejść (jeżeli zwierzak próbuje wyjść poza te krawędzie mapy, to pozostaje na polu na którym był, a jego kierunek zmienia się na odwrotny);
-- [obowiązkowo dla wszystkich] zalesione równiki - preferowany przez rośliny jest poziomy pas pól w centralnej części mapy (udający równik i okolice);
-- [obowiązkowo dla wszystkich] pełna losowość - mutacja zmienia gen na dowolny inny gen;
-- [obowiązkowo dla wszystkich] pełna predestynacja - zwierzak zawsze wykonuje kolejno geny, jeden po drugim;
----
-- [G] dorodne plony - preferowany jest rozkład równomierny, ale na pewnym kwadratowym podobszarze mapy (zajmującym 20% mapy) czasem pojawiają się większe rośliny, których zjedzenie dodaje zwierzakowi znacznie więcej energii. Każda taka roślina zajmuje kwadratowy obszar 2x2 pola. Obsługa sytuacji, w której więcej zwierzaków kończy ruch na jednym z pól należących do dużej rośliny powinna wyglądać tak samo jak w przypadku, gdy wiele zwierząt walczy o normalną roślinę na jednym polu.
-- [4] starość nie radość - starsze zwierzaki poruszają się wolniej, raz na kilka tur pomijając swój ruch, ale nadal tracąc energię. Prawdopodobieństwo pominięcia ruchu rośnie z wiekiem, maksymalnie do 80%.
+Interactive simulation of an animal ecosystem with UI and statistical tracking, built in Java.
+
+## Table of Contents
+
+- [About](#about)  
+- [Features](#features)  
+- [Requirements](#requirements)  
+- [Getting Started](#getting-started)  
+- [Configuration](#configuration)  
+- [Usage](#usage)  
+- [Architecture & Design](#architecture--design)  
+- [Contributing](#contributing)  
+- [Authors](#authors)  
+- [License](#license)  
+
+## About
+
+The **OOP Animal World Project** is a simulation of a virtual world populated with animals and plants. The project demonstrates object-oriented programming techniques and design principles, while allowing the user to observe emergent behavior, as well as collect metrics and statistics about the simulated ecosystem.
+
+This repository contains the Java source code, UI frontend, configuration modules, and statistical/graphical output.
+
+## Features
+
+- Grid-based world where animals move, eat, reproduce, age, and die  
+- Edge wrapping in east-west direction (“toroidal” in x-axis)  
+- Restricted movement north/south beyond poles — animals reflect/change direction  
+- Random mutations of genes (full random change)  
+- Sequential gene execution (predestination)  
+- Special “large plants” in certain regions, which grant higher energy on consumption  
+- Aging animals move slower; probability of skipping movement increases with age (up to 80%)  
+- UI visualization of the simulated world  
+- Statistics, charts, logs for tracking population, gene distributions, energy, etc.
+
+## Requirements
+
+- Java Development Kit (JDK) 11 or later  
+- A GUI environment (e.g. graphical desktop) for displaying UI  
