@@ -6,14 +6,7 @@ Interactive simulation of an animal ecosystem with UI and statistical tracking, 
 
 - [About](#about)  
 - [Features](#features)  
-- [Requirements](#requirements)  
-- [Getting Started](#getting-started)  
-- [Configuration](#configuration)  
-- [Usage](#usage)  
-- [Architecture & Design](#architecture--design)  
-- [Contributing](#contributing)  
-- [Authors](#authors)  
-- [License](#license)  
+- [Requirements](#requirements)
 
 ## About
 
